@@ -38,14 +38,14 @@ npm run preview
 
 ## GitHub Pages Deploy
 
-1. Set production values (optional via env):
-   - `PUBLIC_SITE_URL=https://YOUR_GH_USERNAME.github.io`
-   - `PUBLIC_BASE_PATH=/YOUR_REPO`
-   - Local `npm run dev` now uses `/` automatically.
-2. Ensure repository default branch is `main` (or update workflow trigger).
-3. Push to GitHub.
-4. In repo settings, enable Pages with **GitHub Actions** as source.
-5. Workflow at `.github/workflows/deploy.yml` will build and deploy automatically.
+1. For your main GitHub Pages URL `https://imdanialrashidi.github.io`, repository name must be exactly:
+   - `imdanialrashidi.github.io`
+2. Push this code to that repository (default branch: `main`).
+3. In repository settings, enable Pages with **GitHub Actions** as source.
+4. Workflow at `.github/workflows/deploy.yml` will build and deploy automatically.
+
+If you deploy from a repository named `danialrashidi`, the URL will be:
+- `https://imdanialrashidi.github.io/danialrashidi`
 
 ## Notes
 
