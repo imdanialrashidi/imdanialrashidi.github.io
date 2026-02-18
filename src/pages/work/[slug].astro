@@ -1,0 +1,71 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SharePanel from '../../components/SharePanel.astro';
+import { withBase } from '../../utils/withBase';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+
+const pageUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
+const statusLabel =
+  project.data.status === 'done' ? 'Done' : project.data.status === 'in-progress' ? 'In Progress' : 'Planned';
+const projectStructuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: project.data.title,
+  description: project.data.summary,
+  datePublished: project.data.date.toISOString(),
+  author: {
+    '@type': 'Person',
+    name: 'Danial Rashidi',
+    jobTitle: 'Aspiring Cloud Security / DevSecOps + SRE Engineer'
+  },
+  keywords: project.data.tags.join(', '),
+  about: ['Cloud Security', 'DevSecOps', 'SRE', 'AI/LLM Security'],
+  url: pageUrl
+};
+---
+
+<BaseLayout
+  title={`${project.data.title} | Work`}
+  description={project.data.summary}
+  ogType="article"
+  ogImage="images/danial-profile.jpg"
+  publishedTime={project.data.date.toISOString()}
+  structuredData={projectStructuredData}
+>
+  <article class="glass rounded-xl2 p-6 md:p-8">
+    <a href={withBase('work')} class="kicker">← Back to work</a>
+    <h1 class="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">{project.data.title}</h1>
+    <p class="mt-4 max-w-3xl text-muted">{project.data.summary}</p>
+
+    <div class="mt-5 flex flex-wrap items-center gap-2 text-xs text-muted">
+      <span class:list={['status-badge', `status-${project.data.status}`]}>{statusLabel}</span>
+      <time datetime={project.data.date.toISOString()}>
+        {new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(project.data.date)}
+      </time>
+    </div>
+
+    <ul class="mt-5 flex flex-wrap gap-2">
+      {project.data.tags.map((tag: string) => <li class="chip">{tag}</li>)}
+    </ul>
+
+    {(project.data.repo || project.data.demo) && (
+      <div class="mt-6 flex flex-wrap gap-3 text-sm">
+        {project.data.repo && <a class="chip px-3 py-1.5" href={project.data.repo} target="_blank" rel="noreferrer noopener">Repository</a>}
+        {project.data.demo && <a class="chip px-3 py-1.5" href={project.data.demo} target="_blank" rel="noreferrer noopener">Live demo</a>}
+      </div>
+    )}
+    <div class="prose mt-8">
+      <Content />
+    </div>
+
+    <SharePanel title={project.data.title} url={pageUrl} />
+  </article>
+</BaseLayout>

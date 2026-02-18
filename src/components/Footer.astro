@@ -1,0 +1,19 @@
+---
+import { socialLinks, resumePath } from '../data/socialLinks';
+import { withBase } from '../utils/withBase';
+---
+
+<footer class="footer-wrap">
+  <div class="shell footer-inner">
+    <div>
+      <p>© {new Date().getFullYear()} Danial Rashidi</p>
+      <p class="footer-note">Built with Astro · Tailwind · MDX</p>
+    </div>
+
+    <ul class="footer-social" role="list" aria-label="Social links">
+      {socialLinks.map((item) => <li><a href={item.url} target="_blank" rel="noreferrer noopener">{item.label}</a></li>)}
+    </ul>
+
+    <a class="chip px-3 py-1.5" href={withBase(resumePath)} download>Download Resume</a>
+  </div>
+</footer>

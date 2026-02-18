@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 620" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="70" y1="40" x2="450" y2="580" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1A2533"/>
+      <stop offset="1" stop-color="#0B1018"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="90" y1="40" x2="420" y2="520" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6DB8FF" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#6DB8FF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="520" height="620" rx="38" fill="url(#bg)"/>
+  <rect x="18" y="18" width="484" height="584" rx="30" stroke="rgba(255,255,255,0.22)"/>
+  <path d="M260 336c57.99 0 105-47.01 105-105s-47.01-105-105-105-105 47.01-105 105 47.01 105 105 105Z" fill="#2A394D"/>
+  <path d="M90 562c14-95 79-152 170-152s156 57 170 152" fill="#243245"/>
+  <path d="M26 26h468v240C414 116 154 65 26 195V26Z" fill="url(#shine)"/>
+  <text x="40" y="578" fill="#EAF2FF" font-size="20" font-family="Inter, -apple-system, sans-serif" letter-spacing="0.08em">DANIAL RASHIDI</text>
+</svg>

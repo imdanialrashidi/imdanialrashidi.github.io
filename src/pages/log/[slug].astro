@@ -1,0 +1,35 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SharePanel from '../../components/SharePanel.astro';
+import { withBase } from '../../utils/withBase';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const pageUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
+---
+
+<BaseLayout
+  title={`${post.data.title} | Log`}
+  description={post.data.excerpt}
+  ogType="article"
+  ogImage="images/danial-profile.jpg"
+  publishedTime={post.data.date.toISOString()}
+>
+  <article class="glass rounded-xl2 p-6 md:p-8">
+    <a href={withBase('blog')} class="kicker">← Continue on /blog</a>
+    <h1 class="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">{post.data.title}</h1>
+    <p class="mt-4 max-w-3xl text-muted">{post.data.excerpt}</p>
+    <div class="prose mt-8">
+      <Content />
+    </div>
+
+    <SharePanel title={post.data.title} url={pageUrl} />
+  </article>
+</BaseLayout>

@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionTitle from '../../components/SectionTitle.astro';
+import PostCard from '../../components/PostCard.astro';
+import { withBase } from '../../utils/withBase';
+
+const posts = (await getCollection('blog')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<BaseLayout
+  title="Log | Danial Rashidi"
+  description="Legacy route mirroring Cloud Security / DevSecOps + SRE blog entries by Danial Rashidi."
+  ogImage="images/danial-profile.jpg"
+>
+  <SectionTitle
+    eyebrow="Legacy Route"
+    title="Engineering Log"
+    subtitle="This route is kept for compatibility. New entries are published under /blog."
+  />
+
+  <section class="grid gap-4 sm:grid-cols-2">
+    {
+      posts.map((post) => (
+        <PostCard
+          href={withBase(`blog/${post.slug}`)}
+          title={post.data.title}
+          excerpt={post.data.excerpt}
+          date={post.data.date}
+          readingTime={post.data.readingTime}
+          tags={post.data.tags}
+        />
+      ))
+    }
+  </section>
+</BaseLayout>

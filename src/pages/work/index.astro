@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionTitle from '../../components/SectionTitle.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { withBase } from '../../utils/withBase';
+
+const projects = (await getCollection('projects')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<BaseLayout
+  title="Work | Danial Rashidi"
+  description="Selected projects by Danial Rashidi focused on Cloud Security, DevSecOps, and SRE learning in public."
+  ogImage="images/danial-profile.jpg"
+>
+  <SectionTitle
+    eyebrow="Work"
+    title="Projects"
+    subtitle="Reality + roadmap: completed builds, active labs, and planned systems for Cloud Security / DevSecOps + SRE."
+  />
+
+  <section class="grid gap-4 sm:grid-cols-2">
+    {
+      projects.map((project) => (
+        <ProjectCard
+          href={withBase(`work/${project.slug}`)}
+          title={project.data.title}
+          summary={project.data.summary}
+          tags={project.data.tags}
+          date={project.data.date}
+          status={project.data.status}
+        />
+      ))
+    }
+  </section>
+</BaseLayout>

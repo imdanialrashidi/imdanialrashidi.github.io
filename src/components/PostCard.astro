@@ -1,0 +1,32 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  excerpt: string;
+  date: Date;
+  readingTime?: string;
+  tags?: string[];
+}
+
+const { href, title, excerpt, date, readingTime, tags = [] } = Astro.props;
+const formattedDate = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric'
+}).format(date);
+---
+
+<article class="glass card">
+  <div class="mb-3 flex flex-wrap items-center gap-2 text-xs text-muted">
+    <time datetime={date.toISOString()}>{formattedDate}</time>
+    {readingTime && <span>· {readingTime}</span>}
+  </div>
+  <h3 class="text-lg font-medium tracking-tight text-text">{title}</h3>
+  <p class="mt-2 text-sm text-muted md:text-base">{excerpt}</p>
+  {tags.length > 0 && (
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {tags.map((tag) => <li class="chip">{tag}</li>)}
+    </ul>
+  )}
+  <a href={href} class="mt-5 inline-flex text-sm font-medium text-text">Read article →</a>
+</article>

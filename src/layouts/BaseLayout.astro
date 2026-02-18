@@ -1,0 +1,86 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { withBase } from '../utils/withBase';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article' | 'profile';
+  noindex?: boolean;
+  publishedTime?: string;
+  modifiedTime?: string;
+  structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
+}
+
+const {
+  title,
+  description = 'Danial Rashidi portfolio focused on Cloud Security, DevSecOps, and SRE.',
+  ogImage = 'images/danial-profile.jpg',
+  ogType = 'website',
+  noindex = false,
+  publishedTime,
+  modifiedTime,
+  structuredData
+} = Astro.props;
+
+const origin = Astro.site ?? Astro.url;
+const canonical = new URL(Astro.url.pathname, origin).toString();
+const resolvedOgImage = ogImage.startsWith('http') ? ogImage : new URL(withBase(ogImage), origin).toString();
+const robots = noindex
+  ? 'noindex,nofollow'
+  : 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1';
+const structuredDataList = Array.isArray(structuredData) ? structuredData : structuredData ? [structuredData] : [];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    <meta name="theme-color" content="#07090b" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={resolvedOgImage} />
+    <meta property="og:site_name" content="Danial Rashidi" />
+    <meta property="og:locale" content="en_US" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={resolvedOgImage} />
+
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+
+    {
+      structuredDataList.map((item) => (
+        <script type="application/ld+json" set:html={JSON.stringify(item)}></script>
+      ))
+    }
+
+    <ViewTransitions />
+  </head>
+  <body>
+    <div class="site-bg" aria-hidden="true"></div>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <Nav />
+    <main id="main-content" class="pb-20 pt-24 md:pt-28">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

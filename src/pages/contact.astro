@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import { socialLinks, resumePath } from '../data/socialLinks';
+import { withBase } from '../utils/withBase';
+
+const contacts = [
+  { label: 'Email', value: 'imdanialrashidi@gmail.com', href: 'mailto:imdanialrashidi@gmail.com' },
+  { label: 'GitHub', value: 'github.com/imdanialrashidi', href: 'https://github.com/imdanialrashidi' }
+];
+---
+
+<BaseLayout
+  title="Contact | Danial Rashidi"
+  description="Contact Danial Rashidi for internship and junior collaboration in Cloud Security, DevSecOps, and SRE-focused engineering work."
+  ogImage="images/danial-profile.jpg"
+>
+  <SectionTitle
+    eyebrow="Contact"
+    title="Let's Collaborate"
+    subtitle="Open to internship and junior collaboration opportunities in Cloud Security, DevSecOps, and reliability engineering."
+  />
+
+  <section class="grid gap-4 md:grid-cols-[1.15fr_1fr]">
+    <article class="glass rounded-xl2 p-6 md:p-8">
+      <h2 class="text-xl font-medium tracking-tight">Professional Snapshot</h2>
+      <ul class="mt-4 space-y-2 text-sm text-muted md:text-base">
+        <li>Computer Engineering student, Islamic Azad University (Karaj)</li>
+        <li>Current trajectory: Cloud Security foundations → DevSecOps workflows → SRE reliability practice</li>
+        <li>Hands-on background: basic WordPress websites, Linux/Python fundamentals, project-based learning</li>
+        <li>Preferred collaboration: internship or junior-level practical projects with clear mentorship and real systems exposure</li>
+      </ul>
+
+      <a class="btn-primary mt-6 inline-flex" href={withBase(resumePath)} download>
+        Download Resume
+      </a>
+    </article>
+
+    <article class="glass rounded-xl2 p-6 md:p-8">
+      <h2 class="text-xl font-medium tracking-tight">Reach Out</h2>
+      <ul class="mt-4 space-y-4">
+        {
+          contacts.map((item) => (
+            <li class="flex flex-col gap-1 border-b border-white/10 pb-4 last:border-none last:pb-0">
+              <span class="text-sm text-muted">{item.label}</span>
+              <a href={item.href} class="text-sm md:text-base" target={item.href.startsWith('http') ? '_blank' : undefined} rel={item.href.startsWith('http') ? 'noreferrer noopener' : undefined}>{item.value}</a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h3 class="mt-6 text-sm font-medium text-text">Social</h3>
+      <ul class="mt-3 flex flex-wrap gap-2" role="list" aria-label="Social links">
+        {
+          socialLinks.map((item) => (
+            <li>
+              <a class="chip px-3 py-1.5" href={item.url} target="_blank" rel="noreferrer noopener">{item.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </article>
+  </section>
+</BaseLayout>

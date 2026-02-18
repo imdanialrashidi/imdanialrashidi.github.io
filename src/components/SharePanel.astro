@@ -1,0 +1,63 @@
+---
+interface Props {
+  title: string;
+  url: string;
+}
+
+const { title, url } = Astro.props;
+const encodedUrl = encodeURIComponent(url);
+const encodedTitle = encodeURIComponent(`${title} — Danial Rashidi`);
+
+const shareLinks = [
+  {
+    label: 'Share on X',
+    href: `https://x.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`
+  },
+  {
+    label: 'Share on Telegram',
+    href: `https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`
+  }
+];
+---
+
+<section class="mt-8" aria-label="Share this page">
+  <p class="kicker mb-3">Share</p>
+  <div class="flex flex-wrap gap-2">
+    {
+      shareLinks.map((item) => (
+        <a class="chip share-chip px-3 py-1.5" href={item.href} target="_blank" rel="noreferrer noopener">
+          {item.label}
+        </a>
+      ))
+    }
+    <button type="button" class="chip share-chip share-copy-btn px-3 py-1.5" data-share-url={url}>
+      Copy Link
+    </button>
+  </div>
+</section>
+
+<script is:inline>
+  document.querySelectorAll('.share-copy-btn').forEach((button) => {
+    if (button.dataset.bound === '1') return;
+
+    button.dataset.bound = '1';
+    button.addEventListener('click', async () => {
+      const link = button.getAttribute('data-share-url');
+      if (!link || !navigator.clipboard) return;
+
+      const original = button.textContent;
+      try {
+        await navigator.clipboard.writeText(link);
+        button.textContent = 'Copied';
+        setTimeout(() => {
+          button.textContent = original;
+        }, 1500);
+      } catch {
+        button.textContent = 'Copy failed';
+        setTimeout(() => {
+          button.textContent = original;
+        }, 1500);
+      }
+    });
+  });
+</script>

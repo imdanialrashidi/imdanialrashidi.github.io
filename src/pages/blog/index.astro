@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionTitle from '../../components/SectionTitle.astro';
+import PostCard from '../../components/PostCard.astro';
+import { withBase } from '../../utils/withBase';
+
+const posts = (await getCollection('blog')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<BaseLayout
+  title="Blog | Danial Rashidi"
+  description="Engineering logs by Danial Rashidi on Cloud Security, DevSecOps, SRE practice, and AI/LLM security learning."
+  ogImage="images/danial-profile.jpg"
+>
+  <SectionTitle
+    eyebrow="Blog"
+    title="Engineering Log"
+    subtitle="Short, practical notes documenting progress in Cloud Security / DevSecOps + SRE."
+  />
+
+  <section class="grid gap-4 sm:grid-cols-2">
+    {
+      posts.map((post) => (
+        <PostCard
+          href={withBase(`blog/${post.slug}`)}
+          title={post.data.title}
+          excerpt={post.data.excerpt}
+          date={post.data.date}
+          readingTime={post.data.readingTime}
+          tags={post.data.tags}
+        />
+      ))
+    }
+  </section>
+</BaseLayout>

@@ -1,0 +1,58 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SharePanel from '../../components/SharePanel.astro';
+import { withBase } from '../../utils/withBase';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const pageUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
+const postStructuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.excerpt,
+  datePublished: post.data.date.toISOString(),
+  author: {
+    '@type': 'Person',
+    name: 'Danial Rashidi',
+    jobTitle: 'Aspiring Cloud Security / DevSecOps + SRE Engineer'
+  },
+  url: pageUrl,
+  keywords: (post.data.tags ?? []).join(', '),
+  about: ['Cloud Security', 'DevSecOps', 'SRE', 'AI/LLM Security']
+};
+---
+
+<BaseLayout
+  title={`${post.data.title} | Blog`}
+  description={post.data.excerpt}
+  ogType="article"
+  ogImage="images/danial-profile.jpg"
+  publishedTime={post.data.date.toISOString()}
+  structuredData={postStructuredData}
+>
+  <article class="glass rounded-xl2 p-6 md:p-8">
+    <a href={withBase('blog')} class="kicker">← Back to blog</a>
+    <h1 class="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">{post.data.title}</h1>
+    <p class="mt-4 max-w-3xl text-muted">{post.data.excerpt}</p>
+
+    <div class="mt-5 flex flex-wrap items-center gap-2 text-xs text-muted">
+      <time datetime={post.data.date.toISOString()}>
+        {new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(post.data.date)}
+      </time>
+      {post.data.readingTime && <span>· {post.data.readingTime}</span>}
+    </div>
+    <div class="prose mt-8">
+      <Content />
+    </div>
+
+    <SharePanel title={post.data.title} url={pageUrl} />
+  </article>
+</BaseLayout>
