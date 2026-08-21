@@ -32,6 +32,7 @@ venv/
 vendor/
 
 # Build, test, browser, and framework output
+.astro/
 dist/
 build/
 coverage/

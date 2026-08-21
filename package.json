@@ -1,0 +1,25 @@
+{
+  "name": "imdanialrashidi.github.io",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Danial Rashidi — Software & Product Builder",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview --port 4321",
+    "check": "astro check",
+    "typecheck": "astro check",
+    "ci": "npm run check && npm run build"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^7.2.4",
+    "sharp": "^0.35.3",
+    "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  }
+}

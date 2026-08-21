@@ -1,0 +1,374 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { social } from "../data/site.ts";
+---
+
+<Layout
+  title="Contact — Danial Rashidi"
+  description="Contact Danial Rashidi — Email, GitHub, X and Noveno are primary. Open to interesting software projects, product collaborations and technical opportunities. No form, no backend."
+>
+  <section class="contact-hero">
+    <div class="container contact-hero__inner">
+      <div class="contact-hero__label">
+        <span class="contact-hero__eyebrow">Contact</span>
+        <span class="contact-hero__rule" aria-hidden="true"></span>
+        <span class="contact-hero__meta">No form · No tracker · Direct</span>
+      </div>
+      <h1 class="contact-hero__title">Let’s build something useful.</h1>
+      <p class="contact-hero__lede">
+        I’m open to interesting software projects, product collaborations and technical opportunities — especially where a vague idea needs a working system.
+      </p>
+    </div>
+  </section>
+
+  <section class="contact-body">
+    <div class="container contact-body__inner">
+      <!-- Primary — visually dominant -->
+      <div class="contact-primary" aria-label="Primary contact">
+        <a href={`mailto:${social.email}`} class="contact-primary__email">
+          <span class="contact-primary__label">Email — fastest reply</span>
+          <span class="contact-primary__value">{social.email}</span>
+          <span class="contact-primary__hint">Click to open your mail client <span aria-hidden="true">→</span></span>
+        </a>
+
+        <div class="contact-primary__grid">
+          <a href={social.github} target="_blank" rel="me noopener noreferrer" class="contact-card contact-card--primary">
+            <span class="contact-card__label">GitHub — code</span>
+            <span class="contact-card__value">{social.github.replace("https://", "")}</span>
+            <span class="contact-card__hint">Repositories, product work</span>
+          </a>
+          <a href={social.x} target="_blank" rel="me noopener noreferrer" class="contact-card contact-card--primary">
+            <span class="contact-card__label">X — updates</span>
+            <span class="contact-card__value">{social.x.replace("https://", "")}</span>
+            <span class="contact-card__hint">{social.xHandle}</span>
+          </a>
+          <a href={social.noveno} target="_blank" rel="noopener noreferrer" class="contact-card contact-card--primary contact-card--accent">
+            <span class="contact-card__label">Building — Noveno</span>
+            <span class="contact-card__value">{social.noveno.replace("https://", "")} ↗</span>
+            <span class="contact-card__hint">Customer acquisition system</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Secondary — quieter hierarchy -->
+      <div class="contact-secondary" aria-label="Secondary contact">
+        <div class="contact-secondary__label">
+          <span class="contact-secondary__labelText">Also</span>
+          <span class="contact-secondary__rule" aria-hidden="true"></span>
+          <span class="contact-secondary__hint">Not primary for professional reach</span>
+        </div>
+
+        <div class="contact-secondary__grid">
+          <a href={social.instagram} target="_blank" rel="me noopener noreferrer" class="contact-card contact-card--secondary">
+            <span class="contact-card__label">Instagram</span>
+            <span class="contact-card__value">{social.instagram.replace("https://", "")}</span>
+          </a>
+          <a href={social.telegram} target="_blank" rel="me noopener noreferrer" class="contact-card contact-card--secondary">
+            <span class="contact-card__label">Telegram</span>
+            <span class="contact-card__value">{social.telegram.replace("https://", "")}</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-note">
+        <p class="contact-note__text">No contact form or backend in v1 — direct email, response within a day or two. For hiring-manager visibility: open to product-minded software and product collaborations. If you have a vague idea that deserves a working system, email is the right first step.</p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .contact-hero {
+    padding: clamp(1.75rem, 5vw, 2.75rem) 0 clamp(1.25rem, 4vw, 1.75rem);
+    border-bottom: var(--border-hairline);
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--color-accent-soft) 32%, transparent) 0%, transparent 58%),
+      radial-gradient(ellipse at 78% 0%, color-mix(in srgb, var(--color-border) 14%, transparent) 0%, transparent 54%);
+    position: relative;
+    overflow: clip;
+  }
+
+  .contact-hero::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--color-accent) 0%, transparent 44%);
+    opacity: 0.45;
+  }
+
+  .contact-hero__inner {
+    position: relative;
+    max-width: var(--width-prose);
+  }
+
+  .contact-hero__label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--color-text-faint);
+  }
+
+  .contact-hero__eyebrow { color: var(--color-text); }
+
+  .contact-hero__rule {
+    width: 28px;
+    height: 1px;
+    background: var(--color-border-strong);
+    opacity: 0.7;
+  }
+
+  .contact-hero__meta { font-weight: 600; }
+
+  .contact-hero__title {
+    margin-top: var(--space-4);
+    font-size: clamp(1.875rem, 4.5vw, 2.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.032em;
+    font-weight: 680;
+    text-wrap: balance;
+  }
+
+  .contact-hero__lede {
+    margin-top: var(--space-4);
+    font-size: var(--text-md);
+    line-height: 1.65;
+    color: var(--color-text-muted);
+    max-width: 58ch;
+  }
+
+  .contact-body {
+    padding: clamp(1.5rem, 4vw, 2.25rem) 0 clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .contact-body__inner {
+    max-width: var(--width-prose);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  /* — Primary email — strong inverted card, same pattern as homepage CTA but light/dark safe */
+  .contact-primary__email {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-6) var(--space-6);
+    background: var(--color-text);
+    color: var(--color-canvas);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-text);
+    transition: transform var(--duration-fast) var(--ease-default), background var(--duration-fast) var(--ease-default);
+    position: relative;
+    overflow: clip;
+  }
+
+  .contact-primary__email::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--color-accent) 0%, transparent 50%);
+    opacity: 0.7;
+  }
+
+  .contact-primary__email:hover {
+    transform: translateY(-1px);
+    background: color-mix(in srgb, var(--color-text) 96%, var(--color-accent));
+  }
+
+  .contact-primary__label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    opacity: 0.7;
+  }
+
+  .contact-primary__value {
+    font-size: clamp(1.125rem, 2.6vw, 1.375rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    overflow-wrap: anywhere;
+  }
+
+  .contact-primary__hint {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    opacity: 0.6;
+  }
+
+  :root[data-theme="dark"] .contact-primary__email {
+    background: #17171a;
+    color: #f4f4f5;
+    border-color: #2a2a30;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.38);
+  }
+  :root[data-theme="dark"] .contact-primary__email:hover {
+    border-color: var(--color-accent);
+    background: #1e1e22;
+  }
+
+  .contact-primary__grid {
+    margin-top: var(--space-4);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--space-3);
+  }
+
+  @media (max-width: 720px) {
+    .contact-primary__grid { grid-template-columns: 1fr; }
+  }
+
+  .contact-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: var(--space-4) var(--space-5);
+    background: var(--color-surface);
+    border: var(--border-hairline);
+    border-radius: var(--radius-md);
+    transition: border-color var(--duration-fast) var(--ease-default), background var(--duration-fast) var(--ease-default), transform var(--duration-fast) var(--ease-default);
+    min-width: 0;
+  }
+
+  .contact-card:hover {
+    border-color: var(--color-border-strong);
+    background: var(--color-surface-hover);
+    transform: translateY(-1px);
+  }
+
+  .contact-card--primary {
+    padding: var(--space-5);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    border: var(--border-hairline);
+  }
+
+  .contact-card--primary .contact-card__label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--color-text-faint);
+  }
+
+  .contact-card--primary .contact-card__value {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+    overflow-wrap: anywhere;
+  }
+
+  .contact-card--primary .contact-card__hint {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-text-faint);
+  }
+
+  .contact-card--accent {
+    background: var(--color-accent-soft);
+    border-color: color-mix(in srgb, var(--color-accent) 14%, var(--color-border));
+  }
+
+  .contact-card--accent:hover {
+    border-color: color-mix(in srgb, var(--color-accent) 18%, var(--color-border-strong));
+    background: color-mix(in srgb, var(--color-accent-soft) 92%, var(--color-surface));
+  }
+
+  .contact-card--accent .contact-card__label { color: var(--color-accent); }
+  .contact-card--accent .contact-card__value { color: var(--color-text); }
+
+  .contact-card--secondary {
+    background: var(--color-surface-raised);
+    border: var(--border-hairline);
+    padding: var(--space-4);
+  }
+
+  .contact-card--secondary .contact-card__label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--color-text-faint);
+  }
+
+  .contact-card--secondary .contact-card__value {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .contact-card--secondary:hover {
+    background: var(--color-surface);
+    border-color: var(--color-border-strong);
+  }
+
+  .contact-card--secondary:hover .contact-card__value { color: var(--color-text); }
+
+  /* — Secondary section — deliberately quieter */
+  .contact-secondary__label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--color-text-faint);
+    margin-bottom: var(--space-3);
+  }
+
+  .contact-secondary__labelText { color: var(--color-text-muted); }
+
+  .contact-secondary__rule {
+    flex: 1;
+    max-width: 80px;
+    height: 1px;
+    background: var(--color-border);
+    opacity: 0.9;
+  }
+
+  .contact-secondary__hint {
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    font-size: 11px;
+    color: var(--color-text-faint);
+  }
+
+  .contact-secondary__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+
+  @media (max-width: 480px) {
+    .contact-secondary__grid { grid-template-columns: 1fr; }
+  }
+
+  .contact-note {
+    border-top: var(--border-hairline);
+    padding-top: var(--space-6);
+  }
+
+  .contact-note__text {
+    font-size: var(--text-sm);
+    line-height: 1.65;
+    color: var(--color-text-faint);
+    max-width: 66ch;
+    border-left: 2px solid var(--color-border);
+    padding-left: 12px;
+  }
+</style>

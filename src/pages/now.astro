@@ -1,0 +1,349 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { social } from "../data/site.ts";
+
+// Keep this easy to update — one place, one date, no CMS.
+// Update `lastUpdated` when the content below changes.
+const lastUpdated = "August 21, 2026";
+---
+
+<Layout
+  title="Now — Danial Rashidi"
+  description="What Danial Rashidi is focused on now — building Noveno, strengthening software engineering foundations, and exploring AI application engineering. Last updated August 2026."
+>
+  <section class="now-hero">
+    <div class="container now-hero__inner">
+      <div class="now-hero__label">
+        <span class="now-hero__eyebrow">Now</span>
+        <span class="now-hero__rule" aria-hidden="true"></span>
+        <span class="now-hero__meta">Last updated: {lastUpdated}</span>
+      </div>
+      <h1 class="now-hero__title">What I’m focused on now</h1>
+      <p class="now-hero__lede">
+        This page is intentionally the dynamic part of the site. It is easy to update and stays current — if it is stale, assume I am heads-down building.
+        Inspired by <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer">nownownow.com</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="now-body">
+    <div class="container now-body__inner">
+      <div class="now-grid">
+        <section class="now-card now-card--accent" aria-labelledby="building-title">
+          <div class="now-card__head">
+            <span class="now-card__num">01</span>
+            <h2 id="building-title" class="now-card__title">Building</h2>
+          </div>
+          <ul class="now-card__list" role="list">
+            <li class="now-card__item">
+              <span class="now-card__dot" aria-hidden="true"></span>
+              <span><strong>Software and products</strong> — shipping incrementally, keeping the personal site and product work honest and verifiable.</span>
+            </li>
+            <li class="now-card__item">
+              <span class="now-card__dot" aria-hidden="true"></span>
+              <span><strong>Noveno</strong> — the customer-acquisition system for service businesses. Design, implementation and measurement; see <a href={social.noveno} target="_blank" rel="noopener noreferrer">{social.noveno.replace("https://", "")} ↗</a> for the product, <a href="/work/noveno">Building Noveno →</a> for the founder view.</span>
+            </li>
+            <li class="now-card__item">
+              <span class="now-card__dot" aria-hidden="true"></span>
+              <span>Improving the editorial and engineering quality of shipped surfaces — typography, readability, contrast and reduced-motion behavior — without theoretical polish.</span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="now-card" aria-labelledby="learning-title">
+          <div class="now-card__head">
+            <span class="now-card__num">02</span>
+            <h2 id="learning-title" class="now-card__title">Learning</h2>
+          </div>
+          <ul class="now-card__list" role="list">
+            <li class="now-card__item">
+              <span class="now-card__dot" aria-hidden="true"></span>
+              <span>Stronger software engineering foundations — tightening TypeScript, backend modeling and product engineering judgment through shipped work (Fast English, Noveno).</span>
+            </li>
+            <li class="now-card__item">
+              <span class="now-card__dot" aria-hidden="true"></span>
+              <span>Practical backend thinking: PocketBase hooks, transactions and entitlement checks as the simplest boundary beyond the browser.</span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="now-card" aria-labelledby="exploring-title">
+          <div class="now-card__head">
+            <span class="now-card__num">03</span>
+            <h2 id="exploring-title" class="now-card__title">Exploring</h2>
+          </div>
+          <ul class="now-card__list" role="list">
+            <li class="now-card__item">
+              <span class="now-card__dot" aria-hidden="true"></span>
+              <span><strong>AI application engineering</strong> — agents, automation and product systems where AI creates real leverage, with verification and testing kept explicit.</span>
+            </li>
+            <li class="now-card__item">
+              <span class="now-card__dot" aria-hidden="true"></span>
+              <span>Product systems that behave well under real constraints — mobile-first, unstable network, tools that are actually available in Iran.</span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="now-card now-card--compact" aria-labelledby="based-title">
+          <div class="now-card__head">
+            <span class="now-card__num">04</span>
+            <h2 id="based-title" class="now-card__title">Based in</h2>
+          </div>
+          <p class="now-card__text">Iran — working in English, building for real local conditions and international standards.</p>
+          <div class="now-card__links">
+            <a href="/about" class="now-card__link">About →</a>
+            <a href="/work" class="now-card__link">Work →</a>
+            <a href="/contact" class="now-card__link">Contact →</a>
+          </div>
+        </section>
+      </div>
+
+      <div class="now-foot">
+        <p class="now-foot__note">
+          This page will stay current. The evergreen narrative lives on <a href="/about">About</a> and the homepage; current material lives here rather than polluting those pages. Long-term or private goals stay private.
+        </p>
+        <p class="now-foot__meta">Last updated: <time datetime="2026-08-21">{lastUpdated}</time> · <span class="now-foot__hint">Update this date whenever the sections above change.</span></p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .now-hero {
+    padding: clamp(1.75rem, 5vw, 2.75rem) 0 clamp(1.25rem, 4vw, 1.75rem);
+    border-bottom: var(--border-hairline);
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--color-accent-soft) 34%, transparent) 0%, transparent 62%),
+      radial-gradient(ellipse at 72% 0%, color-mix(in srgb, var(--color-border) 14%, transparent) 0%, transparent 54%);
+    position: relative;
+    overflow: clip;
+  }
+
+  .now-hero::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--color-accent) 0%, transparent 44%);
+    opacity: 0.45;
+  }
+
+  .now-hero__inner {
+    position: relative;
+    max-width: var(--width-prose);
+  }
+
+  .now-hero__label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--color-text-faint);
+  }
+
+  .now-hero__eyebrow { color: var(--color-text); }
+
+  .now-hero__rule {
+    width: 28px;
+    height: 1px;
+    background: var(--color-border-strong);
+    opacity: 0.7;
+  }
+
+  .now-hero__meta {
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+
+  .now-hero__title {
+    margin-top: var(--space-4);
+    font-size: clamp(1.875rem, 4.5vw, 2.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    font-weight: 680;
+  }
+
+  .now-hero__lede {
+    margin-top: var(--space-4);
+    font-size: var(--text-md);
+    line-height: 1.65;
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+
+  .now-hero__lede a {
+    color: var(--color-text-muted);
+    text-decoration: underline;
+    text-decoration-color: var(--color-border-strong);
+    text-underline-offset: 3px;
+  }
+  .now-hero__lede a:hover { color: var(--color-accent); text-decoration-color: var(--color-accent); }
+
+  .now-body {
+    padding: clamp(1.5rem, 4vw, 2.25rem) 0 clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .now-body__inner {
+    max-width: var(--width-prose);
+  }
+
+  .now-grid {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .now-card {
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: var(--border-hairline);
+    border-radius: var(--radius-lg);
+  }
+
+  .now-card--accent {
+    background: var(--color-accent-soft);
+    border-color: color-mix(in srgb, var(--color-accent) 14%, var(--color-border));
+  }
+
+  .now-card--compact {
+    background: var(--color-surface-raised);
+  }
+
+  .now-card__head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding-bottom: var(--space-3);
+    border-bottom: var(--border-hairline);
+  }
+
+  .now-card--accent .now-card__head { border-color: color-mix(in srgb, var(--color-accent) 14%, var(--color-border)); }
+
+  .now-card__num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+    background: var(--color-surface);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 14%, var(--color-border));
+    padding: 3px 7px;
+    border-radius: var(--radius-pill);
+    flex-shrink: 0;
+  }
+
+  .now-card--accent .now-card__num {
+    background: var(--color-surface);
+    color: var(--color-accent);
+  }
+
+  .now-card__title {
+    font-size: var(--text-lg);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    font-weight: 650;
+  }
+
+  .now-card__list {
+    margin-top: var(--space-4);
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .now-card__item {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-start;
+    font-size: var(--text-md);
+    line-height: 1.65;
+    color: var(--color-text-muted);
+  }
+
+  .now-card__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    margin-top: 10px;
+    flex-shrink: 0;
+    opacity: 0.95;
+  }
+
+  .now-card__item strong { color: var(--color-text); font-weight: 600; }
+  .now-card__item a {
+    color: var(--color-accent);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--color-accent) 28%, transparent);
+    text-underline-offset: 3px;
+    overflow-wrap: anywhere;
+  }
+  .now-card__item a:hover { color: var(--color-accent-hover); text-decoration-color: var(--color-accent); }
+
+  .now-card__text {
+    margin-top: var(--space-4);
+    font-size: var(--text-md);
+    line-height: 1.65;
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+
+  .now-card__links {
+    margin-top: var(--space-4);
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .now-card__link {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
+    transition: color var(--duration-fast) var(--ease-default), border-color var(--duration-fast) var(--ease-default);
+  }
+  .now-card__link:hover { color: var(--color-accent); border-color: var(--color-accent); }
+
+  .now-foot {
+    margin-top: var(--space-8);
+    border-top: var(--border-hairline);
+    padding-top: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .now-foot__note {
+    font-size: var(--text-sm);
+    line-height: 1.65;
+    color: var(--color-text-faint);
+    max-width: 66ch;
+  }
+
+  .now-foot__note a {
+    color: var(--color-text-muted);
+    text-decoration: underline;
+    text-decoration-color: var(--color-border-strong);
+    text-underline-offset: 3px;
+  }
+  .now-foot__note a:hover { color: var(--color-accent); }
+
+  .now-foot__meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--color-text-faint);
+    border-left: 2px solid var(--color-border);
+    padding-left: 10px;
+  }
+
+  .now-foot__hint { color: var(--color-text-faint); }
+</style>

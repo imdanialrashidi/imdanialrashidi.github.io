@@ -1,0 +1,286 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CaseHero from "../../components/case-study/CaseHero.astro";
+import CaseSection from "../../components/case-study/CaseSection.astro";
+import Callout from "../../components/case-study/Callout.astro";
+import CaseFigure from "../../components/case-study/CaseFigure.astro";
+import ArchitectureDiagram from "../../components/case-study/ArchitectureDiagram.astro";
+import NextProject from "../../components/case-study/NextProject.astro";
+---
+
+<Layout
+  title="Fast English — Danial Rashidi"
+  description="Fast English — Persian-first English podcast app for Iranian Android users. Product engineering across React, TypeScript, PocketBase, Capacitor, PWA and Android. Architecture, decisions, validation and current status."
+>
+  <CaseHero
+    kicker="Product Engineering · Web · PWA · Android"
+    title="Fast English"
+    summary="A Persian-first English podcast app for Iranian learners on Android — calm, mobile-first, and built for real conditions: manual card-to-card payment, placement test, level-graded episodes with protected audio, delivered as PWA and Android from one codebase."
+    role="Product Engineering"
+    year={2025}
+    statusLabel="In progress — active"
+    stack={["React 19", "TypeScript", "MUI", "PocketBase 0.39.9", "Capacitor", "Vite", "Caddy", "SQLite"]}
+    links={[
+      { label: "Back to work", href: "/work" },
+    ]}
+  />
+
+  <!-- Media slot — honest placeholder -->
+  <div class="container cs-media">
+    <CaseFigure
+      label="Product"
+      placeholderTitle="Fast English — product surfaces"
+      placeholderInitials="FE"
+      caption="Honest placeholder. The app has three surfaces: Student App (MUI), Landing (Tailwind, static) and Staff Admin Console, plus PocketBase. Real UI screenshots will replace this frame without redesign."
+    />
+  </div>
+
+  <CaseSection num="01" label="Overview" title="What it is" id="overview">
+    <p>
+      Fast English Podcast is a Persian-UI English learning product for adults in Iran using Android phones. The student journey is short and explicit: sign up with phone and password, pay manually via card-to-card and wait for operator approval, take a 20-question placement test, then listen to level-graded podcast episodes (A1–C2) with protected audio and per-variant progress. A static landing explains the product; an operator console handles review.
+    </p>
+    <p>
+      Four surfaces share one repository and one <code>package.json</code>: <strong>Student App</strong> <code>app/</code> (React 19 + MUI v9, Persian-first, <code>app.fastenglishpodcast.com</code>), <strong>Staff Admin Console</strong> <code>admin/</code> (React 19 + MUI), <strong>Landing</strong> <code>landing/</code> (React + Tailwind, static, <code>fastenglishpodcast.com</code>), and <strong>Backend</strong> <code>server/</code> (PocketBase 0.39.9 — Go, embedded SQLite, JS hooks for auth, payment, placement, audio). Android is produced via Capacitor with <code>webDir = "dist-app"</code>. No workspace framework, no monorepo tool.
+    </p>
+    <Callout variant="muted" title="Source" icon="◈">
+      <p>All technical claims here trace to the repository itself: <code>README.md</code>, <code>docs/ARCHITECTURE.md</code>, <code>docs/PRODUCT.md</code>, <code>package.json</code>, <code>server/pb_migrations/</code> and <code>server/pb_hooks/</code>. No users, revenue or outcome numbers are invented.</p>
+    </Callout>
+  </CaseSection>
+
+  <CaseSection num="02" label="Problem" title="Why this exists" id="problem">
+    <p>
+      There was no calm, mobile-first, Persian-UI product that fits how many Iranian learners actually pay. App stores and gateway payments are unreliable in this context. The product requirement was therefore: manual card-to-card payment suited to the local market, PWA install plus downloadable APK, placement that grades without claiming certification, and text-plus-audio lessons that work on low-to-mid Android devices over unstable mobile networks with low cognitive load.
+    </p>
+    <p>
+      Constraints were clear from the start: PWA service worker must never cache <code>/api/</code> or private/premium data; correct placement answers must never reach the client; receipt images must stay protected; and the site must stay useful without heavy client frameworks or theoretical scale architecture.
+    </p>
+  </CaseSection>
+
+  <CaseSection num="03" label="Product / Solution" title="How the product fits together" id="solution">
+    <p>
+      The student-facing flow is deliberately simple: choose a plan → see the destination card (number, holder, bank, short instruction, review ETA) → transfer manually → upload one receipt → submit → wait for staff approval. The UI collects only <code>plan_id</code> and the receipt file. The server snapshots plan name, price and duration so later price edits never rewrite history.
+    </p>
+    <p>
+      Placement is 20 active questions from the current test version (four choices each), backend-graded, with one accepted final submission. The suggested CEFR level is stored separately from the selected level — browsing or level UI never mutates placement or subscription. Content is structured as Categories → Episodes (Topics, shared across levels) → Variants (one lesson per topic × CEFR level) with published state, protected audio, and per-variant progress. Entitled students (authenticated, active, not suspended, placement done, active subscription) may access every published variant across all levels — level is a browsing default, not an authorization boundary.
+    </p>
+    <h3>Surfaces</h3>
+    <ul>
+      <li><strong>Student App</strong> — React 19 + MUI v9, RTL with Stylis plugin, single <code>&lt;audio&gt;</code> element via <code>PlayerProvider</code>, React Router, React Hook Form + Zod. Persistent theme and single-audio lifecycle (bind transitions, retry with fresh file token, media session mirroring).</li>
+      <li><strong>Landing</strong> — static, Tailwind only, fast first paint; no payment or placement logic. Pricing is backend-managed via <code>GET /api/fast-english/public/settings</code> — no hard-coded prices.</li>
+      <li><strong>Admin Console</strong> — unified staff console for payment review, business settings, content import; server verifies <code>staff_admins</code> + <code>is_active</code> on every staff endpoint.</li>
+      <li><strong>PocketBase</strong> — migrations committed, JS hooks for phone normalization, uniqueness, receipt checks, approval transaction, grading, and protected-audio proxy.</li>
+    </ul>
+  </CaseSection>
+
+  <CaseSection num="04" label="My Role" title="What I worked on" id="role">
+    <p>
+      My role is product engineering across product, implementation and operations — not a single-layer ticket. I worked across the Web, PWA, Android packaging/distribution, PocketBase modeling and deployment, shaping requirements, system structure, implementation details and verification rather than handing theory to another layer.
+    </p>
+    <ul>
+      <li>Product shaping: journey definitions for signup, manual payment, placement and listening; copy and state language kept honest (no certification, no guaranteed outcomes).</li>
+      <li>Implementation: React + TypeScript client surfaces, Vite isolated configs, PocketBase collections and hooks (phone identity, receipt protection, placement grading, audio proxy, subscription logic), Capacitor Android sync and release build, Caddy and systemd wiring.</li>
+      <li>Verification: verification lanes, disposable-PocketBase smoke suites, Vitest, Playwright at 360–1440 widths, contrast and reduced-motion checks, log redaction and backup timers.</li>
+    </ul>
+    <p>
+      The repository is the proof. Nothing here is claimed beyond what the committed code, migrations and docs support.
+    </p>
+  </CaseSection>
+
+  <CaseSection num="05" label="What I Built" title="Concrete system pieces" id="built">
+    <h3>App and landing</h3>
+    <p>
+      Isolated Vite configs — <code>vite.app.config.ts</code> → <code>dist-app</code> (MUI only) and <code>vite.landing.config.ts</code> → <code>dist-landing</code> (Tailwind only). Shared code is limited to <code>shared/brand.ts</code> constants and CSS variables — no cross-surface component framework. Capacitor uses <code>webDir = "dist-app"</code>. Self-hosted Vazirmatn variable WOFF2, no runtime CDN font.
+    </p>
+    <h3>Backend</h3>
+    <p>
+      PocketBase collections for users (<code>fep_users</code>), plans (<code>plans</code>), payment requests, subscriptions, placement attempts and answers, categories/episodes/variants and progress. Hooks enforce: phone canonical <code>+989XXXXXXXXX</code> with uniqueness; client never sets <code>role</code> / <code>account_status</code>; one pending payment per user; approval + subscription create/extend in one DB transaction with an idempotency link; receipt is a single protected file (JPEG/PNG/WebP, ≤5 MB, MIME/signature/extension match, randomized storage name, short-lived authorized preview only); correct answers never leave the server; premium body/audio denied to pending/rejected/expired/suspended.
+    </p>
+    <h3>Audio and progress</h3>
+    <p>
+      Protected audio is streamed through a lesson-audio proxy with a short-lived PB file token passed as a query parameter (the <code>&lt;audio&gt;</code> element cannot send custom headers). The proxy re-validates live entitlement on every request, so a leaked token grants nothing beyond current entitlement. Progress is per-variant, throttled and revision-guarded.
+    </p>
+    <h3>Platform details</h3>
+    <p>
+      Browser/PWA uses same-origin <code>/api/*</code> via Caddy (allowed origins: <code>app.fastenglishpodcast.com</code>, <code>fastenglishpodcast.com</code>, Capacitor origin — no wildcard CORS). Android release uses an explicit <code>https://app.fastenglishpodcast.com</code> API base and bundled assets — not <code>window.location.origin</code>. Dev uses Vite <code>/api</code> proxy and <code>adb reverse</code> for Android device + <code>VITE_ANDROID_API_ORIGIN</code>.
+    </p>
+  </CaseSection>
+
+  <CaseSection num="06" label="Architecture" title="System structure" id="architecture" intro="Lightweight explanatory view. The value is the constraints it makes visible, not decoration.">
+    <ArchitectureDiagram variant="fast-english" caption="Fast English architecture as committed: isolated Vite outputs, PocketBase as the only backend (migrations + JS hooks), Caddy reverse proxy, explicit Android origin, disposable PocketBase for tests. No secrets in bundle, no wildcard CORS." />
+
+    <h3>Why this shape</h3>
+    <ul>
+      <li><strong>No custom Node backend.</strong> PocketBase hooks cover auth, validation, transactions and grading without a second runtime.</li>
+      <li><strong>Two Vite configs, not a workspace.</strong> Keeps Tailwind out of the app and MUI out of the landing with clear isolated outputs — simplest boundary that prevents bleeding.</li>
+      <li><strong>Mobile-first without ionic.</strong> Single codebase via Capacitor, bundled assets, explicit API origin for APK — verified via <code>cap sync</code> + <code>assembleDebug</code>.</li>
+      <li><strong>Static where possible.</strong> Landing is fully static; pricing and card-transfer availability come from a single public settings endpoint at runtime — no hard-coded prices anywhere.</li>
+    </ul>
+  </CaseSection>
+
+  <CaseSection num="07" label="Engineering Decisions" title="Meaningful trade-offs" id="decisions">
+    <ul>
+      <li><strong>Phone as identity, not email.</strong> PB 0.39 forces <code>email</code> into <code>passwordAuth.identityFields</code>. The resolution: user-facing identity is the phone, server derives a stable internal email <code>&lt;canonical_phone&gt;@fep.local</code>, and the SDK authenticates with the derived email. The phone field has a unique index.</li>
+      <li><strong>Price snapshots, not live prices.</strong> Every paid payment request stores <code>plan_name_snapshot</code> / <code>amount_snapshot</code> / <code>duration_days_snapshot</code> at submission — later edits never rewrite receipt meaning.</li>
+      <li><strong>One pending payment per user.</strong> Guards manual review against duplicate queues; resubmit only after rejection.</li>
+      <li><strong>Free plans via canonical record.</strong> <code>price_toman === 0</code> on the <code>plans</code> record is the free-plan signal; free activation is a dedicated transaction with a partial unique index (<code>idx_subscriptions_one_free_per_user</code>) as the concurrency backstop — never a second entitlement over an existing valid one.</li>
+      <li><strong>Card transfer toggle without deletion.</strong> Disabling hides all card-transfer UI, makes paid plans unavailable, and re-checks server-side on every submission — but never deletes the stored card config.</li>
+      <li><strong>No native HTTP patch by default.</strong> Normal HTTPS/fetch is the path until real-device evidence proves upload fails.</li>
+      <li><strong>PWA boundaries.</strong> Service worker never caches <code>/api/</code>, auth, payments, receipts, placement, premium text/audio or artwork — only app shell and public static assets.</li>
+    </ul>
+  </CaseSection>
+
+  <CaseSection num="08" label="AI Usage" title="How AI was used" id="ai">
+    <p>
+      AI coding tools were used for implementation, research, debugging, repetitive tasks, and iteration. Requirements, architecture, verification, testing, and final responsibility remained explicit parts of the development process.
+    </p>
+    <p>
+      Concretely: scaffolding and refactoring across React/PocketBase code, explaining PB 0.39 goja constraints, drafting tests and smoke scripts, tightening Caddy and systemd units, and speeding up diagnosis. Automation did not replace judgment — every protected path (auth, receipt validation, placement grading, audio entitlement, approval transaction) is server-enforced and verified by real-backend smoke suites and Playwright.
+    </p>
+    <Callout variant="info" title="Framing" icon="✦">
+      <p>Generative output was reviewed before use. No production decision is attributed to a model. What matters is not that AI assisted, but that verification stayed manual and evidence stayed disposable-backend and browser-based.</p>
+    </Callout>
+  </CaseSection>
+
+  <CaseSection num="09" label="Challenges" title="Real constraints" id="challenges">
+    <ul>
+      <li>Working around PB 0.39 <code>identityFields</code> revert by committing to derived email internally while keeping phone as the public identity — without leaking the derivation to UI copy.</li>
+      <li>Handling byte-identical PB file tokens within the same second by adding a cache-busting nonce for audio retry while the proxy still re-validates entitlement.</li>
+      <li>Keeping the single <code>&lt;audio&gt;</code> lifecycle honest across visibility changes, variant switches and Media Session mirroring — never auto-playing, never inventing position.</li>
+      <li>Designing audit-less, gateway-less money handling so a receipt image never proves payment — approval stays operator-verified externally and transaction-idempotent.</li>
+      <li>Serving the same product to unstable mobile networks and low-to-mid Android devices while preserving tabular timestamps, RTL portals, and bounded concurrency without raw colors or heavy animation.</li>
+    </ul>
+  </CaseSection>
+
+  <CaseSection num="10" label="Validation / Testing" title="How it was checked" id="validation">
+    <p>
+      The main gates are: <code>pnpm verify:fast</code> (typecheck + Biome + Vitest), <code>pnpm verify:feature</code> (fast + affected real-backend smokes + <code>@critical</code> Playwright), and <code>pnpm verify:full</code> (all 16 real-PocketBase smoke suites + builds + full Playwright). Each smoke suite runs a disposable PocketBase in <code>/tmp</code> — never touching <code>server/pb_data</code>. CI runs the same lanes.
+    </p>
+    <p>
+      Coverage includes: signup/login with phone normalization and collision handling; one disposable receipt approved creates exactly one subscription and repeated approval does not double duration; unauthorized receipt/approval fails; 20-question placement completes on a real backend in browser and Android with no answer leakage; active student accesses real lesson + audio while pending/expired is denied and progress survives refresh. Automated checks enforce no raw hex in components, WCAG contrast, motion tokens and copy vocabulary (<code>shared/ui/palette.contrast.test.ts</code>, static-quality, copy-guidelines). Caddy access logs have filtered the <code>token</code> query param via a proven redaction script and PocketBase binds to <code>127.0.0.1:8090</code> only.
+    </p>
+  </CaseSection>
+
+  <CaseSection num="11" label="Outcome / Current Status" title="Honest state" id="outcome">
+    <p>
+      The MVP path is implemented against the July 2026 product contract: signup → manual payment → approval → placement → lessons with protected audio and progress, across web/PWA and Android. PWA install is proven. The release APK build chain produces versioned APKs with SHA-256 and is verified as <code>assembleDebug</code> + <code>cap sync</code> — physical-device install, APK signature proof and the two-day deadline logistics remain the open gates (needs keystore on the VPS and a device). Billing still references the owner-approved launch set: monthly 299,000 toman (30 days) and quarterly 807,300 toman (90 days, 10 % off 3× monthly) — no yearly plan.
+    </p>
+    <p>
+      What is still honestly open: release keystore ownership and secure storage, VPS provider and DNS access, operator identities and count, the reviewed 20-question bank (the demo bank is not the reviewed bank), the production episode library (demo package is not production), receipt retention approval, and approved privacy/terms copy. Where data did not exist, placeholders are explicitly labeled — the system never fabricates a metric to look complete.
+    </p>
+    <Callout variant="accent" title="Status" icon="●">
+      <p><strong>In progress, deployable via disposable-backend verification.</strong> The codebase builds, the disposable-backend smokes run locally, and rollback remains a symlink flip + restart. No public marketing outcome is claimed — the infrastructure is waiting for the launch decisions listed above.</p>
+    </Callout>
+  </CaseSection>
+
+  <CaseSection num="12" label="Screenshots / Media" title="Imagery" id="media">
+    <p>
+      Real product screenshots are not yet published in this portfolio. The media treatment below preserves the honest placeholder strategy from the homepage — abstract, well-composed frames that accept real imagery later without redesigning the page. Achievements are not demonstrated via invented dashboards.
+    </p>
+    <div class="cs-media__grid">
+      <CaseFigure
+        label="01"
+        placeholderTitle="Student App — listening surface"
+        placeholderInitials="FE"
+        caption="Placeholder: Student App listening surface — artwork-led, CEFR rail, single audio element, RTL shell. Real capture will replace this frame with width/height reserved and lazy loading."
+      />
+      <CaseFigure
+        label="02"
+        placeholderTitle="Placement — 20 questions"
+        placeholderInitials="FE"
+        caption="Placeholder: placement flow — 20 active questions, backend grading, correct answers never to client. Will show real server-graded state when available."
+      />
+    </div>
+    <Callout variant="muted" title="Media contract" icon="▭">
+      <p>When captures are ready, they will be provided via <code>&lt;Image&gt;</code> with <code>widths={[480,720,1080]}</code>, <code>loading="lazy"</code>, explicit dimensions and truthful alt text — no browser mocks that imply proof.</p>
+    </Callout>
+  </CaseSection>
+
+  <CaseSection num="13" label="Links" title="Where to look next" id="links">
+    <p>
+      The repository itself is the primary artifact. The project is currently private — access is on request. The surface URLs exist in the committed config but are not presented as live marketing destinations until the VPS, DNS and certificate rollout is completed. Every claim above is reachable in the committed <code>docs/</code> and <code>server/</code> code.
+    </p>
+    <div class="cs-links">
+      <a href="/work/noveno" class="cs-links__primary">Building Noveno — next case study →</a>
+      <a href="/about" class="cs-links__secondary">About →</a>
+    </div>
+    <p class="cs-links__note">If you want to inspect the Fast English code, ask for repository access — I can walk through any protected path (receipt handling, placement grading, audio proxy) on a disposable backend.</p>
+  </CaseSection>
+
+  <NextProject
+    title="Noveno"
+    summary="Building a customer-acquisition system for service businesses — business-first, measurable, and static by default. From scattering to a single capture point."
+    href="/work/noveno"
+    kicker="Founder / Product / Business Systems · Web"
+    variant="accent"
+  />
+</Layout>
+
+<style>
+  .cs-media {
+    max-width: var(--width-prose);
+    padding: var(--space-4) 0 0;
+  }
+
+  .cs-media__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .cs-media__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .cs-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .cs-links__primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border-radius: var(--radius-pill);
+    background: var(--color-text);
+    color: var(--color-canvas);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    transition: transform var(--duration-fast) var(--ease-default), background var(--duration-fast) var(--ease-default);
+  }
+  .cs-links__primary:hover {
+    background: color-mix(in srgb, var(--color-text) 88%, var(--color-accent));
+    transform: translateY(-1px);
+  }
+
+  .cs-links__secondary {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 16px;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    border: var(--border-hairline);
+    color: var(--color-text);
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+  .cs-links__secondary:hover {
+    border-color: var(--color-border-strong);
+    background: var(--color-surface-hover);
+  }
+
+  .cs-links__note {
+    margin-top: var(--space-4);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--color-text-faint);
+    max-width: 66ch;
+    border-left: 2px solid var(--color-border);
+    padding-left: 10px;
+  }
+</style>

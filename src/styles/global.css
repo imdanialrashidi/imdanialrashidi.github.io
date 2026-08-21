@@ -1,0 +1,220 @@
+@import "./tokens.css";
+
+/* Geist — local variable fonts, single weight range each, font-display swap */
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* — Reset — */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  color-scheme: light dark;
+  scrollbar-gutter: stable;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-normal);
+  color: var(--color-text);
+  background: var(--color-canvas);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* — Focus — */
+:where(:focus-visible) {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  box-shadow: var(--shadow-focus);
+}
+
+:where(:focus:not(:focus-visible)) {
+  outline: none;
+  box-shadow: none;
+}
+
+/* — Selection — */
+::selection {
+  background: var(--color-accent);
+  color: white;
+}
+
+/* — Links — */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-text);
+}
+
+/* — Typography primitives — */
+h1,
+h2,
+h3 {
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+}
+
+p {
+  color: var(--color-text);
+  max-width: var(--width-prose);
+}
+
+small {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* — Utilities — */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.container {
+  width: min(calc(100% - 2 * var(--width-gutter)), var(--width-content));
+  margin-inline: auto;
+}
+
+.container--prose {
+  width: min(calc(100% - 2 * var(--width-gutter)), var(--width-prose));
+  margin-inline: auto;
+}
+
+.container--wide {
+  width: min(calc(100% - 2 * var(--width-gutter-sm)), var(--width-wide));
+  margin-inline: auto;
+}
+
+/* — Skip link — */
+.skip-link {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  z-index: 100;
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-text);
+  color: var(--color-canvas);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  transform: translateY(-200%);
+  transition: transform var(--duration-fast) var(--ease-default);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* — Prose — */
+.prose {
+  color: var(--color-text);
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+}
+
+.prose p + p {
+  margin-top: var(--space-4);
+}
+
+.prose a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
+  transition: text-decoration-color var(--duration-fast) var(--ease-default),
+    color var(--duration-fast) var(--ease-default);
+}
+
+.prose a:hover {
+  color: var(--color-accent-hover);
+  text-decoration-color: var(--color-accent);
+}
+
+/* — Theme transition — restrained, compositor-friendly */
+@media (prefers-reduced-motion: no-preference) {
+  html,
+  body,
+  .site-header,
+  .site-footer,
+  .arch__frame,
+  .pf,
+  .cta__card {
+    transition: background-color var(--duration-base) var(--ease-default),
+      color var(--duration-base) var(--ease-default),
+      border-color var(--duration-base) var(--ease-default),
+      box-shadow var(--duration-base) var(--ease-default);
+  }
+}
+
+/* — Reduced motion — */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

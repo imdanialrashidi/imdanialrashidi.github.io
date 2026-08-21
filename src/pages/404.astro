@@ -1,0 +1,126 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { social } from "../data/site.ts";
+---
+
+<Layout
+  title="Not found — Danial Rashidi"
+  description="The page you’re looking for doesn’t exist. Find your way back to Home, Work, and Contact."
+  noIndex
+>
+  <section class="notfound">
+    <div class="container notfound__inner">
+      <div class="notfound__code">404</div>
+      <h1 class="notfound__title">This page doesn’t exist</h1>
+      <p class="notfound__desc">
+        The link may be broken, or the page may have been moved. Try one of these instead.
+      </p>
+      <div class="notfound__actions">
+        <a href="/" class="btn btn--primary">Go home</a>
+        <a href="/work" class="btn btn--ghost">View work</a>
+        <a href="/contact" class="btn btn--ghost">Contact</a>
+      </div>
+      <div class="notfound__meta">
+        <span>Need to reach me? </span>
+        <a href={`mailto:${social.email}`}>{social.email}</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .notfound {
+    padding: clamp(3rem, 10vw, 6rem) 0;
+    display: grid;
+    place-items: center;
+    min-height: 48dvh;
+  }
+
+  .notfound__inner {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .notfound__code {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-faint);
+    background: var(--color-surface-raised);
+    border: var(--border-hairline);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-pill);
+  }
+
+  .notfound__title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+  }
+
+  .notfound__desc {
+    font-size: var(--text-md);
+    line-height: var(--leading-normal);
+    color: var(--color-text-muted);
+    max-width: 38ch;
+  }
+
+  .notfound__actions {
+    margin-top: var(--space-2);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.68rem 1.15rem;
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-medium);
+    border-radius: var(--radius-pill);
+    border: var(--border-hairline);
+    transition: background var(--duration-fast) var(--ease-default),
+      color var(--duration-fast) var(--ease-default),
+      border-color var(--duration-fast) var(--ease-default);
+  }
+
+  .btn--primary {
+    background: var(--color-text);
+    color: var(--color-canvas);
+    border-color: var(--color-text);
+  }
+  .btn--primary:hover {
+    background: color-mix(in srgb, var(--color-text) 88%, var(--color-accent));
+  }
+  .btn--ghost {
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+  .btn--ghost:hover {
+    background: var(--color-surface-hover);
+    border-color: var(--color-border-strong);
+  }
+
+  .notfound__meta {
+    margin-top: var(--space-6);
+    font-size: var(--text-sm);
+    color: var(--color-text-faint);
+  }
+  .notfound__meta a {
+    color: var(--color-text);
+    text-decoration: underline;
+    text-decoration-color: var(--color-border-strong);
+    text-underline-offset: 3px;
+  }
+  .notfound__meta a:hover {
+    color: var(--color-accent);
+    text-decoration-color: var(--color-accent);
+  }
+</style>

@@ -36,6 +36,21 @@
       "commands": [
         ["bash", "scripts/pi-doctor.sh", "--ci", "--static"]
       ]
+    },
+    {
+      "id": "product-site",
+      "include": [
+        "src/**",
+        "public/**",
+        "Assets/**",
+        "astro.config.mjs",
+        "tsconfig.json",
+        "package.json",
+        "package-lock.json"
+      ],
+      "commands": [
+        ["npm", "run", "ci"]
+      ]
     }
   ],
   "fallback": [

@@ -1,0 +1,492 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CaseHero from "../../components/case-study/CaseHero.astro";
+import CaseSection from "../../components/case-study/CaseSection.astro";
+import Callout from "../../components/case-study/Callout.astro";
+import CaseFigure from "../../components/case-study/CaseFigure.astro";
+import ArchitectureDiagram from "../../components/case-study/ArchitectureDiagram.astro";
+import NextProject from "../../components/case-study/NextProject.astro";
+---
+
+<Layout
+  title="Noveno — Danial Rashidi"
+  description="Building Noveno — a customer-acquisition system for service businesses in Iran. Problem, system, customer journey, ownership, product decisions and current status. Static Astro on Cloudflare Pages, email-only lead delivery, no invented metrics."
+>
+  <CaseHero
+    kicker="Founder / Product / Business Systems · Web"
+    title="Noveno"
+    summary="Building a system — not a landing page — that turns scattered visits into a trackable path from attention to inquiry, registration and follow-up for service businesses in Iran. Business-first, measurable, and static by default."
+    role="Founder / Product / Business Systems"
+    year={2025}
+    statusLabel="Building · In progress"
+    stack={["Astro 7", "TypeScript", "Tailwind", "Cloudflare Pages", "Pages Functions", "Web3Forms", "Turnstile"]}
+    links={[
+      { label: "Visit noveno.ir", href: "https://noveno.ir", external: true },
+      { label: "Back to work", href: "/work" },
+    ]}
+    variant="accent"
+  />
+
+  <!-- Hero product hint — honest placeholder, brand-accented -->
+  <div class="container cs-media">
+    <CaseFigure
+      variant="accent"
+      label="Product"
+      placeholderTitle="Noveno — acquisition system"
+      placeholderInitials="N"
+      caption="Honest placeholder. Noveno’s real product is the acquisition path — not this frame. Visit noveno.ir for the live site. Real product screenshots will replace this frame without redesign."
+    />
+  </div>
+
+  <CaseSection num="01" label="Overview" title="What Noveno is (without sales copy)" id="overview">
+    <p>
+      Noveno (نوونو) is a customer-acquisition system for small and medium service businesses in Iran. Its job is singular: turn scattered visits — from Instagram, Google, referrals, prior customers or ads — into a single, trackable path from attention to inquiry, registration and measurable follow-up. Every request is stored with source, status and next step.
+    </p>
+    <p>
+      The public site is <a href="https://noveno.ir" target="_blank" rel="noopener noreferrer">noveno.ir</a>. This case study is not a duplicate of that sales site. It is the founder view from my side: what problem space Noveno targets, what system is being built, how the customer journey is considered, and what product and implementation decisions that forces — without pricing, packages or lead-form funnels repeated here.
+    </p>
+    <Callout variant="muted" title="Source" icon="◈">
+      <p>Product positioning is taken from the live noveno.ir (Persian marketing copy, system description, offers, principles). Technical shape cites the committed Noveno repository: <code>docs/ARCHITECTURE.md</code>, <code>docs/DESIGN.md</code>, <code>astro.config.mjs</code>, <code>package.json</code> and the <code>functions/api/audit.ts</code> boundary. No revenue, visits or lead numbers are invented.</p>
+    </Callout>
+  </CaseSection>
+
+  <CaseSection num="02" label="Problem" title="Why visits leak" id="problem">
+    <p>
+      The failure is rarely lack of visits. It is what happens after a visit: a message stays in a DM, a phone call is never logged, follow-up relies on memory, and no one knows which channel produced which request. Business owners see interest but lose the thread between attention and a registered, actionable lead.
+    </p>
+    <ul>
+      <li>Requests are scattered across channels — DM, phone, message, introduction — with no canonical place.</li>
+      <li>Source of entry is unrecorded; follow-up depends on whether someone remembers to chase it.</li>
+      <li>Result is opaque to the decision-maker: no comparable funnel, no bottleneck visibility.</li>
+      <li>Local conditions matter: mobile-first users, unstable internet, tools that are actually available, and interfaces that degrade gracefully.</li>
+    </ul>
+    <p>
+      Noveno treats this as a system problem, not a traffic problem. Buying more attention before fixing the path after attention is waste — more spend, same leak. The first step is therefore diagnosis, not delivery.
+    </p>
+    <div class="cs-quote">
+      <div class="cs-quote__rule" aria-hidden="true"></div>
+      <p class="cs-quote__text">“The problem is not always insufficient visits; sometimes the path after the visit is broken.”</p>
+      <span class="cs-quote__src">— paraphrased from noveno.ir (no guarantee of sales is made anywhere on the site)</span>
+    </div>
+  </CaseSection>
+
+  <CaseSection num="03" label="Product / System" title="From scattering to a single capture point" id="system">
+    <p>
+      The system is organized as six stages every inbound attention must pass through until a registered, trackable request exists:
+    </p>
+    <div class="cs-steps">
+      <div class="cs-steps__row">
+        <span class="cs-steps__num">۰۱</span><span class="cs-steps__label">جذب</span><span class="cs-steps__desc">Instagram, Google, referral, ad, returning customer</span>
+      </div>
+      <div class="cs-steps__row">
+        <span class="cs-steps__num">۰۲</span><span class="cs-steps__label">متقاعدسازی</span><span class="cs-steps__desc">landing, services, trust, answering hesitation</span>
+      </div>
+      <div class="cs-steps__row">
+        <span class="cs-steps__num">۰۳</span><span class="cs-steps__label">اقدام</span><span class="cs-steps__desc">form, phone, message or reservation</span>
+      </div>
+      <div class="cs-steps__row">
+        <span class="cs-steps__num">۰۴</span><span class="cs-steps__label">ثبت</span><span class="cs-steps__desc">ID, source, request and status are registered</span>
+      </div>
+      <div class="cs-steps__row">
+        <span class="cs-steps__num">۰۵</span><span class="cs-steps__label">پیگیری</span><span class="cs-steps__desc">new → contacted → qualified → won / lost</span>
+      </div>
+      <div class="cs-steps__row">
+        <span class="cs-steps__num">۰۶</span><span class="cs-steps__label">یادگیری</span><span class="cs-steps__desc">visits, conversion, lead quality and bottlenecks are reviewed</span>
+      </div>
+    </div>
+    <p>
+      A compact version appears on the live site as Attention → Request → Registration → Follow-up. The point is ordering, tracking and the ability to compare — without requiring the owner to draw a diagram themselves.
+    </p>
+    <h3>How the journey is considered</h3>
+    <p>
+      Joining this journey means fixing the second half before amplifying the first. A typical early engagement starts with <strong>بررسی مسیر جذب</strong> (acquisition-path review) — a low-friction diagnosis of where requests leak today: messaging, landing/CTA, phone path, and the visibility of source. Only then is the system scoped to the actual problem; not every component for every business.
+    </p>
+    <div class="cs-offers">
+      <div class="cs-offer">
+        <span class="cs-offer__num">۰۱</span>
+        <h3 class="cs-offer__title">بررسی مسیر جذب</h3>
+        <p class="cs-offer__desc">Entry diagnosis: where your current path loses requests. Output is an analysis of current state, prioritized issues, a suggested customer path and an implementation plan.</p>
+      </div>
+      <div class="cs-offer">
+        <span class="cs-offer__num">۰۲</span>
+        <h3 class="cs-offer__title">طراحی و اجرای سیستم جذب</h3>
+        <p class="cs-offer__desc">Core collaboration: from scattered attention to registration, follow-up and measurement — only what the business needs is built, without unnecessary complexity.</p>
+      </div>
+      <div class="cs-offer">
+        <span class="cs-offer__num">۰۳</span>
+        <h3 class="cs-offer__title">بهبود و همراهی ماهانه</h3>
+        <p class="cs-offer__desc">Recurring value after implementation: measurement, review, limited improvement and small maintenance within a defined scope. Not endless support.</p>
+      </div>
+    </div>
+    <p class="cs-note">The offers are not a long service menu — three defined paths chosen depending on the business’s situation. Everything on the site is either truly built or explicitly labeled “concept — نمایشِ مفهومی” when it is a scenario.</p>
+  </CaseSection>
+
+  <CaseSection num="04" label="My Role" title="Founder, product and implementation" id="role">
+    <p>
+      I am the founder and product owner. I own problem definition, business-system thinking, and the web implementation that proves the philosophy on its own site. The work is deliberately business-first — technology serves the business problem, not the opposite — and measurable wherever comparison is practical.
+    </p>
+    <ul>
+      <li><strong>Product thinking:</strong> narrowed the system to one fixable idea (leak after attention), defined the four-to-six stage framing, and made “no guaranteed sales” the non-negotiable honesty line — indicators are defined and measured from real data, results reported only to the extent data allows.</li>
+      <li><strong>Business systems:</strong> scoped collaborations so the audit precedes system build, and monthly accompaniment stays bounded. The system segments visible work (landing, log) from the harder work (message path, phone/message route, lead registration by source, status-bound follow-up).</li>
+      <li><strong>Web implementation:</strong> built the production website as a static, Persian-first, RTL-first product that itself implements the philosophy — registration, attribution measurement and staged follow-up — without inventing dashboards.</li>
+    </ul>
+    <p>
+      Noveno remains clearly separate from my personal professional identity. This portfolio presents it as <strong>Building Noveno</strong>, not as a services page or duplicate pricing funnel. The live site remains the canonical commercial source; this page links to it rather than competing with it.
+    </p>
+  </CaseSection>
+
+  <CaseSection num="05" label="What the Site Is" title="The implementation behind noveno.ir" id="built">
+    <p>
+      The website is an Astro 7 + TypeScript site, statically rendered and deployed to Cloudflare Pages — no SSR. There is no client UI framework (no React/Vue/Svelte); interactivity is framework-free TypeScript modules (<code>src/scripts/</code>: theme, menu, audit form state machine, analytics).
+    </p>
+    <ul>
+      <li><strong>Content:</strong> Astro Content Collections for work entries with mechanically enforced honesty types: <code>project</code> (real, no outcome claims), <code>concept</code> (scenario — metrics forbidden, goals/KPIs required), <code>case-study</code> (verified client + verified metrics with source). A test suite rejects fabricated proof.</li>
+      <li><strong>Fonts:</strong> Estedad (display, 800) + Vazirmatn (body) as self-hosted variable woff2 under <code>public/fonts/</code>, ~165 KB total, <code>font-display: swap</code>, metric-matched Tahoma fallback for CLS ≤ 0.1.</li>
+      <li><strong>Theme:</strong> Persian-first, RTL-first, light (“روز کاری”) and dark, system default with persisted override — no theme flash on first paint.</li>
+      <li><strong>Lead delivery:</strong> No database. Leads are delivered as email via Web3Forms — the sole lead destination. Attribution (UTM / referrer / landing) rides in the email, not a database.</li>
+      <li><strong>Analytics:</strong> Cloudflare Web Analytics (baseline) plus a Pages Function events endpoint (<code>/api/events</code> with Analytics Engine binding <code>NOVENO_EVENTS</code>) for custom acquisition events.</li>
+    </ul>
+  </CaseSection>
+
+  <CaseSection num="06" label="Architecture" title="How the audit flow is handled — truthfully" id="architecture" intro="One narrow server boundary; everything else is static. Success is gated on the email provider, not just server validation.">
+    <ArchitectureDiagram variant="noveno" caption="How noveno.ir is actually shipped: static Astro → Cloudflare Pages CDN, one Pages Function that validates (honeypot, rate limiting, Turnstile siteverify, HMAC receipt), then the browser posts the sanitized lead to Web3Forms. Email acceptance is the success gate; nothing is durably stored." />
+
+    <h3>Why this shape</h3>
+    <ul>
+      <li><strong>Static by default.</strong> Marketing sites rarely need SSR. Static generation plus CDN gives the fastest path for mobile RTL users without runtime infrastructure.</li>
+      <li><strong>One function, not a backend.</strong> The audit form is the only business-critical write path — isolating it as <code>functions/api/audit.ts</code> minimizes attack surface and operational cost. The secret (<code>TURNSTILE_SECRET_KEY</code>) lives only in Pages secrets; build-time publics (<code>PUBLIC_TURNSTILE_SITE_KEY</code>, <code>PUBLIC_WEB3FORMS_ACCESS_KEY</code>) never carry secrets.</li>
+      <li><strong>Email-only delivery was a deliberate choice.</strong> The 2026-10 founder decision removed Supabase entirely. Free-tier Web3Forms requires client-side posting, which trades direct-POST risk for zero database ops. Mitigation is an HMAC validation receipt so the inbox can distinguish validated leads; a future migration (<code>D-01</code> in the repo) removes the direct-POST vector entirely — explicitly documented as debt, not hidden.</li>
+      <li><strong>No secrets in bundle, no logs with content.</strong> The site never commits values; Pages Function logging excludes lead content; analytics is Cloudflare-native so no third-party PII store is introduced.</li>
+    </ul>
+  </CaseSection>
+
+  <CaseSection num="07" label="Engineering Decisions" title="Trade-offs that matter" id="decisions">
+    <ul>
+      <li><strong>No client framework.</strong> The sales surface does not need React — framework-free TS modules cover theme, menu, form state and analytics with far less JS. The constraint avoids hydration cost on the landing.</li>
+      <li><strong>No flowchart visual language.</strong> Founder rejection (2026-08-14): drawn routes, stations and node-and-line diagrams are rejected because they feel technical, small, noisy and weak in hierarchy. The system is communicated via typography, real product UI and editorial numerals instead — the word “مسیر” survives only as product vocabulary.</li>
+      <li><strong>Real product UI over stock photography.</strong> The 2026-09 product-led pass retired contextual business photography. Hero became an original inline-SVG brand artwork (scattered → ordered system, ~4 KB, no raster), and proof moved below the hero to real product screenshots capped at 4–7 media moments per long page.</li>
+      <li><strong>Honesty mechanically enforced.</strong> The work content schema rejects a metric without <code>verified: true</code> + <code>source</code>, and forbids metrics on <code>concept</code> entries entirely. Rendering (tags, dashed concept borders, “نتیجه: در دست اندازه‌گیری” for projects) is automatic — authors only fill frontmatter honestly.</li>
+      <li><strong>Free-tier compatible.</strong> Pages free tier is the constraint: Web3Forms email, Analytics Engine and Pages Functions are chosen for compatibility, not because they are theoretically optimal at scale.</li>
+    </ul>
+  </CaseSection>
+
+  <CaseSection num="08" label="AI Usage" title="How AI fits the workflow" id="ai">
+    <p>
+      AI coding tools were used for implementation, research, debugging, repetitive tasks, and iteration. Requirements, architecture, verification, testing, and final responsibility remained explicit parts of the development process.
+    </p>
+    <p>
+      For Noveno that meant: scaffolding Astro components and Pages Functions, explaining Cloudflare Turnstile and wiring <code>siteverify</code>, iterating on Persian typography and RTL layouts, and speeding up repetitive wiring without adding a heavy runtime. No step was gated on a model — validation, turnstile secret handling, Web3Forms delivery success (and the honest “not available” fallback with direct-contact options when keys are absent) and the measurable-with-evidence rule remained human decisions.
+    </p>
+    <Callout variant="info" title="Framing" icon="✦">
+      <p>The product principle on the live site is literally “AI کمک می‌کند، انسان تصمیم می‌گیرد” — AI helps with analysis and speed; important outputs are reviewed before use. This portfolio follows the same line: faster iteration must not weaken verification or source discipline.</p>
+    </Callout>
+  </CaseSection>
+
+  <CaseSection num="09" label="Challenges" title="Real constraints" id="challenges">
+    <ul>
+      <li>Communicating a system without drawing it — after rejecting diagrams, the site had to prove systematism through editing, ordering and real interfaces alone.</li>
+      <li>Building for real Iranian conditions — mobile, unstable internet, available tools and replaceability — without inventing an idealised tool stack that would immediately break on re-entry.</li>
+      <li>Keeping the personal site and the commercial site clearly separated so one does not become the funnel for the other — hence “Building Noveno” framing, not a duplicate offer page.</li>
+      <li>Handling lead delivery without a database while retaining honest error semantics — the user reaches <code>/audit/thank-you</code> only after Web3Forms confirms acceptance; server validation alone never presents success, and duplicates remain distinguishable via <code>submission_id</code>.</li>
+      <li>Maintaining Persian editorial quality at a premium level under the rejected-photography, no-framework, no-WGL, no-glassmorphism constraints.</li>
+    </ul>
+  </CaseSection>
+
+  <CaseSection num="10" label="Validation / Testing" title="How it was checked" id="validation">
+    <p>
+      The main gates are <code>npm run check</code> (Astro check — types + content schema), <code>npm run build</code> (static + prebuild image-manifest, OG validation, sitemap), and <code>node --test tests/*.test.mjs</code> (content honesty contract, sitemap/page correspondence, product-specific invariants) — composed as <code>bash scripts/verify.sh</code>. Prebuild enforces image manifests and OG assets; failures are build-breaking, not warnings.
+    </p>
+    <p>
+      Manual checks prove the audit boundary: without <code>PUBLIC_TURNSTILE_SITE_KEY</code> + <code>PUBLIC_WEB3FORMS_ACCESS_KEY</code> the form still validates locally and shows the honest “not available” fallback with direct-contact options (phone, WhatsApp, Telegram, email). With keys, the flow is validated → posted → confirmed before success. Accessibility and contrast are measured against WCAG 2.2 AA (light <code>#070808</code> on <code>#f9fafa</code> 19.2:1, etc.) and performance budgets stay ≤200 KB for fonts, no heavy JS.
+    </p>
+  </CaseSection>
+
+  <CaseSection num="11" label="Outcome / Current Status" title="Honest state" id="outcome">
+    <p>
+      The flagged production-equivalent build — Astro app, all public routes, the audit flow plus Pages Function trust boundary, Turnstile + Web3Forms delivery, analytics, SEO/production artifacts, visual redesigns (typography + real product UI, brand artwork, وبلاگ) and the email-only architecture — is committed and verified as <code>bash scripts/verify.sh</code> per the repository’s own plan. The site proves the same philosophy it sells: scattered attention → a single registered place → status-bound follow-up → measurement within a defined scope, with AI helping and a human deciding.
+    </p>
+    <p>
+      What is still open before launch is founder provisioning: Cloudflare Pages secrets for Turnstile and Web3Forms, DNS wiring, a preview-deploy smoke, and final approval of privacy/terms copy. No visits, conversion rates or lead counts are claimed — the work entry for the production site itself is type <code>project</code> with <code>outcome: measuring</code> and no metric until real data exists. A real, verifiable case study will be added to <code>src/content/work</code> only when a client and citable source both exist.
+    </p>
+    <Callout variant="accent" title="Status" icon="●">
+      <p><strong>Building — production build verified, launch awaiting provisioning.</strong> The site’s own implementation is proof of the philosophy, but business outcomes are explicitly “in measurement” rather than declared. Nothing is presented as a case study before it is one.</p>
+    </Callout>
+  </CaseSection>
+
+  <CaseSection num="12" label="Screenshots / Media" title="Imagery" id="media">
+    <p>
+      Because this case study must not duplicate the sales site, media here is restrained and honest. The personal site deliberately avoids repurposing Noveno’s marketing photography as portfolio proof. The frames below are the media slots that will receive real product imagery — and the link to the live product remains the primary way to see it.
+    </p>
+    <CaseFigure
+      variant="accent"
+      label="Live"
+      placeholderTitle="noveno.ir — live product"
+      placeholderInitials="N"
+      caption="The live site at noveno.ir is the product itself — that is the proof. This frame is a placeholder; linking there is more honest than embedding a static capture that would age."
+    />
+    <CaseFigure
+      label="02"
+      placeholderTitle="Audit interface — real product UI"
+      placeholderInitials="N"
+      caption="Placeholder: the audit interface behind /audit — the real product surface. When a capture is warranted, it will be a direct, bordered capture (16:10, hairline frame, caption stating 'real screenshot of this project'), not an invented dashboard."
+    />
+    <Callout variant="muted" title="Media contract" icon="▭">
+      <p>This portfolio does not generate fake UI. Real captures, when added, will be delivered via <code>&lt;Image&gt;</code> with explicit dimensions, <code>loading="lazy"</code> and truthful alt text. Unlabeled stock business photography is avoided per the product-led pass.</p>
+    </Callout>
+    <p class="cs-external">
+      Primary external destination: <a href="https://noveno.ir" target="_blank" rel="noopener noreferrer">noveno.ir ↗</a>
+      <span class="cs-external__note">— Persian, RTL, light/dark, no invented metrics. Open in a new tab.</span>
+    </p>
+  </CaseSection>
+
+  <CaseSection num="13" label="Links" title="Where to go from here" id="links">
+    <p>
+      The canonical commercial presence is <a href="https://noveno.ir" target="_blank" rel="noopener noreferrer">noveno.ir</a> — services, process, blog, about and audit. The code lives in a private repository (<code>noveno-website</code>), with escaped secrets, signed boundaries and sitemap-gated proof. Every statement here should be traceable to one of those two places.
+    </p>
+    <div class="cs-links">
+      <a href="https://noveno.ir" target="_blank" rel="noopener noreferrer" class="cs-links__primary">Open noveno.ir ↗</a>
+      <a href="/work/fast-english" class="cs-links__secondary">Fast English — technical case study →</a>
+    </div>
+    <p class="cs-links__note">No pricing, form or package is mirrored from the sales site here. If you are evaluating product thinking, this page is the read; if you are evaluating a purchase, the live site is the read.</p>
+  </CaseSection>
+
+  <NextProject
+    title="Fast English"
+    summary="A Persian-first podcast English product — PWA + Android via one codebase, manual card-to-card payment, protected audio, and verification by disposable backend."
+    href="/work/fast-english"
+    kicker="Product Engineering · Web · PWA · Android"
+  />
+</Layout>
+
+<style>
+  .cs-media {
+    max-width: var(--width-prose);
+    padding: var(--space-4) 0 0;
+  }
+
+  .cs-quote {
+    margin: var(--space-5) 0;
+    padding-left: var(--space-5);
+    border-left: 3px solid var(--color-border);
+    max-width: 66ch;
+  }
+
+  .cs-quote__rule { display: none; }
+
+  .cs-quote__text {
+    font-size: var(--text-lg);
+    line-height: 1.5;
+    letter-spacing: -0.015em;
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  .cs-quote__src {
+    display: block;
+    margin-top: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-text-faint);
+  }
+
+  .cs-steps {
+    margin: var(--space-4) 0 var(--space-5);
+    border: var(--border-hairline);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-surface);
+    max-width: 66ch;
+  }
+
+  .cs-steps__row {
+    display: grid;
+    grid-template-columns: 36px 112px 1fr;
+    gap: var(--space-3);
+    align-items: center;
+    padding: var(--space-3) var(--space-4);
+    border-top: var(--border-hairline);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+  }
+
+  .cs-steps__row:first-child { border-top: none; }
+
+  .cs-steps__row:nth-child(even) {
+    background: var(--color-surface-raised);
+  }
+
+  .cs-steps__num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-accent);
+    background: var(--color-accent-soft);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 14%, transparent);
+    padding: 2px 6px;
+    border-radius: var(--radius-pill);
+    text-align: center;
+  }
+
+  .cs-steps__label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .cs-steps__desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 560px) {
+    .cs-steps__row {
+      grid-template-columns: 36px 1fr;
+    }
+    .cs-steps__desc {
+      grid-column: 2;
+      font-size: 12px;
+    }
+  }
+
+  .cs-offers {
+    margin: var(--space-5) 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    max-width: 66ch;
+  }
+
+  .cs-offer {
+    padding: var(--space-4);
+    border: var(--border-hairline);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+  }
+
+  .cs-offer:nth-child(2) {
+    background: var(--color-accent-soft);
+    border-color: color-mix(in srgb, var(--color-accent) 14%, var(--color-border));
+  }
+
+  .cs-offer__num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-accent);
+    background: var(--color-surface);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 14%, var(--color-border));
+    padding: 2px 7px;
+    border-radius: var(--radius-pill);
+  }
+
+  .cs-offer__title {
+    margin-top: var(--space-3);
+    font-size: var(--text-md);
+    font-weight: 620;
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+  }
+
+  .cs-offer__desc {
+    margin-top: 6px;
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--color-text-muted);
+  }
+
+  .cs-note {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--color-text-faint);
+    max-width: 66ch;
+    border-left: 2px solid var(--color-border);
+    padding-left: 10px;
+  }
+
+  .cs-external {
+    margin-top: var(--space-5);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--color-text-muted);
+  }
+
+  .cs-external a {
+    color: var(--color-accent);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .cs-external__note {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-text-faint);
+    margin-left: 6px;
+  }
+
+  .cs-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .cs-links__primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    color: white;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    border: 1px solid var(--color-accent);
+    transition: background var(--duration-fast) var(--ease-default), transform var(--duration-fast) var(--ease-default);
+  }
+  .cs-links__primary:hover {
+    background: var(--color-accent-hover);
+    transform: translateY(-1px);
+  }
+
+  :global(:root[data-theme="dark"] .cs-links__primary) {
+    background: var(--color-accent-pressed);
+    border-color: var(--color-accent-pressed);
+  }
+  :global(:root[data-theme="dark"] .cs-links__primary:hover) {
+    background: #334ecc;
+    border-color: #334ecc;
+  }
+
+  .cs-links__secondary {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 16px;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    border: var(--border-hairline);
+    color: var(--color-text);
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+  .cs-links__secondary:hover {
+    border-color: var(--color-border-strong);
+    background: var(--color-surface-hover);
+  }
+
+  .cs-links__note {
+    margin-top: var(--space-4);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--color-text-faint);
+    max-width: 66ch;
+    border-left: 2px solid var(--color-border);
+    padding-left: 10px;
+  }
+</style>

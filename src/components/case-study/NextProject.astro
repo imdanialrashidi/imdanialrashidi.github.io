@@ -1,0 +1,206 @@
+---
+interface Props {
+  label?: string;
+  title: string;
+  summary: string;
+  href: string;
+  kicker?: string;
+  variant?: "default" | "accent";
+}
+
+const { label = "Next", title, summary, href, kicker, variant = "default" } = Astro.props;
+---
+
+<nav class:list={["next", variant === "accent" && "next--accent"]} aria-label="Next project">
+  <div class="container next__inner">
+    <div class="next__label">
+      <span class="next__labelNum">↗</span>
+      <span class="next__labelText">{label}</span>
+    </div>
+
+    <div class="next__card">
+      <div class="next__text">
+        {kicker && <div class="next__kicker">{kicker}</div>}
+        <h2 class="next__title">
+          <a href={href} class="next__titleLink">{title}</a>
+        </h2>
+        <p class="next__summary">{summary}</p>
+      </div>
+      <a href={href} class="next__cta" aria-label={`Go to ${title}`}>
+        <span>View</span>
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="next__foot">
+      <a href="/work" class="next__footLink">All work ←</a>
+      <span class="next__footSep" aria-hidden="true">·</span>
+      <a href="/contact" class="next__footLink">Get in touch →</a>
+    </div>
+  </div>
+</nav>
+
+<style>
+  .next {
+    margin-top: var(--space-12);
+    border-top: var(--border-hairline);
+    background: var(--color-surface);
+    padding: clamp(1.5rem, 4vw, 2.5rem) 0 clamp(2rem, 5vw, 3rem);
+  }
+
+  .next--accent {
+    background: linear-gradient(180deg, var(--color-accent-soft) 0%, var(--color-surface) 70%);
+    border-top-color: color-mix(in srgb, var(--color-accent) 10%, var(--color-border));
+  }
+
+  .next__inner {
+    max-width: var(--width-prose);
+  }
+
+  .next__label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--color-text-faint);
+    margin-bottom: var(--space-4);
+  }
+
+  .next__labelNum {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: var(--border-hairline);
+    background: var(--color-surface-raised);
+    font-size: 10px;
+  }
+
+  .next--accent .next__labelNum {
+    background: var(--color-surface);
+    border-color: color-mix(in srgb, var(--color-accent) 18%, var(--color-border));
+    color: var(--color-accent);
+  }
+
+  .next__card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+    padding: var(--space-5) var(--space-6);
+    background: var(--color-surface-raised);
+    border: var(--border-hairline);
+    border-radius: var(--radius-lg);
+    transition: border-color var(--duration-fast) var(--ease-default), background var(--duration-fast) var(--ease-default);
+  }
+
+  .next:hover .next__card {
+    border-color: var(--color-border-strong);
+    background: var(--color-surface-hover);
+  }
+
+  .next--accent .next__card {
+    background: var(--color-surface);
+    border-color: color-mix(in srgb, var(--color-accent) 14%, var(--color-border));
+  }
+
+  .next__kicker {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--color-text-faint);
+    margin-bottom: 6px;
+  }
+
+  .next--accent .next__kicker { color: var(--color-accent); }
+
+  .next__title {
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 650;
+  }
+
+  .next__titleLink {
+    color: var(--color-text);
+    transition: color var(--duration-fast) var(--ease-default);
+  }
+  .next__titleLink:hover { color: var(--color-accent); }
+
+  .next__summary {
+    margin-top: var(--space-2);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    max-width: 42ch;
+  }
+
+  .next__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-shrink: 0;
+    padding: 10px 16px;
+    border-radius: var(--radius-pill);
+    background: var(--color-text);
+    color: var(--color-canvas);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    transition: transform var(--duration-fast) var(--ease-default), background var(--duration-fast) var(--ease-default);
+  }
+
+  .next__cta:hover {
+    background: color-mix(in srgb, var(--color-text) 88%, var(--color-accent));
+    transform: translateY(-1px);
+  }
+
+  .next--accent .next__cta {
+    background: var(--color-accent);
+    color: white;
+  }
+  .next--accent .next__cta:hover { background: var(--color-accent-hover); }
+
+  :global(:root[data-theme="dark"] .next--accent .next__cta) {
+    background: var(--color-accent-pressed);
+    color: white;
+  }
+  :global(:root[data-theme="dark"] .next--accent .next__cta:hover) {
+    background: #334ecc;
+  }
+
+  .next__foot {
+    margin-top: var(--space-6);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    font-size: var(--text-sm);
+    border-top: var(--border-hairline);
+    padding-top: var(--space-4);
+  }
+
+  .next__footLink {
+    font-weight: 600;
+    color: var(--color-text-muted);
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
+    transition: color var(--duration-fast) var(--ease-default), border-color var(--duration-fast) var(--ease-default);
+  }
+  .next__footLink:hover { color: var(--color-accent); border-color: var(--color-accent); }
+  .next__footSep { color: var(--color-border-strong); }
+
+  @media (max-width: 560px) {
+    .next__card { flex-direction: column; align-items: flex-start; padding: var(--space-4); }
+    .next__cta { align-self: stretch; justify-content: space-between; }
+  }
+</style>

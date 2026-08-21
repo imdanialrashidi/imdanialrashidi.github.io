@@ -1,0 +1,1117 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ProjectFeature from "../components/ProjectFeature.astro";
+import { social } from "../data/site.ts";
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+import portraitSrc from "../../Assets/Danial_photo.webp";
+
+const projects = (await getCollection("projects"))
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+
+// Capabilities for "What I Work On"
+const capabilities = [
+  {
+    n: "01",
+    title: "Software Products",
+    desc: "Web applications, working MVPs, and useful digital tools.",
+  },
+  {
+    n: "02",
+    title: "AI-Enabled Systems",
+    desc: "Applications and workflows that integrate AI where it creates meaningful leverage.",
+  },
+  {
+    n: "03",
+    title: "Automation",
+    desc: "Systems that reduce repetitive manual work and connect tools, APIs, and workflows.",
+  },
+  {
+    n: "04",
+    title: "Product Engineering",
+    desc: "Turning a problem into requirements, implementation, testing, deployment, and iteration.",
+  },
+];
+
+const principles = [
+  {
+    title: "Solve the actual problem",
+    desc: "Avoid complexity that does not improve the outcome.",
+  },
+  {
+    title: "Ship working systems",
+    desc: "Ideas become valuable when they become usable.",
+  },
+  {
+    title: "Use AI as leverage",
+    desc: "Faster implementation should not mean weaker verification or judgment.",
+  },
+  {
+    title: "Keep systems understandable",
+    desc: "Readable, testable systems are easier to maintain and improve.",
+  },
+];
+---
+
+<Layout
+  title="Danial Rashidi — Software & Product Builder"
+  description="Danial Rashidi — Software & Product Builder. Building practical web products, AI-enabled software and automations from idea to working implementation. Selected work: Fast English, Building Noveno."
+>
+  <!-- Hero — editorial, identity within first viewport -->
+  <section class="hero">
+    <div class="container hero__inner">
+      <div class="hero__eyebrow" data-hero="1">
+        <span class="hero__eyebrowName">Danial Rashidi</span>
+        <span class="hero__eyebrowSep" aria-hidden="true">—</span>
+        <span class="hero__eyebrowRole">Software & Product Builder</span>
+      </div>
+
+      <h1 class="hero__title" data-hero="2">
+        I build software,<br />
+        products <span class="hero__amp">&</span> systems<span class="hero__dot">.</span>
+      </h1>
+
+      <p class="hero__lede" data-hero="3">
+        Building practical web products, AI-enabled software and automations from idea to working
+        implementation.
+      </p>
+
+      <div class="hero__actions" data-hero="4">
+        <a href="/work" class="btn btn--primary">View my work</a>
+        <a
+          href={social.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn--ghost"
+        >
+          <span>GitHub</span>
+          <span aria-hidden="true" class="btn__ext">↗</span>
+        </a>
+      </div>
+
+      <div class="hero__meta" data-hero="5">
+        <span class="hero__metaItem">Based in Iran</span>
+        <span class="hero__metaDot" aria-hidden="true">·</span>
+        <span class="hero__metaItem">Building products</span>
+        <span class="hero__metaDot" aria-hidden="true">·</span>
+        <a href={social.noveno} target="_blank" rel="noopener noreferrer" class="hero__metaLink">Building Noveno ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Selected Work — strongest proof section -->
+  <section class="section work" aria-labelledby="work-title">
+    <div class="container">
+      <div class="section__head">
+        <div class="section__label">
+          <span class="section__labelNum">01</span>
+          <span class="section__labelRule" aria-hidden="true"></span>
+          <span class="section__labelText">Selected Work</span>
+        </div>
+        <div class="section__headRow">
+          <h2 id="work-title" class="section__title">Proof over promise</h2>
+          <a href="/work" class="section__link">View all work <span aria-hidden="true">→</span></a>
+        </div>
+        <p class="section__lede">
+          Two focused efforts. Honest presentation, no fabricated screenshots — media frames are designed to
+          accept real imagery without redesign.
+        </p>
+      </div>
+
+      <div class="work__stack">
+        {
+          projects.map((p, i) => (
+            <ProjectFeature
+              index={String(i + 1).padStart(2, "0")}
+              title={p.data.title}
+              kicker={p.data.kicker || (p.data.categories ? p.data.categories.join(" · ") : "")}
+              summary={p.data.summary}
+              href={p.data.links?.caseStudy || `/work/${p.id}`}
+              statusLabel={
+                p.data.status === "building"
+                  ? "Building · In progress"
+                  : p.data.status === "in_progress"
+                    ? "Case study — in progress"
+                    : undefined
+              }
+              year={p.data.year}
+              ctaLabel={p.data.title === "Noveno" ? "Explore Noveno" : "View case study"}
+              variant={p.data.title === "Noveno" ? "accent" : "default"}
+              reversed={i % 2 === 1}
+            />
+          ))
+        }
+      </div>
+
+      <p class="work__note">
+        Real project screenshots and deeper narratives will replace the abstract frames when available — the component architecture makes that swap straightforward.
+      </p>
+    </div>
+  </section>
+
+  <!-- What I Work On — editorial, not SaaS cards -->
+  <section class="section capabilities" aria-labelledby="cap-title">
+    <div class="container">
+      <div class="section__head">
+        <div class="section__label">
+          <span class="section__labelNum">02</span>
+          <span class="section__labelRule" aria-hidden="true"></span>
+          <span class="section__labelText">What I Work On</span>
+        </div>
+        <h2 id="cap-title" class="section__title">Practical products, from idea to implementation</h2>
+      </div>
+
+      <div class="cap__grid">
+        {
+          capabilities.map((c) => (
+            <div class="cap">
+              <div class="cap__top">
+                <span class="cap__num">{c.n}</span>
+                <span class="cap__rule" aria-hidden="true" />
+              </div>
+              <h3 class="cap__title">{c.title}</h3>
+              <p class="cap__desc">{c.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- How I Build -->
+  <section class="section principles" aria-labelledby="principles-title">
+    <div class="container">
+      <div class="section__head">
+        <div class="section__label">
+          <span class="section__labelNum">03</span>
+          <span class="section__labelRule" aria-hidden="true"></span>
+          <span class="section__labelText">How I Build</span>
+        </div>
+        <h2 id="principles-title" class="section__title">Calm, precise, shipping-focused</h2>
+      </div>
+
+      <ol class="prin__list" role="list">
+        {
+          principles.map((pr, i) => (
+            <li class="prin">
+              <span class="prin__num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+              <div class="prin__body">
+                <h3 class="prin__title">{pr.title}</h3>
+                <p class="prin__desc">{pr.desc}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- About Preview — portrait later in hierarchy, optimized -->
+  <section class="section about-preview" aria-labelledby="about-title">
+    <div class="container">
+      <div class="about__card">
+        <div class="about__text">
+          <div class="section__label section__label--compact">
+            <span class="section__labelNum">04</span>
+            <span class="section__labelRule" aria-hidden="true"></span>
+            <span class="section__labelText">About</span>
+          </div>
+          <h2 id="about-title" class="about__title">I'm Danial — product builder from Iran</h2>
+          <p class="about__lede">
+            I'm Danial, a Computer Engineering student and product builder from Iran. I'm interested in
+            software, AI, products and entrepreneurship — especially turning vague ideas into useful working
+            systems.
+          </p>
+          <a href="/about" class="about__link">More about me <span aria-hidden="true">→</span></a>
+        </div>
+
+        <div class="about__media">
+          <div class="about__portraitWrap">
+            <Image
+              src={portraitSrc}
+              alt="Portrait of Danial Rashidi"
+              widths={[320, 480, 640]}
+              sizes="(max-width: 720px) 42vw, 320px"
+              loading="eager"
+              decoding="async"
+              class="about__portrait"
+            />
+            <div class="about__portraitCaption">
+              <span class="about__captionLabel">Danial Rashidi</span>
+              <span class="about__captionMeta">Software & Product Builder · Iran</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Now Preview — short, dynamic -->
+  <section class="section now-preview" aria-labelledby="now-title">
+    <div class="container">
+      <div class="now__card">
+        <div class="now__head">
+          <h2 id="now-title" class="now__title">
+            <span class="now__label">Now</span>
+            Current direction
+          </h2>
+          <a href="/now" class="now__link">/now <span aria-hidden="true">→</span></a>
+        </div>
+        <ul class="now__list" role="list">
+          <li class="now__item"><span class="now__dot" aria-hidden="true"></span> Building products — shipping incrementally</li>
+          <li class="now__item"><span class="now__dot" aria-hidden="true"></span> Building Noveno — business and product systems</li>
+          <li class="now__item"><span class="now__dot" aria-hidden="true"></span> Strengthening software engineering foundations</li>
+          <li class="now__item"><span class="now__dot" aria-hidden="true"></span> Exploring AI application and agent workflows</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact CTA — strong but restrained -->
+  <section class="section cta" aria-labelledby="cta-title">
+    <div class="container">
+      <div class="cta__card">
+        <div class="cta__main">
+          <h2 id="cta-title" class="cta__title">Let's build something useful.</h2>
+          <p class="cta__lede">
+            Open to product-minded collaborations. If you have a vague idea that deserves a working system,
+            let's talk.
+          </p>
+          <div class="cta__pills">
+            <span class="cta__pill">Software projects</span>
+            <span class="cta__pill">Product collaboration</span>
+            <span class="cta__pill">Technical opportunities</span>
+          </div>
+        </div>
+        <div class="cta__actions">
+          <a href={`mailto:${social.email}`} class="cta__primary">
+            <span>{social.email}</span>
+            <span class="cta__arrow" aria-hidden="true">→</span>
+          </a>
+          <div class="cta__secondaryRow">
+            <a href="/contact" class="cta__secondary">Contact details</a>
+            <span class="cta__sep" aria-hidden="true">·</span>
+            <a href={social.github} target="_blank" rel="noopener noreferrer" class="cta__secondary">GitHub ↗</a>
+          </div>
+          <p class="cta__note">No form, no tracker — direct email, response within a day or two.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* — Base section rhythm — */
+  .section {
+    padding: clamp(2.5rem, 6vw, 4rem) 0;
+    border-top: var(--border-hairline);
+  }
+
+  .section:first-of-type { border-top: none; }
+
+  .section__head {
+    margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .section__label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-faint);
+    margin-bottom: var(--space-4);
+  }
+
+  .section__label--compact { margin-bottom: var(--space-3); }
+
+  .section__labelNum {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 26px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: var(--radius-pill);
+    border: var(--border-hairline);
+    background: var(--color-surface);
+    font-weight: 700;
+    color: var(--color-text-muted);
+    font-size: 10px;
+  }
+
+  .section__labelRule {
+    width: 24px;
+    height: 1px;
+    background: var(--color-border-strong);
+    opacity: 0.7;
+  }
+
+  .section__labelText { font-weight: 600; }
+
+  .section__headRow {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .section__title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.05;
+    font-weight: 650;
+  }
+
+  .section__link {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
+    transition: color var(--duration-fast) var(--ease-default), border-color var(--duration-fast) var(--ease-default);
+  }
+  .section__link:hover { color: var(--color-accent); border-color: var(--color-accent); }
+
+  .section__lede {
+    margin-top: var(--space-3);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+
+  /* — Hero — */
+  .hero {
+    padding: clamp(2.25rem, 7vw, 4.5rem) 0 clamp(2rem, 5vw, 3rem);
+    border-bottom: var(--border-hairline);
+    position: relative;
+    overflow: clip;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--color-accent-soft) 42%, transparent) 0%, transparent 58%),
+      linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--color-border) 22%, transparent) 1px, transparent 1px);
+    background-size: 100% 100%, 36px 36px;
+  }
+
+  /* subtle hairline top accent */
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--color-accent) 0%, transparent 38%);
+    opacity: 0.5;
+  }
+
+  .hero__inner {
+    position: relative;
+  }
+
+  .hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--color-text-faint);
+  }
+
+  .hero__eyebrowName { color: var(--color-text); letter-spacing: -0.01em; }
+  .hero__eyebrowSep { opacity: 0.4; }
+  .hero__eyebrowRole { color: var(--color-text-muted); letter-spacing: 0.08em; }
+
+  .hero__title {
+    margin-top: var(--space-5);
+    font-size: clamp(2.25rem, 6.2vw, 4rem);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    font-weight: 650;
+    max-width: 14ch;
+    text-wrap: balance;
+    color: var(--color-text);
+  }
+
+  .hero__amp {
+    font-weight: 400;
+    color: var(--color-accent);
+    font-style: italic;
+    font-family: Georgia, serif;
+    letter-spacing: -0.02em;
+  }
+
+  .hero__dot { color: var(--color-accent); }
+
+  .hero__lede {
+    margin-top: var(--space-5);
+    font-size: clamp(1.0625rem, 2vw, 1.22rem);
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    max-width: 52ch;
+    font-weight: 400;
+  }
+
+  .hero__actions {
+    margin-top: var(--space-10);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0.78rem 1.2rem;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    border-radius: var(--radius-pill);
+    border: var(--border-hairline);
+    transition: background var(--duration-fast) var(--ease-default), color var(--duration-fast) var(--ease-default), border-color var(--duration-fast) var(--ease-default), transform var(--duration-fast) var(--ease-default), box-shadow var(--duration-fast) var(--ease-default);
+    will-change: transform;
+  }
+
+  .btn:active { transform: scale(0.98); }
+
+  .btn--primary {
+    background: var(--color-text);
+    color: var(--color-canvas);
+    border-color: var(--color-text);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+  }
+  .btn--primary:hover {
+    background: color-mix(in srgb, var(--color-text) 86%, var(--color-accent));
+    border-color: transparent;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn--ghost {
+    background: var(--color-surface);
+    color: var(--color-text);
+    border-color: var(--color-border-strong);
+  }
+  .btn--ghost:hover {
+    background: var(--color-surface-hover);
+    border-color: var(--color-border-strong);
+    transform: translateY(-1px);
+  }
+
+  .btn__ext { font-size: 11px; opacity: 0.7; }
+
+  .hero__meta {
+    margin-top: var(--space-10);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--color-text-faint);
+    border-top: var(--border-hairline);
+    padding-top: var(--space-5);
+    max-width: 52ch;
+  }
+
+  .hero__metaItem { font-weight: 500; }
+  .hero__metaDot { opacity: 0.5; }
+  .hero__metaLink {
+    color: var(--color-text-muted);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--color-border-strong);
+    text-underline-offset: 3px;
+    transition: color var(--duration-fast) var(--ease-default), text-decoration-color var(--duration-fast) var(--ease-default);
+  }
+  .hero__metaLink:hover { color: var(--color-accent); text-decoration-color: var(--color-accent); }
+
+  /* Hero motion — restrained, fast, compositor-only */
+  [data-hero] {
+    opacity: 0;
+    transform: translateY(8px);
+    animation: heroIn 520ms var(--ease-out) forwards;
+    will-change: transform, opacity;
+  }
+  [data-hero="1"] { animation-delay: 30ms; }
+  [data-hero="2"] { animation-delay: 90ms; }
+  [data-hero="3"] { animation-delay: 160ms; }
+  [data-hero="4"] { animation-delay: 220ms; }
+  [data-hero="5"] { animation-delay: 280ms; }
+
+  @keyframes heroIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-hero] { animation: none; opacity: 1; transform: none; }
+  }
+
+  /* Subtle section label entrance — view-timeline where supported, fallback static */
+  @supports (animation-timeline: view()) {
+    .section__label {
+      animation: labelIn 480ms var(--ease-out) both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 18%;
+    }
+    @keyframes labelIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .section__label { animation: none; }
+    }
+  }
+
+  /* — Work — */
+  .work {
+    padding-top: clamp(2rem, 5vw, 3rem);
+    background: var(--color-canvas);
+  }
+
+  .work__stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .work__note {
+    margin-top: var(--space-6);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--color-text-faint);
+    max-width: 68ch;
+    border-left: 2px solid var(--color-border);
+    padding-left: 12px;
+  }
+
+  /* — Capabilities — editorial grid, not SaaS cards */
+  .capabilities {
+    background: color-mix(in srgb, var(--color-surface) 65%, var(--color-canvas));
+  }
+
+  .cap__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .cap {
+    background: var(--color-surface);
+    padding: clamp(1.1rem, 2.5vw, 1.6rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    min-width: 0;
+    transition: background var(--duration-fast) var(--ease-default);
+  }
+
+  .cap:hover { background: var(--color-surface-hover); }
+
+  .cap:nth-child(1) { border-right: var(--border-hairline); border-bottom: var(--border-hairline); }
+  .cap:nth-child(2) { border-bottom: var(--border-hairline); }
+  .cap:nth-child(3) { border-right: var(--border-hairline); }
+
+  .cap__top {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .cap__num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+    background: var(--color-accent-soft);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 14%, transparent);
+    padding: 3px 7px;
+    border-radius: var(--radius-pill);
+  }
+
+  .cap__rule {
+    flex: 1;
+    height: 1px;
+    background: var(--color-border);
+  }
+
+  .cap__title {
+    font-size: var(--text-lg);
+    line-height: 1.15;
+    letter-spacing: -0.018em;
+    font-weight: 650;
+  }
+
+  .cap__desc {
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    max-width: 32ch;
+  }
+
+  @media (max-width: 680px) {
+    .cap__grid { grid-template-columns: 1fr; }
+    .cap:nth-child(1) { border-right: none; }
+    .cap:nth-child(3) { border-right: none; border-bottom: var(--border-hairline); }
+    .cap__desc { max-width: none; }
+  }
+
+  /* — Principles — */
+  .prin__list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6) var(--space-10);
+    list-style: none;
+    padding: 0;
+    margin-top: var(--space-2);
+  }
+
+  .prin {
+    display: flex;
+    gap: var(--space-4);
+    align-items: flex-start;
+    padding-top: var(--space-4);
+    border-top: var(--border-hairline);
+  }
+
+  .prin__num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--color-text-faint);
+    background: var(--color-surface);
+    border: var(--border-hairline);
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .prin__title {
+    font-size: var(--text-md);
+    font-weight: 650;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+  }
+
+  .prin__desc {
+    margin-top: 6px;
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    max-width: 32ch;
+  }
+
+  @media (max-width: 720px) {
+    .prin__list { grid-template-columns: 1fr; gap: var(--space-4); }
+    .prin__desc { max-width: none; }
+  }
+
+  /* — About preview — */
+  .about-preview {
+    background: var(--color-surface-raised);
+    border-top: var(--border-hairline);
+    border-bottom: var(--border-hairline);
+  }
+
+  .about__card {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: center;
+    background: var(--color-surface);
+    border: var(--border-hairline);
+    border-radius: var(--radius-xl);
+    padding: clamp(1.25rem, 3vw, 2rem);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .about__text {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .about__title {
+    font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+    line-height: 1.08;
+    letter-spacing: -0.022em;
+    font-weight: 680;
+  }
+
+  .about__lede {
+    font-size: var(--text-md);
+    line-height: 1.65;
+    color: var(--color-text-muted);
+    max-width: 48ch;
+  }
+
+  .about__link {
+    align-self: flex-start;
+    margin-top: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-border-strong);
+    padding-bottom: 2px;
+    transition: color var(--duration-fast) var(--ease-default), border-color var(--duration-fast) var(--ease-default);
+  }
+  .about__link:hover { color: var(--color-accent); border-color: var(--color-accent); }
+
+  .about__media {
+    display: flex;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .about__portraitWrap {
+    width: min(100%, 320px);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    align-items: center;
+  }
+
+  .about__portrait {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    border: var(--border-hairline);
+    box-shadow: var(--shadow-sm);
+    display: block;
+    /* reserve dimensions — prevent CLS, Astro Image adds width/height attrs */
+  }
+
+  .about__portraitCaption {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .about__captionLabel {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-text);
+  }
+
+  .about__captionMeta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--color-text-faint);
+  }
+
+  @media (max-width: 780px) {
+    .about__card { grid-template-columns: 1fr; }
+    .about__portraitWrap { width: 100%; max-width: 360px; }
+    .about__portrait { aspect-ratio: 4 / 3; object-position: center 28%; }
+  }
+
+  @media (max-width: 480px) {
+    .about__card { padding: 1rem; border-radius: var(--radius-lg); }
+  }
+
+  /* — Now preview — */
+  .now-preview {
+    padding-bottom: clamp(2rem, 5vw, 3rem);
+  }
+
+  .now__card {
+    background: var(--color-accent-soft);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 10%, var(--color-border));
+    border-radius: var(--radius-xl);
+    padding: clamp(1.1rem, 2.5vw, 1.5rem);
+  }
+
+  .now__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    padding-bottom: var(--space-4);
+    border-bottom: var(--border-hairline);
+    border-color: color-mix(in srgb, var(--color-accent) 12%, var(--color-border));
+  }
+
+  .now__title {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    font-size: clamp(1.15rem, 2.2vw, 1.35rem);
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.2;
+  }
+
+  .now__label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--color-accent);
+    background: var(--color-surface);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 14%, transparent);
+    padding: 4px 8px;
+    border-radius: var(--radius-pill);
+  }
+
+  .now__link {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-accent);
+    transition: color var(--duration-fast) var(--ease-default);
+  }
+  .now__link:hover { color: var(--color-accent-hover); }
+
+  .now__list {
+    margin-top: var(--space-4);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3) var(--space-6);
+    list-style: none;
+    padding: 0;
+  }
+
+  .now__item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    font-size: var(--text-sm);
+    line-height: 1.55;
+    color: var(--color-text-muted);
+  }
+
+  .now__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    margin-top: 8px;
+    flex-shrink: 0;
+    opacity: 0.9;
+  }
+
+  @media (max-width: 680px) {
+    .now__list { grid-template-columns: 1fr; }
+  }
+
+  /* — CTA — strong but restrained */
+  .cta {
+    padding-top: 0;
+    border-top: none;
+    padding-bottom: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .cta__card {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+    align-items: center;
+    background: var(--color-text);
+    color: var(--color-canvas);
+    border-radius: var(--radius-xl);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* subtle top accent line */
+  .cta__card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--color-accent) 0%, transparent 50%);
+    opacity: 0.8;
+  }
+
+  .cta__title {
+    font-size: clamp(1.6rem, 3vw, 2.25rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    font-weight: 680;
+    color: var(--color-canvas);
+    text-wrap: balance;
+  }
+
+  .cta__lede {
+    margin-top: var(--space-4);
+    font-size: var(--text-md);
+    line-height: 1.6;
+    color: color-mix(in srgb, var(--color-canvas) 72%, transparent);
+    max-width: 46ch;
+  }
+
+  .cta__pills {
+    margin-top: var(--space-5);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .cta__pill {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    color: color-mix(in srgb, var(--color-canvas) 92%, transparent);
+    background: color-mix(in srgb, white 10%, transparent);
+    border: 1px solid color-mix(in srgb, white 14%, transparent);
+    padding: 6px 10px;
+    border-radius: var(--radius-pill);
+    backdrop-filter: blur(4px);
+  }
+
+  .cta__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-width: 0;
+    background: color-mix(in srgb, white 6%, transparent);
+    border: 1px solid color-mix(in srgb, white 10%, transparent);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    backdrop-filter: blur(6px);
+  }
+
+  .cta__primary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: 14px 14px 14px 18px;
+    background: var(--color-canvas);
+    color: var(--color-text);
+    border-radius: var(--radius-pill);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    transition: transform var(--duration-fast) var(--ease-default), background var(--duration-fast) var(--ease-default);
+    overflow-wrap: anywhere;
+  }
+
+  .cta__primary:hover { transform: translateY(-1px); background: white; }
+  .cta__primary:active { transform: scale(0.99); }
+
+  .cta__arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--color-text);
+    color: var(--color-canvas);
+    flex-shrink: 0;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  .cta__secondaryRow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    font-size: var(--text-sm);
+  }
+
+  .cta__secondary {
+    color: color-mix(in srgb, var(--color-canvas) 86%, transparent);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, white 18%, transparent);
+    text-underline-offset: 3px;
+    transition: color var(--duration-fast) var(--ease-default), text-decoration-color var(--duration-fast) var(--ease-default);
+  }
+  .cta__secondary:hover { color: white; text-decoration-color: white; }
+
+  .cta__sep { color: color-mix(in srgb, white 30%, transparent); }
+
+  .cta__note {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.5;
+    color: color-mix(in srgb, var(--color-canvas) 58%, transparent);
+    border-top: 1px solid color-mix(in srgb, white 10%, transparent);
+    padding-top: var(--space-3);
+  }
+
+  /* Dark theme: CTA — lift from page canvas for presence without neon */
+  :root[data-theme="dark"] .cta__card {
+    background: #17171a;
+    border: 1px solid #2a2a30;
+    color: var(--color-text);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.35);
+  }
+
+  :root[data-theme="dark"] .cta__card::before {
+    opacity: 0.9;
+  }
+
+  :root[data-theme="dark"] .cta__title { color: #f4f4f5; }
+  :root[data-theme="dark"] .cta__lede { color: #a1a1aa; }
+  :root[data-theme="dark"] .cta__actions { background: #1e1e22; border-color: #2a2a30; }
+  :root[data-theme="dark"] .cta__secondary { color: #a1a1aa; }
+  :root[data-theme="dark"] .cta__secondary:hover { color: #f4f4f5; }
+  :root[data-theme="dark"] .cta__note { color: #71717a; border-color: rgba(255, 255, 255, 0.08); }
+  :root[data-theme="dark"] .cta__pill {
+    color: #f4f4f5;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+
+  :root[data-theme="dark"] .cta__primary {
+    background: #f4f4f5;
+    color: #09090b;
+  }
+  :root[data-theme="dark"] .cta__primary:hover {
+    background: #ffffff;
+  }
+  :root[data-theme="dark"] .cta__arrow {
+    background: #09090b;
+    color: #f4f4f5;
+  }
+
+  @media (max-width: 860px) {
+    .cta__card { grid-template-columns: 1fr; }
+    .cta__actions { padding: var(--space-4); }
+  }
+
+  @media (max-width: 400px) {
+    .cta__card { padding: 1.1rem; }
+    .cta__primary { padding: 12px 12px 12px 14px; font-size: 13px; }
+  }
+
+  /* — Reduced motion — */
+  @media (prefers-reduced-motion: reduce) {
+    .btn, .cap, .prin, .about__card, .cta__card { transition: none; }
+  }
+</style>

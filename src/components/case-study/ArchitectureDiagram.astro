@@ -1,0 +1,323 @@
+---
+interface Props {
+  variant: "fast-english" | "noveno";
+  caption?: string;
+}
+
+const { variant, caption } = Astro.props;
+---
+
+<figure class="arch" role="img" aria-label={variant === "fast-english" ? "Fast English architecture diagram" : "Noveno architecture diagram"}>
+  <div class="arch__frame">
+    {variant === "fast-english" ? (
+      <svg viewBox="0 0 720 360" role="img" aria-labelledby="arch-fe-title arch-fe-desc" class="arch__svg">
+        <title id="arch-fe-title">Fast English — system architecture</title>
+        <desc id="arch-fe-desc">Client surfaces, Caddy reverse proxy, PocketBase with SQLite, and deployment. Same-origin API for web, explicit origin for Android, disposable PocketBase for tests.</desc>
+
+        <!-- Canvas -->
+        <rect x="1" y="1" width="718" height="358" rx="14" fill="none" stroke="var(--color-border)" stroke-width="1.2"/>
+
+        <!-- Header label -->
+        <g font-family="Geist Mono, monospace" font-size="9" letter-spacing="0.08em" fill="var(--color-text-faint)">
+          <text x="20" y="22" font-weight="700">FAST ENGLISH — ARCHITECTURE (HONEST)</text>
+          <text x="20" y="34" font-size="8" fill="var(--color-text-faint)" opacity="0.85">One repo · One package.json · No workspace</text>
+        </g>
+
+        <!-- Client layer -->
+        <g>
+          <rect x="20" y="52" width="212" height="88" rx="10" fill="var(--color-surface-raised)" stroke="var(--color-border-strong)" stroke-width="1"/>
+          <text x="30" y="70" font-family="Geist Mono, monospace" font-size="10" font-weight="700" fill="var(--color-text)">Client</text>
+          <text x="30" y="82" font-family="Geist, sans-serif" font-size="8.5" fill="var(--color-text-muted)">Browser / PWA · Android (Capacitor)</text>
+          <g font-family="Geist Mono, monospace" font-size="7.5" fill="var(--color-text-muted)">
+            <rect x="30" y="92" width="68" height="18" rx="9" fill="var(--color-surface)" stroke="var(--color-border)"/>
+            <text x="38" y="103.5" fill="var(--color-text)">app/</text>
+            <rect x="104" y="92" width="70" height="18" rx="9" fill="var(--color-surface)" stroke="var(--color-border)"/>
+            <text x="110" y="103.5">landing/</text>
+            <rect x="30" y="114" width="92" height="18" rx="9" fill="var(--color-surface)" stroke="var(--color-border)"/>
+            <text x="38" y="125.5">admin/</text>
+          </g>
+          <text x="30" y="143" font-family="Geist, sans-serif" font-size="6.5" fill="var(--color-text-faint)">React 19 + MUI · Tailwind (landing only)</text>
+        </g>
+
+        <!-- Caddy -->
+        <g>
+          <rect x="268" y="72" width="116" height="56" rx="10" fill="var(--color-accent-soft)" stroke="color-mix(in srgb, var(--color-accent) 14%, var(--color-border))" stroke-width="1"/>
+          <text x="278" y="92" font-family="Geist Mono, monospace" font-size="10" font-weight="700" fill="var(--color-accent)">Caddy</text>
+          <text x="278" y="104" font-family="Geist Mono, monospace" font-size="7.5" fill="var(--color-text-muted)">:443 HTTPS</text>
+          <text x="278" y="116" font-family="Geist, sans-serif" font-size="7" fill="var(--color-text-faint)">/api/* → 127.0.0.1:8090</text>
+        </g>
+
+        <!-- Arrows client -> caddy -->
+        <g stroke="var(--color-border-strong)" stroke-width="1.2" fill="none" marker-end="url(#arrow-fe)">
+          <path d="M232 88 L268 88"/>
+          <path d="M232 106 L268 100"/>
+        </g>
+        <text x="235" y="82" font-family="Geist Mono, monospace" font-size="6.5" fill="var(--color-text-faint)">/api/*</text>
+
+        <!-- PocketBase -->
+        <g>
+          <rect x="420" y="52" width="170" height="118" rx="10" fill="var(--color-surface)" stroke="var(--color-border-strong)" stroke-width="1.2"/>
+          <text x="430" y="70" font-family="Geist Mono, monospace" font-size="10" font-weight="700" fill="var(--color-text)">PocketBase 0.39.9</text>
+          <text x="430" y="82" font-family="Geist, sans-serif" font-size="7.5" fill="var(--color-text-muted)">Go · SQLite · JS hooks (goja)</text>
+          <g font-family="Geist Mono, monospace" font-size="7.2" fill="var(--color-text-muted)">
+            <rect x="430" y="90" width="78" height="16" rx="8" fill="var(--color-surface-raised)" stroke="var(--color-border)"/>
+            <text x="436" y="100" fill="var(--color-text)">pb_migrations</text>
+            <rect x="514" y="90" width="66" height="16" rx="8" fill="var(--color-surface-raised)" stroke="var(--color-border)"/>
+            <text x="522" y="100">pb_hooks</text>
+          </g>
+          <text x="430" y="120" font-family="Geist Mono, monospace" font-size="7" fill="var(--color-text-faint)">127.0.0.1:8090 · /api/* · CORS allowlist only</text>
+          <text x="430" y="130" font-family="Geist Mono, monospace" font-size="7" fill="var(--color-text-faint)">phone → +989… · derived email · protected receipt</text>
+          <text x="430" y="140" font-family="Geist Mono, monospace" font-size="7" fill="var(--color-text-faint)">placement grading server-side only</text>
+          <!-- SQLite inside -->
+          <rect x="430" y="148" width="150" height="14" rx="7" fill="var(--color-surface-raised)" stroke="var(--color-border)"/>
+          <text x="436" y="157.5" font-family="Geist Mono, monospace" font-size="7" fill="var(--color-text-muted)">SQLite — server/pb_data (git-ignored)</text>
+        </g>
+
+        <!-- Arrow caddy -> pb -->
+        <g stroke="var(--color-accent)" stroke-width="1.2" fill="none" marker-end="url(#arrow-fe-accent)">
+          <path d="M384 100 L420 100"/>
+        </g>
+
+        <!-- Deployment / Infra below -->
+        <g>
+          <rect x="20" y="176" width="212" height="56" rx="10" fill="none" stroke="var(--color-border)" stroke-width="1" stroke-dasharray="4 4"/>
+          <text x="30" y="194" font-family="Geist Mono, monospace" font-size="9" font-weight="700" fill="var(--color-text-faint)">Deployment</text>
+          <text x="30" y="206" font-family="Geist, sans-serif" font-size="7.5" fill="var(--color-text-muted)">Caddy + systemd · immutable releases</text>
+          <text x="30" y="216" font-family="Geist, sans-serif" font-size="7" fill="var(--color-text-faint)">/opt/fast-english/releases/&lt;id&gt; · current symlink · pb_data outside</text>
+        </g>
+
+        <g>
+          <rect x="268" y="176" width="170" height="56" rx="10" fill="none" stroke="var(--color-border)" stroke-width="1" stroke-dasharray="4 4"/>
+          <text x="278" y="194" font-family="Geist Mono, monospace" font-size="9" font-weight="700" fill="var(--color-text-faint)">Android</text>
+          <text x="278" y="206" font-family="Geist, sans-serif" font-size="7.5" fill="var(--color-text-muted)">Capacitor (no Ionic) · webDir dist-app</text>
+          <text x="278" y="216" font-family="Geist Mono, monospace" font-size="7" fill="var(--color-text-faint)">API = https://app… · bundled assets</text>
+        </g>
+
+        <g>
+          <rect x="468" y="176" width="232" height="56" rx="10" fill="none" stroke="var(--color-border)" stroke-width="1" stroke-dasharray="4 4"/>
+          <text x="478" y="194" font-family="Geist Mono, monospace" font-size="9" font-weight="700" fill="var(--color-text-faint)">Verification</text>
+          <text x="478" y="206" font-family="Geist, sans-serif" font-size="7.5" fill="var(--color-text-muted)">16 smoke suites · disposable PB in /tmp</text>
+          <text x="478" y="216" font-family="Geist, sans-serif" font-size="7" fill="var(--color-text-faint)">Vitest · Playwright 360–1440 · never touches pb_data</text>
+        </g>
+
+        <!-- Build separation -->
+        <g>
+          <rect x="20" y="252" width="336" height="52" rx="10" fill="var(--color-surface)" stroke="var(--color-border)" stroke-width="1"/>
+          <text x="30" y="270" font-family="Geist Mono, monospace" font-size="9" font-weight="700" fill="var(--color-text)">Build — isolated Vite configs</text>
+          <text x="30" y="282" font-family="Geist Mono, monospace" font-size="7" fill="var(--color-text-muted)">vite.landing.config.ts → dist-landing (Tailwind only) · vite.app.config.ts → dist-app (MUI only)</text>
+          <text x="30" y="293" font-family="Geist, sans-serif" font-size="7" fill="var(--color-text-faint)">shared/brand.ts only · Capacitor webDir = dist-app · no Tailwind in app</text>
+        </g>
+
+        <g>
+          <rect x="372" y="252" width="328" height="52" rx="10" fill="var(--color-surface-raised)" stroke="var(--color-border)" stroke-width="1"/>
+          <text x="382" y="270" font-family="Geist Mono, monospace" font-size="9" font-weight="700" fill="var(--color-text)">Key invariants</text>
+          <text x="382" y="282" font-family="Geist, sans-serif" font-size="7" fill="var(--color-text-muted)">Client never sets role/status · one pending payment · approval+subscription tx · answers never to client</text>
+          <text x="382" y="293" font-family="Geist, sans-serif" font-size="7" fill="var(--color-text-faint)">PWA SW never caches /api/private · receipt ≤5MB protected · PB answers no leakage</text>
+        </g>
+
+        <!-- Footer note -->
+        <text x="20" y="328" font-family="Geist Mono, monospace" font-size="7" fill="var(--color-text-faint)">Same-origin API for web (Caddy proxy) · Android uses explicit https origin · Dev: Vite /api proxy · android dev: adb reverse</text>
+        <text x="20" y="340" font-family="Geist, sans-serif" font-size="7" fill="var(--color-text-faint)">Honest architecture — no invented scaling, no payment gateway, no CDN font, no Secrets in bundle. Sources: docs/ARCHITECTURE.md + server/VERSION + package.json in repo.</text>
+
+        <defs>
+          <marker id="arrow-fe" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--color-border-strong)"/>
+          </marker>
+          <marker id="arrow-fe-accent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--color-accent)"/>
+          </marker>
+        </defs>
+      </svg>
+    ) : (
+      <svg viewBox="0 0 720 340" role="img" aria-labelledby="arch-nv-title arch-nv-desc" class="arch__svg">
+        <title id="arch-nv-title">Noveno — system architecture</title>
+        <desc id="arch-nv-desc">Static Astro site on Cloudflare Pages, one Pages Function for audit validation, Turnstile, Web3Forms email delivery, no database, Analytics Engine.</desc>
+
+        <rect x="1" y="1" width="718" height="338" rx="14" fill="none" stroke="var(--color-border)" stroke-width="1.2"/>
+
+        <g font-family="Geist Mono, monospace" font-size="9" letter-spacing="0.08em" fill="var(--color-text-faint)">
+          <text x="20" y="22" font-weight="700">NOVENO — CUSTOMER ACQUISITION SYSTEM (AS BUILT)</text>
+          <text x="20" y="34" font-size="8" fill="var(--color-text-faint)" opacity="0.85">Static site · Business-first · No DB · Email-only lead delivery (2026-10 decision)</text>
+        </g>
+
+        <!-- Visitor -->
+        <g>
+          <rect x="20" y="52" width="200" height="74" rx="10" fill="var(--color-surface-raised)" stroke="var(--color-border-strong)" stroke-width="1"/>
+          <text x="30" y="70" font-family="Geist Mono, monospace" font-size="10" font-weight="700" fill="var(--color-text)">Visitor</text>
+          <text x="30" y="82" font-family="Geist, sans-serif" font-size="8.5" fill="var(--color-text-muted)">Service-business owner</text>
+          <text x="30" y="96" font-family="Geist Mono, monospace" font-size="7.5" fill="var(--color-text-muted)">mobile-first · slow network · RTL Persian</text>
+          <text x="30" y="110" font-family="Geist, sans-serif" font-size="7" fill="var(--color-text-faint)">Light / Dark · Estedad + Vazirmatn · no JS framework</text>
+        </g>
+
+        <!-- Pages CDN -->
+        <g>
+          <rect x="256" y="52" width="184" height="74" rx="10" fill="var(--color-surface)" stroke="var(--color-border-strong)" stroke-width="1.2"/>
+          <text x="266" y="70" font-family="Geist Mono, monospace" font-size="10" font-weight="700" fill="var(--color-text)">Cloudflare Pages</text>
+          <text x="266" y="82" font-family="Geist, sans-serif" font-size="7.5" fill="var(--color-text-muted)">Astro 7 static · HTML + assets · CDN</text>
+          <g font-family="Geist Mono, monospace" font-size="7" fill="var(--color-text-muted)">
+            <rect x="266" y="90" width="48" height="14" rx="7" fill="var(--color-surface-raised)" stroke="var(--color-border)"/>
+            <text x="272" y="99.5">index</text>
+            <rect x="320" y="90" width="52" height="14" rx="7" fill="var(--color-surface-raised)" stroke="var(--color-border)"/>
+            <text x="326" y="99.5">/audit</text>
+            <rect x="378" y="90" width="52" height="14" rx="7" fill="var(--color-surface-raised)" stroke="var(--color-border)"/>
+            <text x="384" y="99.5">/work …</text>
+          </g>
+          <text x="266" y="116" font-family="Geist, sans-serif" font-size="7" fill="var(--color-text-faint)">Tailwind · no React · framework-free TS modules</text>
+        </g>
+
+        <!-- Audit Function -->
+        <g>
+          <rect x="468" y="52" width="232" height="74" rx="10" fill="var(--color-accent-soft)" stroke="color-mix(in srgb, var(--color-accent) 14%, var(--color-border))" stroke-width="1"/>
+          <text x="478" y="70" font-family="Geist Mono, monospace" font-size="10" font-weight="700" fill="var(--color-accent)">Pages Function — /api/audit</text>
+          <text x="478" y="82" font-family="Geist, sans-serif" font-size="7.5" fill="var(--color-text-muted)">The only server boundary · Turnstile siteverify</text>
+          <text x="478" y="96" font-family="Geist Mono, monospace" font-size="7" fill="var(--color-text-muted)">server validation · honeypot · rate limit · HMAC receipt</text>
+          <text x="478" y="108" font-family="Geist, sans-serif" font-size="7" fill="var(--color-text-faint)">Secret: TURNSTILE_SECRET_KEY only — never in bundle</text>
+          <text x="478" y="118" font-family="Geist Mono, monospace" font-size="6.5" fill="var(--color-text-faint)">→ 200 validated → browser posts to Web3Forms</text>
+        </g>
+
+        <!-- Arrows -->
+        <g stroke="var(--color-border-strong)" stroke-width="1.2" fill="none" marker-end="url(#arrow-nv)">
+          <path d="M220 88 L256 88"/>
+        </g>
+        <g stroke="var(--color-accent)" stroke-width="1.2" fill="none" marker-end="url(#arrow-nv-accent)">
+          <path d="M440 88 L468 88"/>
+        </g>
+        <text x="222" y="80" font-family="Geist Mono, monospace" font-size="6.5" fill="var(--color-text-faint)">static</text>
+        <text x="442" y="80" font-family="Geist Mono, monospace" font-size="6.5" fill="var(--color-accent)">POST /api/audit</text>
+
+        <!-- Delivery & storage -->
+        <g>
+          <rect x="256" y="148" width="184" height="58" rx="10" fill="none" stroke="var(--color-border)" stroke-width="1" stroke-dasharray="4 4"/>
+          <text x="266" y="166" font-family="Geist Mono, monospace" font-size="9" font-weight="700" fill="var(--color-text-faint)">Lead delivery</text>
+          <text x="266" y="178" font-family="Geist, sans-serif" font-size="7.5" fill="var(--color-text-muted)">Web3Forms — email only (client-side post)</text>
+          <text x="266" y="190" font-family="Geist Mono, monospace" font-size="7" fill="var(--color-text-faint)">success = Web3Forms {`{ success:true }`} → /thank-you</text>
+          <text x="266" y="200" font-family="Geist, sans-serif" font-size="7" fill="var(--color-text-faint)">No DB — nothing durably stored by site</text>
+        </g>
+
+        <g>
+          <rect x="468" y="148" width="232" height="58" rx="10" fill="none" stroke="var(--color-border)" stroke-width="1" stroke-dasharray="4 4"/>
+          <text x="478" y="166" font-family="Geist Mono, monospace" font-size="9" font-weight="700" fill="var(--color-text-faint)">Analytics</text>
+          <text x="478" y="178" font-family="Geist, sans-serif" font-size="7.5" fill="var(--color-text-muted)">Cloudflare Web Analytics + Analytics Engine</text>
+          <text x="478" y="190" font-family="Geist, sans-serif" font-size="7" fill="var(--color-text-faint)">/api/events · NOVENO_EVENTS · UTM rides in email, not DB</text>
+          <text x="478" y="200" font-family="Geist Mono, monospace" font-size="7" fill="var(--color-text-faint)">Zaraz deferred · no DB to back up</text>
+        </g>
+
+        <!-- Business system -->
+        <g>
+          <rect x="20" y="228" width="680" height="62" rx="10" fill="var(--color-surface)" stroke="var(--color-border)" stroke-width="1"/>
+          <text x="30" y="246" font-family="Geist Mono, monospace" font-size="9" font-weight="700" fill="var(--color-text)">The system being built (not just the site)</text>
+          <g font-family="Geist Mono, monospace" font-size="7.5" fill="var(--color-text-muted)">
+            <text x="30" y="262">01 جذب (Instagram/Google/referral) → 02 متقاعدسازی (landing) → 03 اقدام (form/call) → 04 ثبت (source + status) → 05 پیگیری (new/contacted/qualified/won-lost) → 06 یادگیری</text>
+          </g>
+          <text x="30" y="276" font-family="Geist, sans-serif" font-size="7" fill="var(--color-text-faint)">Collaboration shapes: ① بررسی مسیر جذب (audit) · ② طراحی و اجرای سیستم جذب · ③ بهبود و همراهی ماهانه · Built for real Iran: mobile, unstable internet, available tools.</text>
+          <text x="30" y="286" font-family="Geist Mono, monospace" font-size="6.5" fill="var(--color-text-faint)">Principles: business-first · simple system · measurable · AI helps, human decides · no guaranteed sales.</text>
+        </g>
+
+        <text x="20" y="312" font-family="Geist Mono, monospace" font-size="7" fill="var(--color-text-faint)">Founder directive: no flowchart/route diagrams — system communicated via typography, real product UI and editorial numerals (2026-08-14). Photography retired 2026-09.</text>
+        <text x="20" y="324" font-family="Geist, sans-serif" font-size="7" fill="var(--color-text-faint)">Sources: noveno.ir live site (customer-acquisition positioning), github.com/imdanialrashidi noveno repo (Astro + Pages Function), docs/ARCHITECTURE.md invariants. No invented metrics.</text>
+
+        <defs>
+          <marker id="arrow-nv" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--color-border-strong)"/>
+          </marker>
+          <marker id="arrow-nv-accent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--color-accent)"/>
+          </marker>
+        </defs>
+      </svg>
+    )}
+  </div>
+  <div class="arch__hint" aria-hidden="true">Scroll → to explore</div>
+
+  {caption && <figcaption class="arch__caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .arch {
+    margin: var(--space-6) 0;
+    max-width: 66ch;
+    position: relative;
+  }
+
+  .arch__frame {
+    border: var(--border-hairline);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    overflow: hidden;
+    padding: 6px;
+    position: relative;
+  }
+
+  .arch__frame::after {
+    /* subtle edge fade hinting scroll on narrow — only visible when overflow */
+    content: "";
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    bottom: 6px;
+    width: 28px;
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-surface) 92%, transparent));
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--duration-fast) var(--ease-default);
+  }
+
+  .arch__svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .arch__caption {
+    margin-top: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.55;
+    color: var(--color-text-faint);
+    max-width: 66ch;
+    border-left: 2px solid var(--color-border);
+    padding-left: 10px;
+    overflow-wrap: anywhere;
+  }
+
+  .arch__hint {
+    display: none;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-faint);
+    margin-top: 6px;
+    text-align: right;
+    opacity: 0.9;
+  }
+
+  /* Narrow: horizontal scroll inside frame — page never overflows */
+  @media (max-width: 560px) {
+    .arch__frame {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-border-strong) transparent;
+    }
+    .arch__frame::-webkit-scrollbar {
+      height: 6px;
+    }
+    .arch__frame::-webkit-scrollbar-thumb {
+      background: var(--color-border-strong);
+      border-radius: 999px;
+    }
+    .arch__svg {
+      min-width: 520px;
+    }
+    .arch__frame::after {
+      opacity: 1;
+    }
+    .arch__hint { display: block; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .arch__frame::after { transition: none; }
+  }
+</style>

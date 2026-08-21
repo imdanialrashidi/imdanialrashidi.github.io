@@ -1,0 +1,187 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ProjectFeature from "../../components/ProjectFeature.astro";
+import { getCollection } from "astro:content";
+
+const projects = (await getCollection("projects"))
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+---
+
+<Layout
+  title="Work — Danial Rashidi"
+  description="Work by Danial Rashidi — Fast English and Building Noveno. Curated portfolio index, honest presentation without fabricated proof."
+>
+  <section class="work-head">
+    <div class="container">
+      <div class="work-head__top">
+        <span class="work-head__eyebrow">Portfolio index — 02 projects</span>
+        <span class="work-head__rule" aria-hidden="true"></span>
+      </div>
+      <h1 class="work-head__title">Work</h1>
+      <p class="work-head__lede">
+        A curated index of products I've helped shape. Each entry uses the same project source of truth
+        as the homepage — editorial presentation with generous media hierarchy and an honest placeholder that
+        accepts real screenshots later without redesign.
+      </p>
+      <div class="work-head__meta">
+        <span>Fast English <span class="mono">· Product Engineering · Web · PWA · Android</span></span>
+        <span aria-hidden="true">—</span>
+        <span>Noveno <span class="mono">· Founder / Product / Business Systems · Web</span></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="work-list">
+    <div class="container work-list__stack">
+      {
+        projects.map((p, i) => (
+          <ProjectFeature
+            index={String(i + 1).padStart(2, "0")}
+            title={p.data.title}
+            kicker={p.data.kicker || (p.data.categories ? p.data.categories.join(" · ") : "")}
+            summary={p.data.summary}
+            href={p.data.links?.caseStudy || `/work/${p.id}`}
+            statusLabel={
+              p.data.status === "building"
+                ? "Building · In progress"
+                : p.data.status === "in_progress"
+                  ? "Case study — in progress"
+                  : undefined
+            }
+            year={p.data.year}
+            ctaLabel={p.data.title === "Noveno" ? "Explore Noveno" : "View case study"}
+            variant={p.data.title === "Noveno" ? "accent" : "default"}
+            reversed={i % 2 === 1}
+          />
+        ))
+      }
+    </div>
+
+    <div class="container work-list__foot">
+      <p class="work-list__note">
+        Detailed case-study bodies for Fast English and Noveno are the next slice — this index already
+        preserves strong image hierarchy, distinguishes categories without badge clutter, and makes the
+        path into each case study obvious. No placeholder projects added to fill space.
+      </p>
+      <div class="work-list__actions">
+        <a href="/" class="work-list__link">← Back to home</a>
+        <a href="/contact" class="work-list__link work-list__link--accent">Get in touch →</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .work-head {
+    padding: clamp(2rem, 6vw, 3.25rem) 0 clamp(1.5rem, 4vw, 2rem);
+    border-bottom: var(--border-hairline);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--color-accent-soft) 34%, transparent) 0%, transparent 70%);
+  }
+
+  .work-head__top {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+
+  .work-head__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--color-text-faint);
+  }
+
+  .work-head__rule {
+    flex: 1;
+    max-width: 80px;
+    height: 1px;
+    background: var(--color-border-strong);
+    opacity: 0.7;
+  }
+
+  .work-head__title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: -0.03em;
+    line-height: 0.92;
+    font-weight: 670;
+  }
+
+  .work-head__lede {
+    margin-top: var(--space-4);
+    font-size: var(--text-md);
+    line-height: 1.65;
+    color: var(--color-text-muted);
+    max-width: 62ch;
+  }
+
+  .work-head__meta {
+    margin-top: var(--space-5);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    color: var(--color-text-faint);
+    border-top: var(--border-hairline);
+    padding-top: var(--space-4);
+    max-width: 70ch;
+  }
+
+  .mono { font-size: 10px; opacity: 0.9; }
+
+  .work-list {
+    padding: clamp(1.75rem, 4vw, 2.5rem) 0 clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .work-list__stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .work-list__foot {
+    margin-top: var(--space-8);
+    border-top: var(--border-hairline);
+    padding-top: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .work-list__note {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.65;
+    color: var(--color-text-faint);
+    max-width: 72ch;
+    border-left: 2px solid var(--color-border);
+    padding-left: 12px;
+  }
+
+  .work-list__actions {
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .work-list__link {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    border-bottom: 1px solid var(--color-border-strong);
+    padding-bottom: 2px;
+    transition: color var(--duration-fast) var(--ease-default), border-color var(--duration-fast) var(--ease-default);
+  }
+  .work-list__link:hover { color: var(--color-text); border-color: var(--color-text); }
+  .work-list__link--accent { color: var(--color-accent); border-color: color-mix(in srgb, var(--color-accent) 30%, transparent); }
+  .work-list__link--accent:hover { color: var(--color-accent-hover); border-color: var(--color-accent); }
+
+  @media (max-width: 480px) {
+    .work-head__meta { gap: 6px 10px; }
+  }
+</style>

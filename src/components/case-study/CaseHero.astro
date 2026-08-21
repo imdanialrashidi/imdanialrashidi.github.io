@@ -1,0 +1,311 @@
+---
+interface Props {
+  kicker: string;
+  title: string;
+  summary: string;
+  role?: string;
+  year?: number;
+  statusLabel?: string;
+  stack?: string[];
+  links?: { label: string; href: string; external?: boolean }[];
+  backHref?: string;
+  backLabel?: string;
+  variant?: "default" | "accent";
+}
+
+const {
+  kicker,
+  title,
+  summary,
+  role,
+  year,
+  statusLabel,
+  stack,
+  links,
+  backHref = "/work",
+  backLabel = "Work",
+  variant = "default",
+} = Astro.props;
+---
+
+<section class:list={["cs-hero", variant === "accent" && "cs-hero--accent"]}>
+  <div class="container cs-hero__inner">
+    <a href={backHref} class="cs-hero__back">
+      <span aria-hidden="true">←</span> {backLabel}
+    </a>
+
+    <div class="cs-hero__kicker">
+      <span class="cs-hero__kickerText">{kicker}</span>
+      {statusLabel && <span class="cs-hero__status">{statusLabel}</span>}
+    </div>
+
+    <h1 class="cs-hero__title">{title}</h1>
+    <p class="cs-hero__summary">{summary}</p>
+
+    <div class="cs-hero__meta">
+      <div class="cs-hero__metaGrid">
+        {role && (
+          <div class="cs-hero__metaItem">
+            <span class="cs-hero__metaLabel">Role</span>
+            <span class="cs-hero__metaValue">{role}</span>
+          </div>
+        )}
+        {year && (
+          <div class="cs-hero__metaItem">
+            <span class="cs-hero__metaLabel">Year</span>
+            <span class="cs-hero__metaValue">{year}</span>
+          </div>
+        )}
+        {statusLabel && (
+          <div class="cs-hero__metaItem cs-hero__metaItem--status">
+            <span class="cs-hero__metaLabel">Status</span>
+            <span class="cs-hero__metaValue cs-hero__metaValue--status">{statusLabel}</span>
+          </div>
+        )}
+        {stack && stack.length > 0 && (
+          <div class="cs-hero__metaItem cs-hero__metaItem--stack">
+            <span class="cs-hero__metaLabel">Stack</span>
+            <span class="cs-hero__metaValue cs-hero__stack">
+              {stack.map((s) => (
+                <span class="cs-hero__stackPill">{s}</span>
+              ))}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {links && links.length > 0 && (
+        <div class="cs-hero__links">
+          {links.map((l) => (
+            <a
+              href={l.href}
+              target={l.external ? "_blank" : undefined}
+              rel={l.external ? "noopener noreferrer" : undefined}
+              class="cs-hero__link"
+            >
+              {l.label} {l.external && <span aria-hidden="true">↗</span>}
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cs-hero {
+    padding: clamp(1.75rem, 5vw, 2.75rem) 0 clamp(1.5rem, 4vw, 2rem);
+    border-bottom: var(--border-hairline);
+    position: relative;
+    overflow: clip;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--color-accent-soft) 36%, transparent) 0%, transparent 62%),
+      radial-gradient(ellipse at 18% 0%, color-mix(in srgb, var(--color-border) 18%, transparent) 0%, transparent 55%);
+  }
+
+  .cs-hero::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--color-accent) 0%, transparent 42%);
+    opacity: 0.55;
+  }
+
+  .cs-hero--accent {
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--color-accent-soft) 52%, transparent) 0%, transparent 70%),
+      radial-gradient(ellipse at 78% 0%, color-mix(in srgb, var(--color-accent) 9%, transparent) 0%, transparent 55%);
+  }
+
+  .cs-hero__inner {
+    position: relative;
+    max-width: var(--width-prose);
+  }
+
+  .cs-hero__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text-muted);
+    transition: color var(--duration-fast) var(--ease-default);
+  }
+  .cs-hero__back:hover { color: var(--color-accent); }
+
+  .cs-hero__kicker {
+    margin-top: var(--space-6);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .cs-hero__kickerText {
+    color: var(--color-text-faint);
+  }
+
+  .cs-hero--accent .cs-hero__kickerText { color: var(--color-accent); }
+
+  .cs-hero__status {
+    color: var(--color-text-muted);
+    background: var(--color-surface);
+    border: var(--border-hairline);
+    padding: 3px 8px;
+    border-radius: var(--radius-pill);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+
+  .cs-hero--accent .cs-hero__status {
+    background: var(--color-surface);
+    border-color: color-mix(in srgb, var(--color-accent) 18%, var(--color-border));
+    color: var(--color-accent);
+  }
+
+  .cs-hero__title {
+    margin-top: var(--space-4);
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 0.92;
+    letter-spacing: -0.032em;
+    font-weight: 680;
+    text-wrap: balance;
+    max-width: 16ch;
+  }
+
+  .cs-hero__summary {
+    margin-top: var(--space-4);
+    font-size: clamp(1.02rem, 1.8vw, 1.18rem);
+    line-height: 1.65;
+    color: var(--color-text-muted);
+    max-width: 58ch;
+  }
+
+  .cs-hero__meta {
+    margin-top: var(--space-6);
+    border-top: var(--border-hairline);
+    padding-top: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .cs-hero__metaGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-4) var(--space-6);
+  }
+
+  .cs-hero__metaItem {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .cs-hero__metaItem--stack {
+    grid-column: 1 / -1;
+  }
+
+  .cs-hero__metaLabel {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--color-text-faint);
+  }
+
+  .cs-hero__metaValue {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+    overflow-wrap: anywhere;
+  }
+
+  .cs-hero__metaValue--status {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--color-text-muted);
+  }
+
+  .cs-hero__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .cs-hero__stackPill {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    background: var(--color-surface);
+    border: var(--border-hairline);
+    padding: 4px 9px;
+    border-radius: var(--radius-pill);
+    line-height: 1;
+  }
+
+  .cs-hero__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .cs-hero__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: var(--border-hairline);
+    padding: 8px 14px;
+    border-radius: var(--radius-pill);
+    transition: border-color var(--duration-fast) var(--ease-default), background var(--duration-fast) var(--ease-default), color var(--duration-fast) var(--ease-default);
+  }
+  .cs-hero__link:hover {
+    border-color: var(--color-border-strong);
+    background: var(--color-surface-hover);
+    color: var(--color-accent);
+  }
+
+  .cs-hero--accent .cs-hero__link {
+    background: var(--color-accent);
+    color: white;
+    border-color: var(--color-accent);
+  }
+  .cs-hero--accent .cs-hero__link:hover {
+    background: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+    color: white;
+  }
+
+  /* Dark theme: ensure white on accent meets 4.5:1 */
+  :global(:root[data-theme="dark"] .cs-hero--accent .cs-hero__link) {
+    background: var(--color-accent-pressed);
+    border-color: var(--color-accent-pressed);
+    color: white;
+  }
+  :global(:root[data-theme="dark"] .cs-hero--accent .cs-hero__link:hover) {
+    background: #334ecc;
+    border-color: #334ecc;
+  }
+
+  @media (max-width: 480px) {
+    .cs-hero__metaGrid { grid-template-columns: 1fr; }
+  }
+</style>

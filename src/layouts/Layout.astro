@@ -1,0 +1,111 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { site, social } from "../data/site.ts";
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  noIndex?: boolean;
+}
+
+const {
+  title = site.title,
+  description = site.description,
+  canonical,
+  noIndex = false,
+} = Astro.props;
+
+const rawCanonical = canonical ?? new URL(Astro.url.pathname, site.url).toString();
+// Ensure root canonical matches sitemap (no trailing slash) and respects trailingSlash:never
+const canonicalURL = rawCanonical === site.url + "/" ? site.url : rawCanonical;
+const ogImageURL = new URL("/og-default.png", site.url).toString();
+const ogTitle = title.includes("—") ? title : `${title} — ${site.shortTitle}`;
+---
+
+<!doctype html>
+<html lang={site.language}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="author" content={site.author} />
+    <meta name="theme-color" content="#fcfcfc" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
+
+    <!-- Preload critical Geist sans — mono loads on demand -->
+    <link
+      rel="preload"
+      href="/fonts/Geist-Variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.shortTitle} />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.shortTitle} — Software & Product Builder`} />
+    <meta property="og:locale" content={site.locale} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <!-- JSON-LD Person -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: site.author,
+      url: site.url,
+      jobTitle: "Software & Product Builder",
+      sameAs: [
+        social.github,
+        social.x,
+        social.instagram,
+        social.telegram,
+        social.noveno,
+      ],
+      email: `mailto:${social.email}`,
+    })} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- FOUC prevention — inline, minimal, blocking before paint -->
+    <script is:inline>
+      (function () {
+        try {
+          var k = "theme";
+          var s = localStorage.getItem(k);
+          var d = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          var t = s === "light" || s === "dark" ? s : d;
+          document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {
+          var m = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          document.documentElement.setAttribute("data-theme", m);
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header currentPath={Astro.url.pathname} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

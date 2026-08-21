@@ -1,0 +1,169 @@
+/* — Design Tokens — Editorial × Engineering × Product — monochrome + electric blue — light-first */
+
+:root {
+  /* Color — light (default) */
+  --color-canvas: #fcfcfc;
+  --color-surface: #ffffff;
+  --color-surface-raised: #f5f5f3;
+  --color-surface-hover: #efefed;
+  --color-border: #e9e9e7;
+  --color-border-strong: #d6d6d4;
+  --color-border-faint: #f0f0ef;
+  --color-text: #0f1419;
+  --color-text-muted: #5f6368;
+  --color-text-faint: #71717a;
+  --color-text-inverse: #ffffff;
+  --color-accent: #0f4cff;
+  --color-accent-hover: #0a3dd1;
+  --color-accent-pressed: #0833b0;
+  --color-accent-soft: #eef2ff;
+  --color-accent-soft-hover: #e0e7ff;
+  --color-focus: #0f4cff;
+  --color-focus-ring: rgba(15, 76, 255, 0.4);
+
+  /* Typography */
+  --font-sans: "Geist", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji";
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 1rem;
+  --text-md: 1.0625rem;
+  --text-lg: 1.1875rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.125rem;
+  --text-4xl: 2.625rem;
+  --text-5xl: 3.5rem;
+
+  --leading-tight: 1.1;
+  --leading-snug: 1.25;
+  --leading-normal: 1.55;
+  --leading-relaxed: 1.7;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: -0.01em;
+  --tracking-wide: 0.02em;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* Spacing — 4pt base */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* Layout */
+  --width-prose: 42rem; /* 672px — 66ch measure */
+  --width-content: 72rem; /* 1152px — wide */
+  --width-wide: 80rem;
+  --width-gutter: clamp(1rem, 4vw, 2rem);
+  --width-gutter-sm: clamp(1rem, 3vw, 1.5rem);
+  --header-height: 64px;
+
+  /* Borders */
+  --border-width: 1px;
+  --border-hairline: 1px solid var(--color-border);
+  --border-strong: 1px solid var(--color-border-strong);
+  --border-faint: 1px solid var(--color-border-faint);
+
+  /* Radius */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-pill: 999px;
+
+  /* Motion */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 360ms;
+  --ease-default: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Shadows — restrained */
+  --shadow-sm: 0 1px 2px rgba(15, 20, 25, 0.04), 0 1px 1px rgba(15, 20, 25, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 20, 25, 0.06), 0 1px 3px rgba(15, 20, 25, 0.08);
+  --shadow-focus: 0 0 0 3px var(--color-focus-ring);
+
+  /* Z */
+  --z-header: 50;
+  --z-nav: 40;
+}
+
+/* — Dark theme tokens — polished, not inverted */
+:root[data-theme="dark"] {
+  --color-canvas: #09090b;
+  --color-surface: #111113;
+  --color-surface-raised: #1a1a1e;
+  --color-surface-hover: #212126;
+  --color-border: #232326;
+  --color-border-strong: #2e2e32;
+  --color-border-faint: #1a1a1e;
+  --color-text: #f4f4f5;
+  --color-text-muted: #a1a1aa;
+  --color-text-faint: #94969c;
+  --color-text-inverse: #09090b;
+  --color-accent: #4f7cff;
+  --color-accent-hover: #6b8fff;
+  --color-accent-pressed: #3b5bdb;
+  --color-accent-soft: #151c30;
+  --color-accent-soft-hover: #1d2540;
+  --color-focus: #4f7cff;
+  --color-focus-ring: rgba(79, 124, 255, 0.45);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.5);
+  --shadow-focus: 0 0 0 3px var(--color-focus-ring);
+}
+
+/* System preference fallback when no explicit data-theme is set (FOUC window before JS) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --color-canvas: #09090b;
+    --color-surface: #111113;
+    --color-surface-raised: #1a1a1e;
+    --color-surface-hover: #212126;
+    --color-border: #232326;
+    --color-border-strong: #2e2e32;
+    --color-border-faint: #1a1a1e;
+    --color-text: #f4f4f5;
+    --color-text-muted: #a1a1aa;
+    --color-text-faint: #94969c;
+    --color-text-inverse: #09090b;
+    --color-accent: #4f7cff;
+    --color-accent-hover: #6b8fff;
+    --color-accent-pressed: #3b5bdb;
+    --color-accent-soft: #151c30;
+    --color-accent-soft-hover: #1d2540;
+    --color-focus: #4f7cff;
+    --color-focus-ring: rgba(79, 124, 255, 0.45);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.5);
+    --shadow-focus: 0 0 0 3px var(--color-focus-ring);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0.01ms;
+    --duration-base: 0.01ms;
+    --duration-slow: 0.01ms;
+  }
+}
