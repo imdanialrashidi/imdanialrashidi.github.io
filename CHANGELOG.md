@@ -33,3 +33,27 @@ All notable workflow changes are documented here. This project follows the spiri
 - Reduced the launcher from 22 to 19 active tool schemas and made subagents conditional with a universal self-review fallback.
 - Reduced routine eval default trials from three to one while retaining explicit repeated trials and stronger efficiency thresholds for promotion comparisons.
 - Updated reviewed pins to Pi `0.84.2`, `pi-mcp-adapter@2.26.1`, `@juicesharp/rpiv-todo@2.6.2`, and `@bytetrue/pi-web-search@0.2.1` with exact registry integrity records.
+
+### Added — product site (slice 1–4, plans 001–010, commit dbda97e)
+
+- Astro 7.2.4 + TypeScript 5.9 (strict) static site — 8 routes (/, /work, /work/fast-english, /work/noveno, /about, /now, /contact, 404) with `src/layouts/Layout.astro` (canonical, OG/Twitter, JSON-LD Person, FOUC script) and `src/data/site.ts` as single source for site/social/nav.
+- Content layer — `src/content.config.ts` collections (`projects` via `astro/loaders` + zod, `profile`/`now` stubs) with `src/content/projects/{fast-english,noveno}.md`; typed frontmatter for card + case-study contracts.
+- Design system — semantic tokens `src/styles/tokens.css` + `global.css`, Geist/Geist Mono variable woff2 vendored to `public/fonts` (69K+70K, preload Sans), editorial × engineering aesthetic per `docs/DESIGN.md` (light-first + polished dark, `backdrop-filter` header, `clamp()` rhythm).
+- Components/pages — `Header` (sticky + mobile `role=dialog` with focus trap), `Footer`, `ThemeToggle` (localStorage + prefers-color-scheme), `ProjectFeature`/`ProjectMedia`, `case-study/*` blocks; portrait via `astro:assets <Image>` on Home + About.
+- Social preview — `public/og-default.png` (1200×630) via `scripts/generate-og.mjs` + OG/Twitter meta in Layout (plan 005).
+
+### Added — deployment & CI (plans 001–002, 007, 014)
+
+- `bash scripts/ci-install.sh` + `npm ci` install lane (plan 001).
+- `.github/workflows/deploy.yml` — `actions/deploy-pages` to GitHub Pages (`contents: read, pages: write, id-token: write`, `node 22.23.2`) with typecheck gate `npm run check` before build (plan 014).
+- `.github/workflows/quality.yml` product verification (`bash scripts/verify.sh` + `verify-package-integrity --online`) with lint/format gate (plan 018).
+
+### Changed
+
+- `.gitignore` + `README.md` repo hygiene, `AGENTS.md`/`docs/` map, `docs/TOOLING_SETUP.md` Pi pin source (plan 003).
+- `src/content.config.ts` `links.caseStudy` hardened to block `javascript:` and enforce `/(https?)` (plan 012); `src/lib/projects.ts` single source for card mapping, draft filtering, and first `node:test` coverage (`tests/projects.test.mjs`).
+- `src/pages/about.astro` LCP image `fetchpriority="high"`, `src/pages/index.astro` below-fold portrait `loading="lazy"`, `astro.config.mjs` `inlineStylesheets: "always"` for first-paint (plan 013).
+- `scripts/generate-og.mjs` anchored to `import.meta.dirname` with repo-root guard and wired into `npm run build` (plan 015).
+- `src/components/Footer.astro` explicit year, `ProjectMedia`/`CaseFigure` placeholders `aria-hidden="true"`, `ThemeToggle` `is:inline` pressed state, `.pi/models.env` guard comment (plan 019).
+- `CONTRIBUTING.md` Pi pin pointer fixed to `docs/TOOLING_SETUP.md` (plan 016); `docs/DESIGN.md` budgets corrected (portrait rendered, CSS inlined), `docs/ARCHITECTURE.md` topology updated to shipped `deploy-pages` (plan 016).
+- `biome.json` + `.editorconfig` lint/format baseline, `.github/workflows/quality.yml` `Lint and format check` (plan 018); `.pi/package-integrity.json` extended to 14 entries (8 harness + 5 product + Biome) with `verify-package-integrity` allowing product prefixes (plan 017).

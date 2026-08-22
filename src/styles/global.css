@@ -183,8 +183,8 @@ small {
   text-decoration-thickness: 1.5px;
   text-underline-offset: 3px;
   text-decoration-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
-  transition: text-decoration-color var(--duration-fast) var(--ease-default),
-    color var(--duration-fast) var(--ease-default);
+  transition: text-decoration-color var(--duration-fast) var(--ease-default), color
+    var(--duration-fast) var(--ease-default);
 }
 
 .prose a:hover {
@@ -201,10 +201,9 @@ small {
   .arch__frame,
   .pf,
   .cta__card {
-    transition: background-color var(--duration-base) var(--ease-default),
-      color var(--duration-base) var(--ease-default),
-      border-color var(--duration-base) var(--ease-default),
-      box-shadow var(--duration-base) var(--ease-default);
+    transition: background-color var(--duration-base) var(--ease-default), color
+      var(--duration-base) var(--ease-default), border-color var(--duration-base)
+      var(--ease-default), box-shadow var(--duration-base) var(--ease-default);
   }
 }
 

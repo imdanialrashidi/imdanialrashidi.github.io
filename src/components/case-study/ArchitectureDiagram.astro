@@ -1,10 +1,10 @@
 ---
 interface Props {
-  variant: "fast-english" | "noveno";
-  caption?: string;
+  variant: 'fast-english' | 'noveno'
+  caption?: string
 }
 
-const { variant, caption } = Astro.props;
+const { variant, caption } = Astro.props
 ---
 
 <figure class="arch" role="img" aria-label={variant === "fast-english" ? "Fast English architecture diagram" : "Noveno architecture diagram"}>

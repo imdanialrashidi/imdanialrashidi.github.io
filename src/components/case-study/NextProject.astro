@@ -1,14 +1,14 @@
 ---
 interface Props {
-  label?: string;
-  title: string;
-  summary: string;
-  href: string;
-  kicker?: string;
-  variant?: "default" | "accent";
+  label?: string
+  title: string
+  summary: string
+  href: string
+  kicker?: string
+  variant?: 'default' | 'accent'
 }
 
-const { label = "Next", title, summary, href, kicker, variant = "default" } = Astro.props;
+const { label = 'Next', title, summary, href, kicker, variant = 'default' } = Astro.props
 ---
 
 <nav class:list={["next", variant === "accent" && "next--accent"]} aria-label="Next project">

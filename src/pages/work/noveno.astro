@@ -1,11 +1,16 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import CaseHero from "../../components/case-study/CaseHero.astro";
-import CaseSection from "../../components/case-study/CaseSection.astro";
-import Callout from "../../components/case-study/Callout.astro";
-import CaseFigure from "../../components/case-study/CaseFigure.astro";
-import ArchitectureDiagram from "../../components/case-study/ArchitectureDiagram.astro";
-import NextProject from "../../components/case-study/NextProject.astro";
+import { getCollection } from 'astro:content'
+import ArchitectureDiagram from '../../components/case-study/ArchitectureDiagram.astro'
+import Callout from '../../components/case-study/Callout.astro'
+import CaseFigure from '../../components/case-study/CaseFigure.astro'
+import CaseHero from '../../components/case-study/CaseHero.astro'
+import CaseSection from '../../components/case-study/CaseSection.astro'
+import NextProject from '../../components/case-study/NextProject.astro'
+import Layout from '../../layouts/Layout.astro'
+import { statusLabelFor } from '../../lib/projects.ts'
+
+const entry = (await getCollection('projects')).find((p) => p.id === 'noveno')
+if (!entry) throw new Error('Missing project entry: noveno')
 ---
 
 <Layout
@@ -13,12 +18,12 @@ import NextProject from "../../components/case-study/NextProject.astro";
   description="Building Noveno — a customer-acquisition system for service businesses in Iran. Problem, system, customer journey, ownership, product decisions and current status. Static Astro on Cloudflare Pages, email-only lead delivery, no invented metrics."
 >
   <CaseHero
-    kicker="Founder / Product / Business Systems · Web"
-    title="Noveno"
+    kicker={entry.data.kicker ?? 'Founder / Product / Business Systems · Web'}
+    title={entry.data.title}
     summary="Building a system — not a landing page — that turns scattered visits into a trackable path from attention to inquiry, registration and follow-up for service businesses in Iran. Business-first, measurable, and static by default."
-    role="Founder / Product / Business Systems"
-    year={2025}
-    statusLabel="Building · In progress"
+    role={entry.data.role ?? 'Founder / Product / Business Systems'}
+    year={entry.data.year}
+    statusLabel={statusLabelFor(entry.data.status)}
     stack={["Astro 7", "TypeScript", "Tailwind", "Cloudflare Pages", "Pages Functions", "Web3Forms", "Turnstile"]}
     links={[
       { label: "Visit noveno.ir", href: "https://noveno.ir", external: true },

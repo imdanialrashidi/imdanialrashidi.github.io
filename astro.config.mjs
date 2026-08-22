@@ -9,7 +9,7 @@ export default defineConfig({
   integrations: [sitemap()],
   trailingSlash: "never",
   build: {
-    inlineStylesheets: "auto",
+    inlineStylesheets: "always",
   },
   vite: {
     css: {

@@ -127,9 +127,9 @@ Contrast measured via Lighthouse and manual ratio (WCAG 2.2 AA: 4.5:1 text, 3:1 
 - Accessibility: WCAG 2.2 AA, text 4.5:1, large/UI 3:1, focus visible, keyboard tab order, skip link, touch 36px+, dialog `aria-modal`, `aria-expanded`, Escape + click-away, `aria-pressed` on toggle.
 - Text/non-text contrast: see color table (all AA); focus ring `0 0 0 3px rgba`.
 - Keyboard/focus/touch: Tab order verified, focus ring on :focus-visible, mobile menu traps Tab within the dialog, Escape closes and restores focus to the menu button.
-- Performance: LCP ≤2.5s, CLS ≤0.1, INP ≤200ms (targets, not claimed); lab via Lighthouse preview (manual). Budgets: CSS 23K total (7+16K), fonts 139K (preload Sans only), JS 0 external + ~2K inline (theme + nav). No React, no motion lib, no analytics, no backend.
+- Performance: LCP ≤2.5s, CLS ≤0.1, INP ≤200ms (targets, not claimed); lab via Lighthouse preview (manual). Budgets: CSS 23K total (7+16K) at foundation, ~90K shipped (inlined via `astro.config build.inlineStylesheets: "always"` after plan 013), fonts 139K (preload Sans only), JS 0 external + ~2K inline (theme + nav). No React, no motion lib, no analytics, no backend.
 - Pre-release lab and RUM: Lab measured locally via `npm run build` + preview + Lighthouse (not yet CI-enforced); RUM not added at foundation (deferred).
-- Image/font/JS budget: Images 0 yet (portrait preserved not rendered), fonts 69+70, JS 2K inline, CSS 23K, total HTML 8 pages ~120K.
+- Image/font/JS budget: portrait via `astro:assets <Image>` on Home + About (`Assets/Danial_photo.webp` 855×855 source, 4 responsive `dist/_astro/Danial_photo.*.webp` variants, `loading: lazy` on Home / `eager + fetchpriority:high` on About after plan 013), fonts 69+70 (preload Sans only, swap), JS 0 external + ~2K inline (theme + nav), CSS 23K at foundation, ~90K shipped (inlined via `astro.config build.inlineStylesheets` after plan 013), total HTML 8 pages ~120K + inlined CSS per page.
 - Supported browsers/input: Evergreen (Chromium, Firefox, Safari), keyboard + touch + pointer, no IE; prefers-color-scheme supported.
 
 ## Screen acceptance
@@ -145,8 +145,8 @@ Contrast measured via Lighthouse and manual ratio (WCAG 2.2 AA: 4.5:1 text, 3:1 
 
 ## Decisions intentionally deferred
 
-- Full homepage storytelling composition (foundation is restrained, not final)
-- Fast English / Noveno case-study long-form layouts (stub “in progress” honest placeholders)
+- Full homepage storytelling composition — delivered (hero/work/capabilities/principles/about/now/cta per docs/exec-plans/active/premium-personal-brand.md slices 2–3; future copy depth still open)
+- Fast English / Noveno case-study long-form layouts — shell delivered as honest stubs, long-form body-copy/media depth still open (no invented proof)
 - Notes/blog (`/writing`) — omitted until cadence exists
 - ~~Portrait rendering optimization~~ — delivered: rendered via `astro:assets <Image>` on Home + About
 - Analytics, backend form — deferred per brief

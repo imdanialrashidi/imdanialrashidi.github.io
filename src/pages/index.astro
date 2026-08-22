@@ -1,56 +1,55 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import ProjectFeature from "../components/ProjectFeature.astro";
-import { social } from "../data/site.ts";
-import { getCollection } from "astro:content";
-import { Image } from "astro:assets";
-import portraitSrc from "../../Assets/Danial_photo.webp";
+import { Image } from 'astro:assets'
+import portraitSrc from '../../Assets/Danial_photo.webp'
+import ProjectFeature from '../components/ProjectFeature.astro'
+import { social } from '../data/site.ts'
+import Layout from '../layouts/Layout.astro'
+import { cardPropsFor, getDisplayProjects } from '../lib/projects.ts'
 
-const projects = (await getCollection("projects"))
-  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+const projects = await getDisplayProjects()
 
 // Capabilities for "What I Work On"
 const capabilities = [
   {
-    n: "01",
-    title: "Software Products",
-    desc: "Web applications, working MVPs, and useful digital tools.",
+    n: '01',
+    title: 'Software Products',
+    desc: 'Web applications, working MVPs, and useful digital tools.',
   },
   {
-    n: "02",
-    title: "AI-Enabled Systems",
-    desc: "Applications and workflows that integrate AI where it creates meaningful leverage.",
+    n: '02',
+    title: 'AI-Enabled Systems',
+    desc: 'Applications and workflows that integrate AI where it creates meaningful leverage.',
   },
   {
-    n: "03",
-    title: "Automation",
-    desc: "Systems that reduce repetitive manual work and connect tools, APIs, and workflows.",
+    n: '03',
+    title: 'Automation',
+    desc: 'Systems that reduce repetitive manual work and connect tools, APIs, and workflows.',
   },
   {
-    n: "04",
-    title: "Product Engineering",
-    desc: "Turning a problem into requirements, implementation, testing, deployment, and iteration.",
+    n: '04',
+    title: 'Product Engineering',
+    desc: 'Turning a problem into requirements, implementation, testing, deployment, and iteration.',
   },
-];
+]
 
 const principles = [
   {
-    title: "Solve the actual problem",
-    desc: "Avoid complexity that does not improve the outcome.",
+    title: 'Solve the actual problem',
+    desc: 'Avoid complexity that does not improve the outcome.',
   },
   {
-    title: "Ship working systems",
-    desc: "Ideas become valuable when they become usable.",
+    title: 'Ship working systems',
+    desc: 'Ideas become valuable when they become usable.',
   },
   {
-    title: "Use AI as leverage",
-    desc: "Faster implementation should not mean weaker verification or judgment.",
+    title: 'Use AI as leverage',
+    desc: 'Faster implementation should not mean weaker verification or judgment.',
   },
   {
-    title: "Keep systems understandable",
-    desc: "Readable, testable systems are easier to maintain and improve.",
+    title: 'Keep systems understandable',
+    desc: 'Readable, testable systems are easier to maintain and improve.',
   },
-];
+]
 ---
 
 <Layout
@@ -120,26 +119,10 @@ const principles = [
 
       <div class="work__stack">
         {
-          projects.map((p, i) => (
-            <ProjectFeature
-              index={String(i + 1).padStart(2, "0")}
-              title={p.data.title}
-              kicker={p.data.kicker || (p.data.categories ? p.data.categories.join(" · ") : "")}
-              summary={p.data.summary}
-              href={p.data.links?.caseStudy || `/work/${p.id}`}
-              statusLabel={
-                p.data.status === "building"
-                  ? "Building · In progress"
-                  : p.data.status === "in_progress"
-                    ? "Case study — in progress"
-                    : undefined
-              }
-              year={p.data.year}
-              ctaLabel={p.data.title === "Noveno" ? "Explore Noveno" : "View case study"}
-              variant={p.data.title === "Noveno" ? "accent" : "default"}
-              reversed={i % 2 === 1}
-            />
-          ))
+          projects.map((p, i) => {
+            const props = cardPropsFor(p, i)
+            return <ProjectFeature {...props} />
+          })
         }
       </div>
 
@@ -232,7 +215,7 @@ const principles = [
               alt="Portrait of Danial Rashidi"
               widths={[320, 480, 640]}
               sizes="(max-width: 720px) 42vw, 320px"
-              loading="eager"
+              loading="lazy"
               decoding="async"
               class="about__portrait"
             />

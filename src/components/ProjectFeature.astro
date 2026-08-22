@@ -1,22 +1,35 @@
 ---
-import ProjectMedia from "./ProjectMedia.astro";
+import ProjectMedia from './ProjectMedia.astro'
 
 interface Props {
-  index: string; // "01"
-  title: string;
-  kicker: string;
-  summary: string;
-  href: string;
-  statusLabel?: string;
-  year?: number;
-  ctaLabel?: string;
-  variant?: "default" | "accent";
-  reversed?: boolean;
-  image?: ImageMetadata;
-  imageAlt?: string;
+  index: string // "01"
+  title: string
+  kicker: string
+  summary: string
+  href: string
+  statusLabel?: string
+  year?: number
+  ctaLabel?: string
+  variant?: 'default' | 'accent'
+  reversed?: boolean
+  image?: ImageMetadata
+  imageAlt?: string
 }
 
-const { index, title, kicker, summary, href, statusLabel, year, ctaLabel = "View case study", variant = "default", reversed = false, image, imageAlt } = Astro.props;
+const {
+  index,
+  title,
+  kicker,
+  summary,
+  href,
+  statusLabel,
+  year,
+  ctaLabel = 'View case study',
+  variant = 'default',
+  reversed = false,
+  image,
+  imageAlt,
+} = Astro.props
 ---
 
 <article class:list={["pf", reversed && "pf--reversed", variant === "accent" && "pf--accent"]}>

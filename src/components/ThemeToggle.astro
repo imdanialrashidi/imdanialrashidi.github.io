@@ -85,33 +85,33 @@
   }
 </style>
 
-<script>
-  const STORAGE_KEY = "theme";
-  const attr = "data-theme";
+<script is:inline>
+  const STORAGE_KEY = "theme"
+  const attr = "data-theme"
 
-  function getStored(): string | null {
+  function getStored() {
     try {
-      return localStorage.getItem(STORAGE_KEY);
+      return localStorage.getItem(STORAGE_KEY)
     } catch {
-      return null;
+      return null
     }
   }
-  function setStored(value: string) {
+  function setStored(value) {
     try {
-      localStorage.setItem(STORAGE_KEY, value);
+      localStorage.setItem(STORAGE_KEY, value)
     } catch {}
   }
-  function getSystem(): "light" | "dark" {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  function getSystem() {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
   }
-  function getCurrent(): "light" | "dark" {
-    const el = document.documentElement.getAttribute(attr);
-    if (el === "light" || el === "dark") return el;
-    const stored = getStored();
-    if (stored === "light" || stored === "dark") return stored;
-    return getSystem();
+  function getCurrent() {
+    const el = document.documentElement.getAttribute(attr)
+    if (el === "light" || el === "dark") return el
+    const stored = getStored()
+    if (stored === "light" || stored === "dark") return stored
+    return getSystem()
   }
-  function apply(theme: "light" | "dark") {
+  function apply(theme) {
     document.documentElement.setAttribute(attr, theme);
     const btn = document.getElementById("theme-toggle");
     if (btn) {

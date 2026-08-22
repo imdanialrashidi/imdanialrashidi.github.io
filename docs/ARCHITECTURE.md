@@ -1,12 +1,12 @@
-# Architecture Decisions — Danial Rashidi Personal Site (Foundation Slice)
+# Architecture Decisions — Danial Rashidi Personal Site (Shipped — plans 001–010 at dbda97e; updates 011+ in progress)
 
 ## Current system
 
 - **Runtime/platform:** Astro 7.2.4 + TypeScript 5.9 (strict, `astro/tsconfigs/strict`) — static HTML only
-- **Main modules:** `src/layouts/Layout.astro`, `src/components/{Header,Footer,ThemeToggle}`, `src/styles/{tokens,global}.css`, `src/data/site.ts`, `src/pages/{index,work,about,now,contact,404}`, `src/content.config.ts` (stub), `public/{fonts,favicon,robots}`
-- **Data stores:** File-system content only (markdown collections stubbed via `astro/loaders` glob) — no DB, no CMS, no backend at v1
+- **Main modules:** `src/layouts/Layout.astro`, `src/components/{Header,Footer,ThemeToggle}`, `src/styles/{tokens,global}.css`, `src/data/site.ts`, `src/lib/projects.ts`, `src/pages/{index,work,about,now,contact,404}`, `src/content.config.ts`, `public/{fonts,favicon,robots}`
+- **Data stores:** File-system content only (markdown collections via `astro/loaders` glob — projects authored: fast-english, noveno) — no DB, no CMS, no backend at v1
 - **External services:** None at foundation (no analytics, no form backend, no CDN font request). Noveno `https://noveno.ir` is external link only.
-- **Deployment topology:** GitHub Pages `username.github.io` static. Source `main`, build `astro build` → `dist/` (HTML + hashed `_astro/*.css` + `fonts/*.woff2` + `.nojekyll` + `sitemap-*.xml`), deploy via GitHub Pages (either branch-Jekyll-bypass or future Actions `deploy-pages`). `.nojekyll` committed at repo root and `public/.nojekyll` → `dist/.nojekyll`.
+- **Deployment topology:** GitHub Pages `username.github.io` static. Source `main`, build `node scripts/generate-og.mjs && astro build` → `dist/` (HTML + hashed `_astro/*.webp` + `fonts/*.woff2` + `.nojekyll` + `sitemap-*.xml` + `og-default.png`), deploy via `actions/deploy-pages via .github/workflows/deploy.yml` (live, plan 002 DONE, gated on `npm run check` per plan 014). `.nojekyll` committed at repo root and `public/.nojekyll` → `dist/.nojekyll`.
 
 ## Trust boundaries and critical data flows
 

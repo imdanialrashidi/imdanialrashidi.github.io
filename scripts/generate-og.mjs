@@ -1,12 +1,22 @@
 #!/usr/bin/env node
+import { existsSync } from 'node:fs'
+import { mkdir } from 'node:fs/promises'
+import path from 'node:path'
 // Generates public/og-default.png (1200x630) — brand-consistent social
-// preview for the whole site. Re-run whenever branding changes; commit output.
-import sharp from "sharp";
-import { mkdir } from "node:fs/promises";
-import path from "node:path";
+// preview for the whole site. Regenerated automatically via `npm run build`.
+import sharp from 'sharp'
 
-const WIDTH = 1200;
-const HEIGHT = 630;
+const WIDTH = 1200
+const HEIGHT = 630
+
+const repoRoot = path.resolve(import.meta.dirname, '..')
+const publicDir = path.join(repoRoot, 'public')
+const outPath = path.join(publicDir, 'og-default.png')
+
+if (!existsSync(path.join(repoRoot, 'package.json'))) {
+  console.error(`Refusing to write OG image: repo root not found at ${repoRoot}`)
+  process.exit(1)
+}
 
 const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}">
@@ -20,8 +30,8 @@ const svg = `
         font-size="30" fill="#8a8f98">Web · AI · Automation · Product Engineering</text>
   <text x="80" y="540" font-family="'DejaVu Sans Mono','Menlo',monospace"
         font-size="26" fill="#0f4cff">imdanialrashidi.github.io</text>
-</svg>`;
+</svg>`
 
-await mkdir(path.resolve("public"), { recursive: true });
-await sharp(Buffer.from(svg)).png({ compressionLevel: 9 }).toFile(path.resolve("public/og-default.png"));
-console.log("wrote public/og-default.png");
+await mkdir(publicDir, { recursive: true })
+await sharp(Buffer.from(svg)).png({ compressionLevel: 9 }).toFile(outPath)
+console.log(`wrote ${path.relative(repoRoot, outPath)}`)

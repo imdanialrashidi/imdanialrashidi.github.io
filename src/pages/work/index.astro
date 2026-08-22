@@ -1,10 +1,9 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import ProjectFeature from "../../components/ProjectFeature.astro";
-import { getCollection } from "astro:content";
+import ProjectFeature from '../../components/ProjectFeature.astro'
+import Layout from '../../layouts/Layout.astro'
+import { cardPropsFor, getDisplayProjects } from '../../lib/projects.ts'
 
-const projects = (await getCollection("projects"))
-  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+const projects = await getDisplayProjects()
 ---
 
 <Layout
@@ -14,7 +13,7 @@ const projects = (await getCollection("projects"))
   <section class="work-head">
     <div class="container">
       <div class="work-head__top">
-        <span class="work-head__eyebrow">Portfolio index — 02 projects</span>
+        <span class="work-head__eyebrow">Portfolio index — {String(projects.length).padStart(2, '0')} projects</span>
         <span class="work-head__rule" aria-hidden="true"></span>
       </div>
       <h1 class="work-head__title">Work</h1>
@@ -24,9 +23,19 @@ const projects = (await getCollection("projects"))
         accepts real screenshots later without redesign.
       </p>
       <div class="work-head__meta">
-        <span>Fast English <span class="mono">· Product Engineering · Web · PWA · Android</span></span>
-        <span aria-hidden="true">—</span>
-        <span>Noveno <span class="mono">· Founder / Product / Business Systems · Web</span></span>
+        {
+          projects.map((p, idx) => (
+            <>
+              <span>
+                {p.data.title}{' '}
+                <span class="mono">
+                  · {p.data.kicker ?? (p.data.categories ? p.data.categories.join(' · ') : '')}
+                </span>
+              </span>
+              {idx < projects.length - 1 && <span aria-hidden="true">—</span>}
+            </>
+          ))
+        }
       </div>
     </div>
   </section>
@@ -34,26 +43,10 @@ const projects = (await getCollection("projects"))
   <section class="work-list">
     <div class="container work-list__stack">
       {
-        projects.map((p, i) => (
-          <ProjectFeature
-            index={String(i + 1).padStart(2, "0")}
-            title={p.data.title}
-            kicker={p.data.kicker || (p.data.categories ? p.data.categories.join(" · ") : "")}
-            summary={p.data.summary}
-            href={p.data.links?.caseStudy || `/work/${p.id}`}
-            statusLabel={
-              p.data.status === "building"
-                ? "Building · In progress"
-                : p.data.status === "in_progress"
-                  ? "Case study — in progress"
-                  : undefined
-            }
-            year={p.data.year}
-            ctaLabel={p.data.title === "Noveno" ? "Explore Noveno" : "View case study"}
-            variant={p.data.title === "Noveno" ? "accent" : "default"}
-            reversed={i % 2 === 1}
-          />
-        ))
+        projects.map((p, i) => {
+          const props = cardPropsFor(p, i)
+          return <ProjectFeature {...props} />
+        })
       }
     </div>
 

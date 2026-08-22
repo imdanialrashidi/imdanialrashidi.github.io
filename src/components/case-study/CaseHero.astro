@@ -1,16 +1,16 @@
 ---
 interface Props {
-  kicker: string;
-  title: string;
-  summary: string;
-  role?: string;
-  year?: number;
-  statusLabel?: string;
-  stack?: string[];
-  links?: { label: string; href: string; external?: boolean }[];
-  backHref?: string;
-  backLabel?: string;
-  variant?: "default" | "accent";
+  kicker: string
+  title: string
+  summary: string
+  role?: string
+  year?: number
+  statusLabel?: string
+  stack?: string[]
+  links?: { label: string; href: string; external?: boolean }[]
+  backHref?: string
+  backLabel?: string
+  variant?: 'default' | 'accent'
 }
 
 const {
@@ -22,10 +22,10 @@ const {
   statusLabel,
   stack,
   links,
-  backHref = "/work",
-  backLabel = "Work",
-  variant = "default",
-} = Astro.props;
+  backHref = '/work',
+  backLabel = 'Work',
+  variant = 'default',
+} = Astro.props
 ---
 
 <section class:list={["cs-hero", variant === "accent" && "cs-hero--accent"]}>

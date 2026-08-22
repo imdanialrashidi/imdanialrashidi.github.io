@@ -1,19 +1,31 @@
 ---
-import { Image } from "astro:assets";
+import { Image } from 'astro:assets'
 
 interface Props {
-  title: string;
-  indexLabel?: string; // "01"
-  statusLabel?: string; // "Case study — in progress"
-  image?: ImageMetadata; // imported asset — when present, replaces abstract frame
-  imageAlt?: string;
-  variant?: "default" | "accent";
+  title: string
+  indexLabel?: string // "01"
+  statusLabel?: string // "Case study — in progress"
+  image?: ImageMetadata // imported asset — when present, replaces abstract frame
+  imageAlt?: string
+  variant?: 'default' | 'accent'
 }
 
-const { title, indexLabel, statusLabel = "Imagery to follow — honest placeholder", image, imageAlt, variant = "default" } = Astro.props;
+const {
+  title,
+  indexLabel,
+  statusLabel = 'Imagery to follow — honest placeholder',
+  image,
+  imageAlt,
+  variant = 'default',
+} = Astro.props
 
 // Derive initials for abstract composition
-const initials = title.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+const initials = title
+  .split(' ')
+  .map((w) => w[0])
+  .join('')
+  .slice(0, 2)
+  .toUpperCase()
 ---
 
 <div class:list={["pm", variant === "accent" && "pm--accent"]} data-media>
@@ -28,7 +40,7 @@ const initials = title.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase()
       class="pm__img"
     />
   ) : (
-    <div class="pm__frame" aria-hidden="false" role="img" aria-label={`${title} — imagery placeholder, honest abstract treatment`}>
+    <div class="pm__frame" aria-hidden="true">
       <!-- subtle grid -->
       <div class="pm__grid" aria-hidden="true"></div>
 

@@ -1,27 +1,27 @@
 ---
-import { Image } from "astro:assets";
+import { Image } from 'astro:assets'
 
 interface Props {
-  caption?: string;
-  alt?: string;
-  image?: ImageMetadata;
-  label?: string;
-  variant?: "default" | "accent";
-  placeholderTitle?: string;
-  placeholderInitials?: string;
-  placeholderNote?: string;
+  caption?: string
+  alt?: string
+  image?: ImageMetadata
+  label?: string
+  variant?: 'default' | 'accent'
+  placeholderTitle?: string
+  placeholderInitials?: string
+  placeholderNote?: string
 }
 
 const {
   caption,
   alt,
   image,
-  label = "Figure",
-  variant = "default",
-  placeholderTitle = "Imagery to follow",
-  placeholderInitials = "—",
-  placeholderNote = "No fabricated interface — real screenshots will replace this frame when available.",
-} = Astro.props;
+  label = 'Figure',
+  variant = 'default',
+  placeholderTitle = 'Imagery to follow',
+  placeholderInitials = '—',
+  placeholderNote = 'No fabricated interface — real screenshots will replace this frame when available.',
+} = Astro.props
 ---
 
 <figure class:list={["cs-figure", variant === "accent" && "cs-figure--accent"]}>
@@ -37,7 +37,7 @@ const {
         class="cs-figure__img"
       />
     ) : (
-      <div class="cs-figure__placeholder" role="img" aria-label={`${placeholderTitle} — honest placeholder`}>
+      <div class="cs-figure__placeholder" aria-hidden="true">
         <div class="cs-figure__grid" aria-hidden="true"></div>
         <div class="cs-figure__inner">
           <div class="cs-figure__top">

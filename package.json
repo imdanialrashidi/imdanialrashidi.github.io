@@ -6,15 +6,19 @@
   "description": "Danial Rashidi — Software & Product Builder",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/generate-og.mjs && astro build",
     "preview": "astro preview --port 4321",
     "check": "astro check",
     "typecheck": "astro check",
-    "ci": "npm run check && npm run build"
+    "ci": "npm run check && npm run build",
+    "lint": "biome lint ./src ./scripts",
+    "format": "biome format ./src ./scripts",
+    "format:check": "biome check ./src ./scripts"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@astrojs/sitemap": "^3.7.3",
+    "@biomejs/biome": "1.9.4",
     "astro": "^7.2.4",
     "sharp": "^0.35.3",
     "typescript": "^5.9.2"

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "reviewedAt": "2026-08-20",
+  "reviewedAt": "2026-08-22",
   "packages": [
     {
       "source": "npm:@earendil-works/pi-coding-agent@0.84.2",
@@ -49,6 +49,42 @@
       "integrity": "sha512-VpqD4a3vFyGQMY9sh3UJiO6wjcurggkljKfAyCHL0QWGY5m6Ehr3MNsAAHPDHO//n13g0PCjpHatAOiulrqdZQ==",
       "license": "Apache-2.0",
       "repository": "https://github.com/microsoft/playwright-mcp"
+    },
+    {
+      "source": "npm:astro@7.2.4",
+      "integrity": "sha512-+cuLsBns2wwUHI9a10xZMbjrF91m7+QNwqTVeljTx0B8Lf+8h0LgVGjdVIL2FALDKD2I565lczeeS3BFC+KdZg==",
+      "license": "MIT",
+      "repository": "https://github.com/withastro/astro"
+    },
+    {
+      "source": "npm:@astrojs/check@0.9.10",
+      "integrity": "sha512-zgx/UQMozdjOa3bOxjgeCFdtpE3c9rRX6xHwa+2QXvy8z8Akifu2AtubHyv/zzC2znO8dl8fFWL4K+Ba9kS8HQ==",
+      "license": "MIT",
+      "repository": "https://github.com/withastro/astro"
+    },
+    {
+      "source": "npm:@astrojs/sitemap@3.7.3",
+      "integrity": "sha512-f8euLVsyeAmAkSm/1M2Kb8sL8byQmfgbvBNaHFItCheTj/IpiJYSEWVcqDHZ/yEHxiS7+w87mQkzwZaPHmk5GA==",
+      "license": "MIT",
+      "repository": "https://github.com/withastro/astro"
+    },
+    {
+      "source": "npm:sharp@0.35.3",
+      "integrity": "sha512-ej0zVHuZGHCiABXcNxeYhpRnPNPAcvbG8RMdBAhDAxLKkCRVSpK3Iyu7qbqw3JMzoj0REeM6f3tJLtVwl0023Q==",
+      "license": "Apache-2.0",
+      "repository": "https://github.com/lovell/sharp"
+    },
+    {
+      "source": "npm:typescript@5.9.2",
+      "integrity": "sha512-CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==",
+      "license": "Apache-2.0",
+      "repository": "https://github.com/microsoft/TypeScript"
+    },
+    {
+      "source": "npm:@biomejs/biome@1.9.4",
+      "integrity": "sha512-1rkd7G70+o9KkTn5KLmDYXihGoTaIGO9PIIN2ZB7UJxFrWw04CZHPYiMRjYsaDvVV7hP1dYNRLxSANLaBFGpog==",
+      "license": "MIT OR Apache-2.0",
+      "repository": "https://github.com/biomejs/biome"
     }
   ]
 }

@@ -1,15 +1,15 @@
 ---
-import { navigation, social } from "../data/site.ts";
-import ThemeToggle from "./ThemeToggle.astro";
+import { navigation, social } from '../data/site.ts'
+import ThemeToggle from './ThemeToggle.astro'
 
 interface Props {
-  currentPath?: string;
+  currentPath?: string
 }
-const { currentPath = "/" } = Astro.props;
+const { currentPath = '/' } = Astro.props
 
 function isActive(href: string, path: string) {
-  if (href === "/") return path === "/";
-  return path === href || path.startsWith(href + "/");
+  if (href === '/') return path === '/'
+  return path === href || path.startsWith(href + '/')
 }
 ---
 
@@ -348,6 +348,8 @@ function isActive(href: string, path: string) {
       btn.setAttribute("aria-label", "Open menu");
       nav.hidden = true;
       document.body.style.removeProperty("overflow");
+      document.getElementById("main")?.removeAttribute("inert");
+      document.querySelector("footer")?.removeAttribute("inert");
       btn.focus();
     };
     const open = () => {
@@ -355,6 +357,8 @@ function isActive(href: string, path: string) {
       btn.setAttribute("aria-label", "Close menu");
       nav.hidden = false;
       document.body.style.overflow = "hidden";
+      document.getElementById("main")?.setAttribute("inert", "");
+      document.querySelector("footer")?.setAttribute("inert", "");
       // focus first link for accessibility
       const firstLink = nav.querySelector("a") as HTMLElement | null;
       firstLink?.focus();
@@ -363,7 +367,7 @@ function isActive(href: string, path: string) {
     const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
     const trapFocus = (e: KeyboardEvent) => {
-      if (e.key !== "Tab" || nav.getAttribute("aria-hidden") === "true") return;
+      if (e.key !== "Tab") return;
       if (btn.getAttribute("aria-expanded") !== "true") return;
       const focusables = Array.from(nav.querySelectorAll<HTMLElement>(FOCUSABLE));
       if (focusables.length === 0) return;
@@ -389,11 +393,7 @@ function isActive(href: string, path: string) {
     // close on link click
     nav.querySelectorAll("a").forEach((a) => {
       a.addEventListener("click", () => {
-        if (btn.getAttribute("aria-expanded") === "true") {
-          btn.setAttribute("aria-expanded", "false");
-          nav.hidden = true;
-          document.body.style.removeProperty("overflow");
-        }
+        if (btn.getAttribute("aria-expanded") === "true") close();
       });
     });
 
@@ -412,11 +412,7 @@ function isActive(href: string, path: string) {
     // reset on resize to desktop
     const mq = window.matchMedia("(min-width: 781px)");
     mq.addEventListener("change", (e) => {
-      if (e.matches && btn.getAttribute("aria-expanded") === "true") {
-        btn.setAttribute("aria-expanded", "false");
-        nav.hidden = true;
-        document.body.style.removeProperty("overflow");
-      }
+      if (e.matches && btn.getAttribute("aria-expanded") === "true") close();
     });
   }
 </script>

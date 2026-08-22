@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies
         run: bash scripts/ci-install.sh
 
+      - name: Lint and format check
+        run: npm run format:check
+
       - name: Validate template
         run: bash scripts/verify.sh
 
