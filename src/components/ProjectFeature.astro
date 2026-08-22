@@ -34,7 +34,7 @@ const {
 
 <article class:list={["pf", reversed && "pf--reversed", variant === "accent" && "pf--accent"]}>
   <div class="pf__media">
-    <a href={href} class="pf__mediaLink" aria-label={`${title} — ${ctaLabel}`} tabindex="-1">
+    <a href={href} class="pf__mediaLink" tabindex="-1" aria-hidden="true">
       <ProjectMedia title={title} indexLabel={index} statusLabel={statusLabel} variant={variant} image={image} imageAlt={imageAlt} />
     </a>
   </div>

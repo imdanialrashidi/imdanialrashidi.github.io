@@ -1,0 +1,118 @@
+---
+import Callout from '../../components/case-study/Callout.astro'
+import CaseFigure from '../../components/case-study/CaseFigure.astro'
+import CaseHero from '../../components/case-study/CaseHero.astro'
+import CaseSection from '../../components/case-study/CaseSection.astro'
+import NextProject from '../../components/case-study/NextProject.astro'
+import Layout from '../../layouts/Layout.astro'
+import previewImg from '../../assets/work/mobile-khorsandi-hero.webp'
+import { site } from '../../data/site.ts'
+
+const pageTitle = 'Mobile Khorsandi — Danial Rashidi'
+const pageDescription = 'Mobile Khorsandi — online store for phones, accessories, parts and gadgets. Categories, search, cart, buying guides and support. Public work; no validated order or conversion data claimed.'
+const canonical = new URL('/work/mobile-khorsandi', site.url).toString()
+---
+
+<Layout title={pageTitle} description={pageDescription} canonical={canonical} ogImage="/og-default.png">
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: pageTitle,
+      description: pageDescription,
+      url: canonical,
+      isPartOf: { "@type": "WebSite", name: site.shortTitle, url: site.url },
+      primaryImageOfPage: { "@type": "ImageObject", contentUrl: new URL(previewImg.src, site.url).toString() },
+      about: { "@type": "CreativeWork", name: "Mobile Khorsandi", url: "https://mobilekhorsandi.ir" }
+    })} />
+  </Fragment>
+
+  <CaseHero
+    kicker="Web · E-commerce · Retail"
+    title="Mobile Khorsandi"
+    summary="Online store for phones, accessories, parts and gadgets — product categories, search, cart, buying guides and support paths."
+    role="Web Engineering"
+    links={[
+      { label: "Visit live site", href: "https://mobilekhorsandi.ir", external: true },
+      { label: "Back to work", href: "/work" },
+    ]}
+  />
+
+  <div class="container cs-media">
+    <CaseFigure
+      image={previewImg}
+      alt="Mobile Khorsandi homepage — online store for mobile phones, accessories and parts"
+      caption="Real preview — Mobile Khorsandi homepage (public site). 1440×900 WebP; provenance in src/assets/work/SOURCES.md."
+    />
+  </div>
+
+  <CaseSection num="01" label="Overview" title="What this is" id="overview">
+    <p>
+      Mobile Khorsandi is an online store for mobile phones, accessories, parts and practical gadgets — listed in <a href="https://noveno.ir/work/" target="_blank" rel="noopener noreferrer">Noveno's portfolio</a> as a designed and implemented store. This profile records only what the public site shows.
+    </p>
+    <Callout variant="muted" title="Source" icon="◈">
+      <p>Source: public site <a href="https://mobilekhorsandi.ir" target="_blank" rel="noopener noreferrer">mobilekhorsandi.ir</a> plus the Noveno work entry. Outcome is “measuring” — no sales/order metric is claimed.</p>
+    </Callout>
+  </CaseSection>
+
+  <CaseSection num="02" label="Problem" title="Why it exists" id="problem">
+    <p>
+      The business needed a storefront with clear categorisation for accessories, gadgets, phone parts and related goods — so shoppers reach the right product type quickly.
+    </p>
+  </CaseSection>
+
+  <CaseSection num="03" label="What was built" title="Store structure" id="built">
+    <ul>
+      <li>Store with shopping and cart path; headphones/hands-free, chargers, cables, power banks, holders, microphones, adapters, watches, speakers, practical gadgets, phone protectors and phone parts as visible categories.</li>
+      <li>Bestsellers, most-viewed and newest sections; search and brand/filtering.</li>
+      <li>Blog with tech news, tutorials, buying guides and comparisons.</li>
+      <li>FAQ, warranty terms, about and contact/support pages.</li>
+    </ul>
+  </CaseSection>
+
+  <CaseSection num="04" label="Status" title="Honest state" id="status">
+    <p>
+      Public e-commerce site. No validated sales, order or conversion data is available in public sources. Pricing, stock and shipping details may have changed since review and should be checked on the live site.
+    </p>
+    <Callout variant="accent" title="Limitation" icon="●">
+      <p><strong>No validated outcome.</strong> This is not a case study; no sales/order or conversion number is inferred from the site's appearance.</p>
+    </Callout>
+  </CaseSection>
+
+  <CaseSection num="05" label="Details" title="Public shop info" id="details">
+    <ul>
+      <li>Live: <a href="https://mobilekhorsandi.ir" target="_blank" rel="noopener noreferrer">mobilekhorsandi.ir ↗</a></li>
+      <li>Field: phones, accessories, gadgets and phone parts</li>
+      <li>Location (site): Karaj, Daneshkadeh St., Daneshkadeh Passage, 2nd floor</li>
+      <li>Phone: <code style="direction:ltr">02632209919</code> · Support: <code style="direction:ltr">09960111224</code> · Email: <code style="direction:ltr">nimakhorsandi4040@gmail.com</code></li>
+    </ul>
+  </CaseSection>
+
+  <CaseSection num="06" label="Links" title="Where to go next" id="links">
+    <div class="cs-links">
+      <a href="https://mobilekhorsandi.ir" target="_blank" rel="noopener noreferrer" class="cs-links__primary">Open mobilekhorsandi.ir ↗</a>
+      <a href="/work" class="cs-links__secondary">Back to work →</a>
+    </div>
+  </CaseSection>
+
+  <NextProject title="PHP IELTS House" summary="Education website for an English/IELTS house in Karaj — course approach, levels, results and contact." href="/work/php-ielts-house" kicker="Web · Education · Services" />
+</Layout>
+
+<style>
+  .cs-media { max-width: var(--width-prose); padding: var(--space-4) 0 0; }
+  .cs-links { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+  .cs-links__primary {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 16px; border-radius: var(--radius-pill);
+    background: var(--color-text); color: var(--color-canvas);
+    font-size: var(--text-sm); font-weight: 600; transition: transform var(--duration-fast) var(--ease-default);
+  }
+  .cs-links__primary:hover { transform: translateY(-1px); }
+  .cs-links__secondary {
+    display: inline-flex; align-items: center;
+    padding: 10px 16px; border-radius: var(--radius-pill);
+    background: var(--color-surface); border: var(--border-hairline);
+    color: var(--color-text); font-size: var(--text-sm); font-weight: 600;
+  }
+  .cs-links__secondary:hover { border-color: var(--color-border-strong); background: var(--color-surface-hover); }
+</style>

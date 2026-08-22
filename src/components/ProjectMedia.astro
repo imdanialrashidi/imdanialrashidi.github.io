@@ -128,8 +128,8 @@ const initials = title
     flex-direction: column;
     justify-content: space-between;
     border: 1px solid color-mix(in srgb, var(--color-border-strong) 70%, transparent);
-    background: color-mix(in srgb, var(--color-surface) 88%, transparent);
-    backdrop-filter: blur(2px);
+    background: color-mix(in srgb, var(--color-surface) 92%, var(--color-surface));
+    /* blur removed for paint performance — solid background is cheaper and still premium */
     border-radius: calc(var(--radius-lg) - 6px);
     padding: clamp(12px, 1.8vw, 18px);
     box-shadow: var(--shadow-sm);

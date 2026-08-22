@@ -1,0 +1,135 @@
+---
+import Callout from '../../components/case-study/Callout.astro'
+import CaseFigure from '../../components/case-study/CaseFigure.astro'
+import CaseHero from '../../components/case-study/CaseHero.astro'
+import CaseSection from '../../components/case-study/CaseSection.astro'
+import NextProject from '../../components/case-study/NextProject.astro'
+import Layout from '../../layouts/Layout.astro'
+import previewImg from '../../assets/work/elsa-hamrah-hero.webp'
+import { site } from '../../data/site.ts'
+
+const pageTitle = 'Elsa Hamrah — Danial Rashidi'
+const pageDescription = 'Elsa Hamrah — online digital-goods store for phones, tablets, smartwatches and accessories. What was built, current status and honest limitations. No validated sales or conversion data claimed.'
+const canonical = new URL('/work/elsa-hamrah', site.url).toString()
+---
+
+<Layout title={pageTitle} description={pageDescription} canonical={canonical} ogImage="/og-default.png">
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: pageTitle,
+      description: pageDescription,
+      url: canonical,
+      isPartOf: { "@type": "WebSite", name: site.shortTitle, url: site.url },
+      primaryImageOfPage: { "@type": "ImageObject", contentUrl: new URL(previewImg.src, site.url).toString() },
+      about: { "@type": "CreativeWork", name: "Elsa Hamrah", url: "https://elsahamrah.com" }
+    })} />
+  </Fragment>
+
+  <CaseHero
+    kicker="Web · E-commerce · Digital Retail"
+    title="Elsa Hamrah"
+    summary="Online store for phones, tablets, smartwatches, headphones and accessories — clear categories, brand filtering and trusted checkout cues. Public work; no validated sales or conversion data claimed."
+    role="Web Engineering"
+    links={[
+      { label: "Visit live site", href: "https://elsahamrah.com", external: true },
+      { label: "Back to work", href: "/work" },
+    ]}
+  />
+
+  <div class="container cs-media">
+    <CaseFigure
+      image={previewImg}
+      alt="Elsa Hamrah homepage — online store for phones, tablets, smartwatches and digital accessories"
+      caption="Real preview — Elsa Hamrah homepage (public site). Capture via thum.io → 1440×900 WebP; provenance in src/assets/work/SOURCES.md. Responsive srcset via Astro Image; no browser mockup."
+    />
+  </div>
+
+  <CaseSection num="01" label="Overview" title="What this is" id="overview">
+    <p>
+      Elsa Hamrah is an online digital-goods store for phones, tablets, smartwatches, headphones and accessories. It appears in <a href="https://noveno.ir/work/" target="_blank" rel="noopener noreferrer">Noveno's public portfolio</a> as a designed store. This page stays strictly within what the public site shows — no sales, traffic or conversion numbers are inferred.
+    </p>
+    <Callout variant="muted" title="Truthfulness" icon="◈">
+      <p>Source: public site <a href="https://elsahamrah.com" target="_blank" rel="noopener noreferrer">elsahamrah.com</a> plus the Noveno work entry for Elsa Hamrah. Outcome is recorded as “measuring” — i.e., no validated result yet. Screenshots are real public-site captures, not staged UI.</p>
+    </Callout>
+  </CaseSection>
+
+  <CaseSection num="02" label="Problem" title="Why it exists" id="problem">
+    <p>
+      The business needed a straightforward online path to present and sell digital goods — letting shoppers move between categories and brands, find a product, and see order, return and support information without friction.
+    </p>
+  </CaseSection>
+
+  <CaseSection num="03" label="What was built" title="Store structure" id="built">
+    <ul>
+      <li>Store for phones, tablets, smartwatches, headphones and accessories; categories are the primary navigation.</li>
+      <li>Brand filtering (Apple, Samsung, Xiaomi and others) and product search.</li>
+      <li>Order tracking, refund policy, terms &amp; conditions, FAQ and contact/support pages.</li>
+      <li>Homepage trust signals: price guarantee, 24/7 support, return policy, authenticity and fast delivery.</li>
+    </ul>
+    <p>
+      The site is a conventional WordPress/WooCommerce-style retail surface — not a case study with instrumentation. The value here is a clean browsing and trust path; operational outcomes remain unmeasured publicly.
+    </p>
+  </CaseSection>
+
+  <CaseSection num="04" label="Status" title="Honest state" id="status">
+    <p>
+      Public work listed as a designed site on Noveno's portfolio. At the time of the Noveno source review the site displayed “the store is currently closed for new orders” — availability should be re-checked directly on <a href="https://elsahamrah.com" target="_blank" rel="noopener noreferrer">elsahamrah.com</a> before citing it.
+    </p>
+    <p>
+      No validated sales, visits or conversion metric is available in public sources. Nothing on this profile converts “in measurement” into a success claim.
+    </p>
+    <Callout variant="accent" title="Limitation" icon="●">
+      <p><strong>No validated outcome.</strong> This is a portfolio profile, not a case study. Price, stock, shipping and contact details may have changed since the source review.</p>
+    </Callout>
+  </CaseSection>
+
+  <CaseSection num="05" label="Details" title="Public business info" id="details">
+    <ul>
+      <li>Live: <a href="https://elsahamrah.com" target="_blank" rel="noopener noreferrer">elsahamrah.com ↗</a></li>
+      <li>Category: phones, tablets, smartwatches, headphones &amp; accessories</li>
+      <li>Public address on site: Tehran, Ferdowsi Sq., Ferdows World Trade Center, 6th floor, unit 11</li>
+      <li>Phone (site): <code style="direction:ltr">02166340536</code> · Email: <code>info@elsahamrah.com</code></li>
+    </ul>
+    <p class="cs-note">Information above is reproduced from the public site and Noveno's portfolio entry for provenance; it is not a claim of project outcome.</p>
+  </CaseSection>
+
+  <CaseSection num="06" label="Links" title="Where to go next" id="links">
+    <div class="cs-links">
+      <a href="https://elsahamrah.com" target="_blank" rel="noopener noreferrer" class="cs-links__primary">Open elsahamrah.com ↗</a>
+      <a href="/work" class="cs-links__secondary">Back to work →</a>
+    </div>
+  </CaseSection>
+
+  <NextProject title="Isbatab" summary="Corporate website for a safety, HSE and technical-inspection services company — formal presence, services, projects and certifications." href="/work/isbatab" kicker="Web · Corporate · Services" />
+</Layout>
+
+<style>
+  .cs-media { max-width: var(--width-prose); padding: var(--space-4) 0 0; }
+  .cs-note {
+    margin-top: var(--space-4);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--color-text-faint);
+    border-left: 2px solid var(--color-border);
+    padding-left: 10px;
+    max-width: 66ch;
+  }
+  .cs-links { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+  .cs-links__primary {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 16px; border-radius: var(--radius-pill);
+    background: var(--color-text); color: var(--color-canvas);
+    font-size: var(--text-sm); font-weight: 600; transition: transform var(--duration-fast) var(--ease-default);
+  }
+  .cs-links__primary:hover { transform: translateY(-1px); }
+  .cs-links__secondary {
+    display: inline-flex; align-items: center;
+    padding: 10px 16px; border-radius: var(--radius-pill);
+    background: var(--color-surface); border: var(--border-hairline);
+    color: var(--color-text); font-size: var(--text-sm); font-weight: 600;
+  }
+  .cs-links__secondary:hover { border-color: var(--color-border-strong); background: var(--color-surface-hover); }
+</style>

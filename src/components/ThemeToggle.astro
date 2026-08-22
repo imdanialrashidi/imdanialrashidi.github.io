@@ -86,30 +86,23 @@
 </style>
 
 <script is:inline>
-  const STORAGE_KEY = "theme"
-  const attr = "data-theme"
-
+  const STORAGE_KEY = "theme";
+  const attr = "data-theme";
   function getStored() {
-    try {
-      return localStorage.getItem(STORAGE_KEY)
-    } catch {
-      return null
-    }
+    try { return localStorage.getItem(STORAGE_KEY); } catch { return null; }
   }
   function setStored(value) {
-    try {
-      localStorage.setItem(STORAGE_KEY, value)
-    } catch {}
+    try { localStorage.setItem(STORAGE_KEY, value); } catch {}
   }
   function getSystem() {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   }
   function getCurrent() {
-    const el = document.documentElement.getAttribute(attr)
-    if (el === "light" || el === "dark") return el
-    const stored = getStored()
-    if (stored === "light" || stored === "dark") return stored
-    return getSystem()
+    const el = document.documentElement.getAttribute(attr);
+    if (el === "light" || el === "dark") return el;
+    const stored = getStored();
+    if (stored === "light" || stored === "dark") return stored;
+    return getSystem();
   }
   function apply(theme) {
     document.documentElement.setAttribute(attr, theme);
@@ -124,18 +117,18 @@
     apply(next);
     setStored(next);
   }
-
-  // init button state
-  apply(getCurrent());
-
-  document.getElementById("theme-toggle")?.addEventListener("click", toggle);
-
-  // keep in sync with system changes when no explicit preference
-  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-    if (!getStored()) {
-      apply(e.matches ? "dark" : "light");
-    }
-  });
-
-  // keyboard hint: respect reduced motion via CSS
+  function initTheme() {
+    apply(getCurrent());
+    const btn = document.getElementById("theme-toggle");
+    if (btn) btn.onclick = toggle;
+  }
+  initTheme();
+  document.addEventListener("astro:page-load", initTheme);
+  document.addEventListener("astro:after-swap", initTheme);
+  if (!window.__themeSystemListener) {
+    window.__themeSystemListener = true;
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+      if (!getStored()) apply(e.matches ? "dark" : "light");
+    });
+  }
 </script>

@@ -15,7 +15,7 @@ function isActive(href: string, path: string) {
 
 <header class="site-header">
   <div class="container site-header__inner">
-    <a href="/" class="site-header__brand" aria-label="Danial Rashidi — Software & Product Builder — Home">
+    <a href="/" class="site-header__brand">
       <span class="site-header__name">Danial Rashidi</span>
       <span class="site-header__meta">Software &amp; Product Builder</span>
     </a>
@@ -101,6 +101,8 @@ function isActive(href: string, path: string) {
     backdrop-filter: saturate(1.2) blur(10px);
     -webkit-backdrop-filter: saturate(1.2) blur(10px);
     border-bottom: var(--border-hairline);
+    /* Promote sticky to compositor layer only on capable devices; avoid continuous repaint */
+    contain: layout paint;
   }
 
   /* Fallback when backdrop-filter unsupported */
@@ -108,6 +110,18 @@ function isActive(href: string, path: string) {
     .site-header {
       background: var(--color-canvas);
     }
+  }
+
+  /* Mobile simplification: blur is expensive on low-end GPUs and coarse pointers — use solid */
+  @media (max-width: 780px), (pointer: coarse) {
+    .site-header {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      background: var(--color-canvas);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .site-header { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--color-canvas); }
   }
 
   .site-header__inner {
@@ -338,81 +352,101 @@ function isActive(href: string, path: string) {
   }
 </style>
 
-<script>
-  const btn = document.getElementById("menu-toggle") as HTMLButtonElement | null;
-  const nav = document.getElementById("mobile-nav") as HTMLElement | null;
+<script is:inline>
+  function initMobileNav() {
+    const btn = document.getElementById("menu-toggle");
+    const nav = document.getElementById("mobile-nav");
+    if (!btn || !nav) return;
 
-  if (btn && nav) {
-    const close = () => {
-      btn.setAttribute("aria-expanded", "false");
-      btn.setAttribute("aria-label", "Open menu");
-      nav.hidden = true;
+    // Close helper always queries fresh nodes to avoid stale closures after swaps
+    function getBtn() { return document.getElementById("menu-toggle"); }
+    function getNav() { return document.getElementById("mobile-nav"); }
+
+    function close() {
+      const b = getBtn(); const n = getNav();
+      if (!b || !n) return;
+      b.setAttribute("aria-expanded", "false");
+      b.setAttribute("aria-label", "Open menu");
+      n.hidden = true;
       document.body.style.removeProperty("overflow");
       document.getElementById("main")?.removeAttribute("inert");
       document.querySelector("footer")?.removeAttribute("inert");
-      btn.focus();
-    };
-    const open = () => {
-      btn.setAttribute("aria-expanded", "true");
-      btn.setAttribute("aria-label", "Close menu");
-      nav.hidden = false;
+      // only focus if menu was open and user is still on page (avoid stealing focus after navigation)
+      if (document.activeElement && n.contains(document.activeElement)) b.focus();
+    }
+    function open() {
+      const b = getBtn(); const n = getNav();
+      if (!b || !n) return;
+      b.setAttribute("aria-expanded", "true");
+      b.setAttribute("aria-label", "Close menu");
+      n.hidden = false;
       document.body.style.overflow = "hidden";
       document.getElementById("main")?.setAttribute("inert", "");
       document.querySelector("footer")?.setAttribute("inert", "");
-      // focus first link for accessibility
-      const firstLink = nav.querySelector("a") as HTMLElement | null;
-      firstLink?.focus();
+      const firstLink = n.querySelector("a");
+      if (firstLink) firstLink.focus();
+    }
+
+    // Idempotent per-element bindings: use onclick assignment to overwrite stale listeners after swaps
+    btn.onclick = () => {
+      const b = getBtn();
+      if (!b) return;
+      const expanded = b.getAttribute("aria-expanded") === "true";
+      if (expanded) close(); else open();
     };
 
-    const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
-
-    const trapFocus = (e: KeyboardEvent) => {
-      if (e.key !== "Tab") return;
-      if (btn.getAttribute("aria-expanded") !== "true") return;
-      const focusables = Array.from(nav.querySelectorAll<HTMLElement>(FOCUSABLE));
-      if (focusables.length === 0) return;
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
-      if (!first || !last) return;
-      const active = document.activeElement;
-      if (e.shiftKey && (active === first || !nav.contains(active))) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && active === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    };
-
-    btn.addEventListener("click", () => {
-      const expanded = btn.getAttribute("aria-expanded") === "true";
-      if (expanded) close();
-      else open();
-    });
-
-    // close on link click
     nav.querySelectorAll("a").forEach((a) => {
-      a.addEventListener("click", () => {
-        if (btn.getAttribute("aria-expanded") === "true") close();
-      });
+      a.onclick = () => {
+        const b = getBtn();
+        if (b && b.getAttribute("aria-expanded") === "true") close();
+      };
     });
 
-    // modal keyboard behavior: Escape closes, Tab stays inside the dialog
-    document.addEventListener("keydown", (e: KeyboardEvent) => {
-      if (btn.getAttribute("aria-expanded") !== "true") return;
-      if (e.key === "Escape") close();
-      else trapFocus(e);
-    });
-
-    // close on backdrop click (outside inner)
-    nav.addEventListener("click", (e) => {
+    // Backdrop click
+    nav.onclick = (e) => {
       if (e.target === nav) close();
-    });
+    };
 
-    // reset on resize to desktop
-    const mq = window.matchMedia("(min-width: 781px)");
-    mq.addEventListener("change", (e) => {
-      if (e.matches && btn.getAttribute("aria-expanded") === "true") close();
-    });
+    // Ensure closed state on fresh page (important after View Transition where old open state could leak)
+    close();
+
+    // Bind global handlers only once to avoid duplicates after repeated swaps
+    if (!window.__mobileNavGlobals) {
+      window.__mobileNavGlobals = true;
+      const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+      function trapFocus(e) {
+        const b = getBtn(); const n = getNav();
+        if (!b || !n) return;
+        if (e.key !== "Tab") return;
+        if (b.getAttribute("aria-expanded") !== "true") return;
+        const focusables = Array.from(n.querySelectorAll(FOCUSABLE));
+        if (focusables.length === 0) return;
+        const first = focusables[0]; const last = focusables[focusables.length - 1];
+        if (!first || !last) return;
+        const active = document.activeElement;
+        if (e.shiftKey && (active === first || !n.contains(active))) {
+          e.preventDefault(); last.focus();
+        } else if (!e.shiftKey && active === last) {
+          e.preventDefault(); first.focus();
+        }
+      }
+      document.addEventListener("keydown", (e) => {
+        const b = getBtn();
+        if (!b || b.getAttribute("aria-expanded") !== "true") return;
+        if (e.key === "Escape") { e.preventDefault(); close(); }
+        else trapFocus(e);
+      });
+      const mq = window.matchMedia("(min-width: 781px)");
+      mq.addEventListener("change", (e) => {
+        const b = getBtn();
+        if (e.matches && b && b.getAttribute("aria-expanded") === "true") close();
+      });
+      // Also close on View Transition swaps that happen while open
+      document.addEventListener("astro:before-swap", close);
+      document.addEventListener("astro:after-swap", close);
+    }
   }
+  initMobileNav();
+  document.addEventListener("astro:page-load", initMobileNav);
+  document.addEventListener("astro:after-swap", initMobileNav);
 </script>

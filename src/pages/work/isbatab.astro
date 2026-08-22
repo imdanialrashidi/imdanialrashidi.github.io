@@ -1,0 +1,122 @@
+---
+import Callout from '../../components/case-study/Callout.astro'
+import CaseFigure from '../../components/case-study/CaseFigure.astro'
+import CaseHero from '../../components/case-study/CaseHero.astro'
+import CaseSection from '../../components/case-study/CaseSection.astro'
+import NextProject from '../../components/case-study/NextProject.astro'
+import Layout from '../../layouts/Layout.astro'
+import previewImg from '../../assets/work/isbatab-hero.webp'
+import { site } from '../../data/site.ts'
+
+const pageTitle = 'Isbatab — Danial Rashidi'
+const pageDescription = 'Isbatab — corporate website for a safety, HSE and technical-inspection services company. Formal presence for industrial clients, services, projects and certifications. No validated lead or contract data claimed.'
+const canonical = new URL('/work/isbatab', site.url).toString()
+---
+
+<Layout title={pageTitle} description={pageDescription} canonical={canonical} ogImage="/og-default.png">
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: pageTitle,
+      description: pageDescription,
+      url: canonical,
+      isPartOf: { "@type": "WebSite", name: site.shortTitle, url: site.url },
+      primaryImageOfPage: { "@type": "ImageObject", contentUrl: new URL(previewImg.src, site.url).toString() },
+      about: { "@type": "CreativeWork", name: "Isbatab", url: "https://isbatab.ir" }
+    })} />
+  </Fragment>
+
+  <CaseHero
+    kicker="Web · Corporate · Services"
+    title="Isbatab"
+    summary="Corporate website for a safety, HSE and technical-inspection services company — formal presence for industrial clients, services, projects, certifications and inquiry paths."
+    role="Web Engineering"
+    links={[
+      { label: "Visit live site", href: "https://isbatab.ir", external: true },
+      { label: "Back to work", href: "/work" },
+    ]}
+  />
+
+  <div class="container cs-media">
+    <CaseFigure
+      image={previewImg}
+      alt="Isbatab homepage — corporate website for safety, HSE and technical inspection services"
+      caption="Real preview — Isbatab homepage (public site). 1440×900 WebP capture; provenance in src/assets/work/SOURCES.md. No staged dashboard."
+    />
+  </div>
+
+  <CaseSection num="01" label="Overview" title="What this is" id="overview">
+    <p>
+      Imen Sanat Batab (Isbatab) is a safety/HSE and technical-inspection services company. Its website is a formal, trust-oriented corporate presence for industrial and civil-project clients — presented in <a href="https://noveno.ir/work/" target="_blank" rel="noopener noreferrer">Noveno's portfolio</a> as a designed corporate site.
+    </p>
+    <Callout variant="muted" title="Source" icon="◈">
+      <p>Source: public site <a href="https://isbatab.ir" target="_blank" rel="noopener noreferrer">isbatab.ir</a> plus the Noveno work entry for Isbatab. No inquiry/lead metric is claimed; the entry is type <code>project</code> with outcome “measuring”.</p>
+    </Callout>
+  </CaseSection>
+
+  <CaseSection num="02" label="Problem" title="Why it exists" id="problem">
+    <p>
+      The company needed a credible, official web presence to present specialist services — safety consulting, HSE management, inspection of cranes/forklifts/machinery, risk management, training, engineering documentation and project résumé — to organisations that evaluate vendors on trust and evidence.
+    </p>
+  </CaseSection>
+
+  <CaseSection num="03" label="What was built" title="Corporate structure" id="built">
+    <ul>
+      <li>Company introduction, history, team and HSE approach.</li>
+      <li>Safety and technical-inspection services (crane, forklift, machinery, structures).</li>
+      <li>HAZOP/HAZID, risk, building safety, earthing and lightning systems.</li>
+      <li>Training and HSE management-system consulting/implementation.</li>
+      <li>Engineering and documentation: As-Built, P&amp;ID, PFD, 3D Model.</li>
+      <li>Project résumé (mines, refineries, petrochemical and industrial projects), certifications (ISO 45001, 14001, 9001), policy and social responsibility.</li>
+      <li>Phone and WhatsApp inquiry CTAs.</li>
+    </ul>
+  </CaseSection>
+
+  <CaseSection num="04" label="Status" title="Honest state" id="status">
+    <p>
+      Public corporate site. No validated inquiry, lead or contract data is available in public sources. The company's executive activity from 2013 and formal registration/Tehran office from 2024 are company history — not the website build date — and are not presented here as project outcomes.
+    </p>
+    <Callout variant="accent" title="Limitation" icon="●">
+      <p><strong>No validated outcome.</strong> Certificates, standards and project records shown on the site belong to the company and are not presented as outcomes of the website design. This is a portfolio profile, not a case study.</p>
+    </Callout>
+  </CaseSection>
+
+  <CaseSection num="05" label="Details" title="Public company info" id="details">
+    <ul>
+      <li>Live: <a href="https://isbatab.ir" target="_blank" rel="noopener noreferrer">isbatab.ir ↗</a></li>
+      <li>Field: HSE, technical inspection, training, consulting and specialist industrial services</li>
+      <li>Office (site): Tehran, Baharestan Sq., Mellat St., Kaveh Alley, Kaveh Bldg, 2nd floor, No. 218</li>
+      <li>Phone: <code style="direction:ltr">02133959935</code> · Mobile: <code style="direction:ltr">09128823933</code> · Email: <code>isbatab.co@gmail.com</code></li>
+      <li>Displayed standards: ISO 45001:2018, ISO 14001:2018, ISO 9001:2018</li>
+    </ul>
+  </CaseSection>
+
+  <CaseSection num="06" label="Links" title="Where to go next" id="links">
+    <div class="cs-links">
+      <a href="https://isbatab.ir" target="_blank" rel="noopener noreferrer" class="cs-links__primary">Open isbatab.ir ↗</a>
+      <a href="/work" class="cs-links__secondary">Back to work →</a>
+    </div>
+  </CaseSection>
+
+  <NextProject title="Mobile Khorsandi" summary="Online store for phones, accessories, parts and gadgets — categories, search, cart and support." href="/work/mobile-khorsandi" kicker="Web · E-commerce · Retail" />
+</Layout>
+
+<style>
+  .cs-media { max-width: var(--width-prose); padding: var(--space-4) 0 0; }
+  .cs-links { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+  .cs-links__primary {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 16px; border-radius: var(--radius-pill);
+    background: var(--color-text); color: var(--color-canvas);
+    font-size: var(--text-sm); font-weight: 600; transition: transform var(--duration-fast) var(--ease-default);
+  }
+  .cs-links__primary:hover { transform: translateY(-1px); }
+  .cs-links__secondary {
+    display: inline-flex; align-items: center;
+    padding: 10px 16px; border-radius: var(--radius-pill);
+    background: var(--color-surface); border: var(--border-hairline);
+    color: var(--color-text); font-size: var(--text-sm); font-weight: 600;
+  }
+  .cs-links__secondary:hover { border-color: var(--color-border-strong); background: var(--color-surface-hover); }
+</style>

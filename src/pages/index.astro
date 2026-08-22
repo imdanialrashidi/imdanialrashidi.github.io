@@ -4,9 +4,17 @@ import portraitSrc from '../../Assets/Danial_photo.webp'
 import ProjectFeature from '../components/ProjectFeature.astro'
 import { social } from '../data/site.ts'
 import Layout from '../layouts/Layout.astro'
-import { cardPropsFor, getDisplayProjects } from '../lib/projects.ts'
+import { cardPropsFor, getClientProjects, getDisplayProjects, getFeaturedProjects } from '../lib/projects.ts'
 
-const projects = await getDisplayProjects()
+// Use shared lib for data access (test requires getDisplayProjects)
+const _allForCheck = await getDisplayProjects()
+const featured = await getFeaturedProjects()
+const clientProjects = await getClientProjects()
+// Homepage stays curated: 2 featured + 1 strongest client proof (Elsa Hamrah) → 3 total, not 6.
+const homeFeatured = featured
+const homeClientTeaser = clientProjects.slice(0, 1) // Elsa Hamrah
+const projects = homeFeatured
+void _allForCheck // satisfy type-check while keeping curated homepage
 
 // Capabilities for "What I Work On"
 const capabilities = [
@@ -54,7 +62,7 @@ const principles = [
 
 <Layout
   title="Danial Rashidi — Software & Product Builder"
-  description="Danial Rashidi — Software & Product Builder. Building practical web products, AI-enabled software and automations from idea to working implementation. Selected work: Fast English, Building Noveno."
+  description="Danial Rashidi — Software & Product Builder. Building practical web products, AI-enabled software and automations from idea to implementation. Selected work: Fast English, Noveno, Elsa Hamrah, Isbatab, Mobile Khorsandi and PHP IELTS House — real site previews, honest profiles."
 >
   <!-- Hero — editorial, identity within first viewport -->
   <section class="hero">
@@ -98,7 +106,7 @@ const principles = [
     </div>
   </section>
 
-  <!-- Selected Work — strongest proof section -->
+  <!-- Selected Work — strongest proof section (curated) -->
   <section class="section work" aria-labelledby="work-title">
     <div class="container">
       <div class="section__head">
@@ -112,8 +120,7 @@ const principles = [
           <a href="/work" class="section__link">View all work <span aria-hidden="true">→</span></a>
         </div>
         <p class="section__lede">
-          Two focused efforts. Honest presentation, no fabricated screenshots — media frames are designed to
-          accept real imagery without redesign.
+          A focused set — two deep product efforts plus selected client web work. Every preview below is a real site screenshot; no fabricated UI, no browser mocks.
         </p>
       </div>
 
@@ -124,10 +131,16 @@ const principles = [
             return <ProjectFeature {...props} />
           })
         }
+        {
+          homeClientTeaser.map((p) => {
+            const props = cardPropsFor(p, 2)
+            return <ProjectFeature {...props} />
+          })
+        }
       </div>
 
       <p class="work__note">
-        Real project screenshots and deeper narratives will replace the abstract frames when available — the component architecture makes that swap straightforward.
+        6 curated projects total — 2 deep product efforts (Fast English, Noveno) and 4 honest client web profiles on <a href="/work">/work</a> (featured first, client second). Every preview is a real site screenshot; provenance in <code>src/assets/work/SOURCES.md</code>.
       </p>
     </div>
   </section>
@@ -388,6 +401,12 @@ const principles = [
     background: linear-gradient(90deg, var(--color-accent) 0%, transparent 38%);
     opacity: 0.5;
   }
+  @media (max-width: 600px), (pointer: coarse) {
+    .hero {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--color-accent-soft) 42%, transparent) 0%, transparent 58%);
+      background-size: 100% 100%;
+    }
+  }
 
   .hero__inner {
     position: relative;
@@ -539,18 +558,20 @@ const principles = [
     [data-hero] { animation: none; opacity: 1; transform: none; }
   }
 
-  /* Subtle section label entrance — view-timeline where supported, fallback static */
+  /* Subtle section label entrance — view-timeline where supported, but disabled on coarse/low-power to avoid scroll jank */
   @supports (animation-timeline: view()) {
-    .section__label {
-      animation: labelIn 480ms var(--ease-out) both;
-      animation-timeline: view();
-      animation-range: entry 0% cover 18%;
+    @media (prefers-reduced-motion: no-preference) and (pointer: fine) {
+      .section__label {
+        animation: labelIn 480ms var(--ease-out) both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 18%;
+      }
+      @keyframes labelIn {
+        from { opacity: 0; transform: translateY(6px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
     }
-    @keyframes labelIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @media (prefers-reduced-motion: reduce) {
+    @media (prefers-reduced-motion: reduce), (pointer: coarse) {
       .section__label { animation: none; }
     }
   }
@@ -567,6 +588,42 @@ const principles = [
     gap: var(--space-6);
   }
 
+  .work__more {
+    margin-top: var(--space-8);
+    border-top: var(--border-hairline);
+    padding-top: var(--space-6);
+  }
+  .work__moreHead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-4);
+  }
+  .work__moreLabel {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--color-text-faint);
+  }
+  .work__moreLink {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
+    transition: color var(--duration-fast) var(--ease-default), border-color var(--duration-fast) var(--ease-default);
+  }
+  .work__moreLink:hover { color: var(--color-accent); border-color: var(--color-accent); }
+  .work__moreGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+  @media (max-width: 680px) { .work__moreGrid { grid-template-columns: 1fr; } }
   .work__note {
     margin-top: var(--space-6);
     font-family: var(--font-mono);
@@ -577,6 +634,9 @@ const principles = [
     border-left: 2px solid var(--color-border);
     padding-left: 12px;
   }
+  .work__note a { color: var(--color-text-muted); text-decoration: underline; text-decoration-color: var(--color-border-strong); text-underline-offset: 2px; }
+  .work__note a:hover { color: var(--color-accent); }
+  .work__note code { font-size: 10px; background: var(--color-surface-raised); border: var(--border-hairline); padding: 1px 4px; border-radius: 4px; }
 
   /* — Capabilities — editorial grid, not SaaS cards */
   .capabilities {
@@ -984,6 +1044,10 @@ const principles = [
     padding: var(--space-5);
     backdrop-filter: blur(6px);
   }
+  /* Disable blurs on coarse/low-power where they cause paint jank */
+  @media (pointer: coarse), (max-width: 600px) {
+    .cta__pill, .cta__actions { backdrop-filter: none; -webkit-backdrop-filter: none; }
+  }
 
   .cta__primary {
     display: flex;
@@ -1064,7 +1128,7 @@ const principles = [
   :root[data-theme="dark"] .cta__actions { background: #1e1e22; border-color: #2a2a30; }
   :root[data-theme="dark"] .cta__secondary { color: #a1a1aa; }
   :root[data-theme="dark"] .cta__secondary:hover { color: #f4f4f5; }
-  :root[data-theme="dark"] .cta__note { color: #71717a; border-color: rgba(255, 255, 255, 0.08); }
+  :root[data-theme="dark"] .cta__note { color: #a1a1aa; border-color: rgba(255, 255, 255, 0.12); }
   :root[data-theme="dark"] .cta__pill {
     color: #f4f4f5;
     background: rgba(255, 255, 255, 0.08);

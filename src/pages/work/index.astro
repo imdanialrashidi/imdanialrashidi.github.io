@@ -1,14 +1,17 @@
 ---
+import CompactWorkCard from '../../components/CompactWorkCard.astro'
 import ProjectFeature from '../../components/ProjectFeature.astro'
 import Layout from '../../layouts/Layout.astro'
-import { cardPropsFor, getDisplayProjects } from '../../lib/projects.ts'
+import { cardPropsFor, getClientProjects, getDisplayProjects, getFeaturedProjects } from '../../lib/projects.ts'
 
 const projects = await getDisplayProjects()
+const featured = await getFeaturedProjects()
+const clients = await getClientProjects()
 ---
 
 <Layout
   title="Work — Danial Rashidi"
-  description="Work by Danial Rashidi — Fast English and Building Noveno. Curated portfolio index, honest presentation without fabricated proof."
+  description="Work by Danial Rashidi — Fast English, Noveno, Elsa Hamrah, Isbatab, Mobile Khorsandi and PHP IELTS House. Curated portfolio with real site screenshots and honest, source-backed profiles."
 >
   <section class="work-head">
     <div class="container">
@@ -18,9 +21,7 @@ const projects = await getDisplayProjects()
       </div>
       <h1 class="work-head__title">Work</h1>
       <p class="work-head__lede">
-        A curated index of products I've helped shape. Each entry uses the same project source of truth
-        as the homepage — editorial presentation with generous media hierarchy and an honest placeholder that
-        accepts real screenshots later without redesign.
+        A curated portfolio — two deep product efforts and selected client web work. Every preview is a real public-site screenshot (provenance in <code>src/assets/work/SOURCES.md</code>); outcomes are “measuring” unless publicly verifiable, with limitations noted per project.
       </p>
       <div class="work-head__meta">
         {
@@ -40,21 +41,66 @@ const projects = await getDisplayProjects()
     </div>
   </section>
 
-  <section class="work-list">
-    <div class="container work-list__stack">
-      {
-        projects.map((p, i) => {
-          const props = cardPropsFor(p, i)
-          return <ProjectFeature {...props} />
-        })
-      }
+  <!-- Featured: deep product work -->
+  <section class="work-list" aria-labelledby="featured-title">
+    <div class="container">
+      <div class="work-list__sectionHead">
+        <h2 id="featured-title" class="work-list__sectionTitle">Featured — deep product work</h2>
+        <p class="work-list__sectionLede">Two focused product efforts with long-form case studies — honest depth without invented screenshots.</p>
+      </div>
+      <div class="work-list__stack">
+        {
+          featured.map((p, i) => {
+            const props = cardPropsFor(p, i)
+            return <ProjectFeature {...props} />
+          })
+        }
+      </div>
     </div>
+  </section>
 
+  <!-- Selected client work — lighter profiles, real previews -->
+  <section class="work-list work-list--clients" aria-labelledby="clients-title">
+    <div class="container">
+      <div class="work-list__sectionHead">
+        <div class="work-list__eyebrow">
+          <span class="work-list__eyebrowNum">03–06</span>
+          <span class="work-list__eyebrowRule" aria-hidden="true"></span>
+          <span class="work-list__eyebrowText">Selected client work</span>
+        </div>
+        <h2 id="clients-title" class="work-list__sectionTitle">Web work — honest profiles</h2>
+        <p class="work-list__sectionLede">Four public business sites — presented as concise portfolio profiles with real hero screenshots and explicit limitations; no campaign metrics are fabricated.</p>
+      </div>
+
+      <div class="work-list__grid">
+        {
+          clients.map((p) => {
+            const props = cardPropsFor(p, 0)
+            return (
+              <CompactWorkCard
+                title={props.title}
+                kicker={props.kicker}
+                summary={props.summary}
+                href={props.href}
+                image={props.image}
+                imageAlt={props.imageAlt}
+                externalHref={p.data.links?.live}
+              />
+            )
+          })
+        }
+      </div>
+
+      <p class="work-list__note">
+        Hierarchy is intentional: featured work carries editorial weight (large feature cards). Client work is lighter (compact grid) — breadth without an agency dump. Every image is a real public-site screenshot; every outcome is “measuring” until public data exists. Screenshots via thum.io; local copies in <code>src/assets/work/</code> with <code>SOURCES.md</code> provenance.
+      </p>
+    </div>
+  </section>
+
+  <section class="work-list__footWrap">
     <div class="container work-list__foot">
       <p class="work-list__note">
-        Detailed case-study bodies for Fast English and Noveno are the next slice — this index already
-        preserves strong image hierarchy, distinguishes categories without badge clutter, and makes the
-        path into each case study obvious. No placeholder projects added to fill space.
+        Fast English and Noveno retain deep case-study treatment; the four client entries are intentionally lighter “project profiles” — scope, what was built, public site, honest status and limitations — so depth matches available evidence.
       </p>
       <div class="work-list__actions">
         <a href="/" class="work-list__link">← Back to home</a>
@@ -128,13 +174,72 @@ const projects = await getDisplayProjects()
   .mono { font-size: 10px; opacity: 0.9; }
 
   .work-list {
-    padding: clamp(1.75rem, 4vw, 2.5rem) 0 clamp(2.5rem, 6vw, 4rem);
+    padding: clamp(1.75rem, 4vw, 2.5rem) 0 clamp(1.5rem, 4vw, 2.5rem);
   }
+  .work-list--clients {
+    padding-top: clamp(1.5rem, 4vw, 2.5rem);
+    border-top: var(--border-hairline);
+    background: color-mix(in srgb, var(--color-surface) 50%, var(--color-canvas));
+  }
+  .work-list__sectionHead {
+    margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  }
+  .work-list__sectionTitle {
+    font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+    font-weight: 650;
+    letter-spacing: -0.018em;
+    line-height: 1.15;
+  }
+  .work-list__sectionLede {
+    margin-top: var(--space-2);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+  .work-list__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--color-text-faint);
+    margin-bottom: var(--space-3);
+  }
+  .work-list__eyebrowNum {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: var(--radius-pill);
+    border: var(--border-hairline);
+    background: var(--color-surface);
+    font-weight: 700;
+    color: var(--color-text-muted);
+    font-size: 10px;
+  }
+  .work-list__eyebrowRule { width: 24px; height: 1px; background: var(--color-border-strong); opacity: 0.7; }
+  .work-list__eyebrowText { font-weight: 600; }
 
   .work-list__stack {
     display: flex;
     flex-direction: column;
     gap: var(--space-6);
+  }
+  .work-list__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+  @media (max-width: 720px) { .work-list__grid { grid-template-columns: 1fr; } }
+  .work-list__footWrap {
+    padding: clamp(1.5rem, 4vw, 2.5rem) 0 clamp(2.5rem, 6vw, 4rem);
+    border-top: var(--border-hairline);
   }
 
   .work-list__foot {

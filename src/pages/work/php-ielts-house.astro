@@ -1,0 +1,119 @@
+---
+import Callout from '../../components/case-study/Callout.astro'
+import CaseFigure from '../../components/case-study/CaseFigure.astro'
+import CaseHero from '../../components/case-study/CaseHero.astro'
+import CaseSection from '../../components/case-study/CaseSection.astro'
+import NextProject from '../../components/case-study/NextProject.astro'
+import Layout from '../../layouts/Layout.astro'
+import previewImg from '../../assets/work/php-ielts-house-hero.webp'
+import { site } from '../../data/site.ts'
+
+const pageTitle = 'PHP IELTS House — Danial Rashidi'
+const pageDescription = 'PHP IELTS House — education website for an English/IELTS house in Karaj. Course approach, levels, student results, placement and contact. Public work; no independent enrolment or conversion data claimed.'
+const canonical = new URL('/work/php-ielts-house', site.url).toString()
+---
+
+<Layout title={pageTitle} description={pageDescription} canonical={canonical} ogImage="/og-default.png">
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: pageTitle,
+      description: pageDescription,
+      url: canonical,
+      isPartOf: { "@type": "WebSite", name: site.shortTitle, url: site.url },
+      primaryImageOfPage: { "@type": "ImageObject", contentUrl: new URL(previewImg.src, site.url).toString() },
+      about: { "@type": "CreativeWork", name: "PHP IELTS House", url: "https://phpieltshouse.ir" }
+    })} />
+  </Fragment>
+
+  <CaseHero
+    kicker="Web · Education · Services"
+    title="PHP IELTS House"
+    summary="Education website for an English/IELTS house in Karaj — course approach, levels, student results, placement and contact. Public work; no independent enrolment or conversion metric is claimed."
+    role="Web Engineering"
+    links={[
+      { label: "Visit live site", href: "https://phpieltshouse.ir", external: true },
+      { label: "Back to work", href: "/work" },
+    ]}
+  />
+
+  <div class="container cs-media">
+    <CaseFigure
+      image={previewImg}
+      alt="PHP IELTS House homepage — English and IELTS education services website in Karaj"
+      caption="Real preview — PHP IELTS House homepage (public site). 1440×900 WebP capture; provenance in src/assets/work/SOURCES.md."
+    />
+  </div>
+
+  <CaseSection num="01" label="Overview" title="What this is" id="overview">
+    <p>
+      PHP IELTS House is an education/services site for specialised English and IELTS in Karaj — a presence to explain teaching approach and shorten the path to placement, consultation or enrolment. It appears in <a href="https://noveno.ir/work/" target="_blank" rel="noopener noreferrer">Noveno's portfolio</a> as a designed education site.
+    </p>
+    <Callout variant="muted" title="Source" icon="◈">
+      <p>Source: public site <a href="https://phpieltshouse.ir" target="_blank" rel="noopener noreferrer">phpieltshouse.ir</a> plus the Noveno work entry. Educational claims (scores, durations) are site-stated content and are not presented here as validated project outcomes.</p>
+    </Callout>
+  </CaseSection>
+
+  <CaseSection num="02" label="Problem" title="Why it exists" id="problem">
+    <p>
+      The institute needed a coherent online presence that clarifies courses and teaching approach and moves visitors toward placement, consultation or registration — especially where a vague “help me start” needs a concrete next step.
+    </p>
+  </CaseSection>
+
+  <CaseSection num="03" label="What was built" title="Education structure" id="built">
+    <ul>
+      <li>Homepage with “Specialised English &amp; IELTS in Karaj” and placement/consultation CTAs.</li>
+      <li>Conversation-focused approach: per site copy, reading/listening at home, class time on speaking.</li>
+      <li>Course paths: intermediate → IELTS 7 (8 months) and zero → IELTS 7 (16 months) as stated on the site.</li>
+      <li>Student results and testimonial quotes (site content), classroom environment, film/series analysis, interactive classes.</li>
+      <li>Mock IELTS, intensive conversation, pre-IELTS and free placement courses; blog, FAQ, contact/hours and map.</li>
+    </ul>
+  </CaseSection>
+
+  <CaseSection num="04" label="Status" title="Honest state" id="status">
+    <p>
+      Public education site. Independent enrolment or conversion data is not available; educational claims (scores, durations) are site-stated and are not reported here as validated project metrics.
+    </p>
+    <Callout variant="accent" title="Limitation" icon="●">
+      <p><strong>No validated outcome.</strong> Scores shown in testimonials and duration promises are site-reported and need independent source before being presented as a project result. This is a portfolio profile, not a case study.</p>
+    </Callout>
+  </CaseSection>
+
+  <CaseSection num="05" label="Details" title="Public institute info" id="details">
+    <ul>
+      <li>Live: <a href="https://phpieltshouse.ir" target="_blank" rel="noopener noreferrer">phpieltshouse.ir ↗</a></li>
+      <li>Field: English language, conversation and IELTS preparation</li>
+      <li>Location (site): Karaj, Mehrshahr, Eram Blvd, corner of 100 West St., Anahita Bldg, 1st floor, unit 2</li>
+      <li>Phone/WhatsApp: <code style="direction:ltr">09938905261</code> · Hours (site): 10:00–22:00 daily</li>
+    </ul>
+  </CaseSection>
+
+  <CaseSection num="06" label="Links" title="Where to go next" id="links">
+    <div class="cs-links">
+      <a href="https://phpieltshouse.ir" target="_blank" rel="noopener noreferrer" class="cs-links__primary">Open phpieltshouse.ir ↗</a>
+      <a href="/work" class="cs-links__secondary">Back to work →</a>
+    </div>
+  </CaseSection>
+
+  <NextProject title="Fast English" summary="A Persian-first English podcast product — PWA + Android via one codebase, manual card-to-card payment and protected audio." href="/work/fast-english" kicker="Product Engineering · Web · PWA · Android" />
+</Layout>
+
+<style>
+  .cs-media { max-width: var(--width-prose); padding: var(--space-4) 0 0; }
+  .cs-links { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+  .cs-links__primary {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 16px; border-radius: var(--radius-pill);
+    background: var(--color-text); color: var(--color-canvas);
+    font-size: var(--text-sm); font-weight: 600; transition: transform var(--duration-fast) var(--ease-default);
+  }
+  .cs-links__primary:hover { transform: translateY(-1px); }
+  .cs-links__secondary {
+    display: inline-flex; align-items: center;
+    padding: 10px 16px; border-radius: var(--radius-pill);
+    background: var(--color-surface); border: var(--border-hairline);
+    color: var(--color-text); font-size: var(--text-sm); font-weight: 600;
+  }
+  .cs-links__secondary:hover { border-color: var(--color-border-strong); background: var(--color-surface-hover); }
+</style>

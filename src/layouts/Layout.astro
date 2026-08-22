@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from 'astro:transitions'
 import '../styles/global.css'
 import Footer from '../components/Footer.astro'
 import Header from '../components/Header.astro'
@@ -9,6 +10,8 @@ interface Props {
   description?: string
   canonical?: string
   noIndex?: boolean
+  ogImage?: string
+  ogImageAlt?: string
 }
 
 const {
@@ -16,12 +19,15 @@ const {
   description = site.description,
   canonical,
   noIndex = false,
+  ogImage,
+  ogImageAlt,
 } = Astro.props
 
 const rawCanonical = canonical ?? new URL(Astro.url.pathname, site.url).toString()
 // Ensure root canonical matches sitemap (no trailing slash) and respects trailingSlash:never
 const canonicalURL = rawCanonical === site.url + '/' ? site.url : rawCanonical
-const ogImageURL = new URL('/og-default.png', site.url).toString()
+const ogImageURL = ogImage ? new URL(ogImage, site.url).toString() : new URL('/og-default.png', site.url).toString()
+const ogImageAltText = ogImageAlt ?? `${site.shortTitle} — Software & Product Builder`
 const ogTitle = title.includes('—') ? title : `${title} — ${site.shortTitle}`
 ---
 
@@ -57,7 +63,7 @@ const ogTitle = title.includes('—') ? title : `${title} — ${site.shortTitle}
     <meta property="og:image" content={ogImageURL} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={`${site.shortTitle} — Software & Product Builder`} />
+    <meta property="og:image:alt" content={ogImageAltText} />
     <meta property="og:locale" content={site.locale} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={ogTitle} />
@@ -83,6 +89,25 @@ const ogTitle = title.includes('—') ? title : `${title} — ${site.shortTitle}
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <slot name="head" />
+    <ClientRouter fallback="swap" />
+    <style is:global>
+      /* View Transitions — very fast, restrained, compositor-friendly */
+      ::view-transition-old(root),
+      ::view-transition-new(root) {
+        animation-duration: 140ms;
+        animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+      }
+      ::view-transition-old(root) { animation-name: vtFadeOut; }
+      ::view-transition-new(root) { animation-name: vtFadeIn; }
+      @keyframes vtFadeOut { from { opacity: 1; } to { opacity: 0; } }
+      @keyframes vtFadeIn { from { opacity: 0; } to { opacity: 1; } }
+      @media (prefers-reduced-motion: reduce) {
+        ::view-transition-group(*),
+        ::view-transition-old(*),
+        ::view-transition-new(*) { animation: none !important; }
+      }
+    </style>
 
     <!-- FOUC prevention — inline, minimal, blocking before paint -->
     <script is:inline>
