@@ -60,37 +60,37 @@ function isActive(href: string, path: string) {
       </button>
     </div>
   </div>
+</header>
 
-  <!-- Mobile navigation — separate layer -->
-  <div id="mobile-nav" class="mobile-nav" role="dialog" aria-modal="true" aria-label="Navigation menu" hidden>
-    <div class="mobile-nav__inner container">
-      <nav aria-label="Mobile">
-        <ul class="mobile-nav__list" role="list">
-          {
-            navigation.map((item) => {
-              const active = isActive(item.href, currentPath);
-              return (
-                <li>
-                  <a
-                    href={item.href}
-                    class:list={["mobile-nav__link", { "mobile-nav__link--active": active }]}
-                    aria-current={active ? "page" : undefined}
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              );
-            })
-          }
-        </ul>
-      </nav>
-      <div class="mobile-nav__foot">
-        <a href={`mailto:${social.email}`} class="mobile-nav__email">{social.email}</a>
-        <span class="mobile-nav__hint">Available for product-minded work</span>
-      </div>
+<!-- Mobile navigation — outside header to avoid containing-block clipping -->
+<div id="mobile-nav" class="mobile-nav" role="dialog" aria-modal="true" aria-label="Navigation menu" hidden>
+  <div class="mobile-nav__inner container">
+    <nav aria-label="Mobile">
+      <ul class="mobile-nav__list" role="list">
+        {
+          navigation.map((item) => {
+            const active = isActive(item.href, currentPath);
+            return (
+              <li>
+                <a
+                  href={item.href}
+                  class:list={["mobile-nav__link", { "mobile-nav__link--active": active }]}
+                  aria-current={active ? "page" : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </nav>
+    <div class="mobile-nav__foot">
+      <a href={`mailto:${social.email}`} class="mobile-nav__email">{social.email}</a>
+      <span class="mobile-nav__hint">Available for product-minded work</span>
     </div>
   </div>
-</header>
+</div>
 
 <style>
   .site-header {
@@ -101,8 +101,6 @@ function isActive(href: string, path: string) {
     backdrop-filter: saturate(1.2) blur(10px);
     -webkit-backdrop-filter: saturate(1.2) blur(10px);
     border-bottom: var(--border-hairline);
-    /* Promote sticky to compositor layer only on capable devices; avoid continuous repaint */
-    contain: layout paint;
   }
 
   /* Fallback when backdrop-filter unsupported */
@@ -243,14 +241,17 @@ function isActive(href: string, path: string) {
     transform: translateY(-5.75px) rotate(-45deg);
   }
 
-  /* Mobile nav overlay */
+  /* Mobile nav overlay — fixed to viewport, outside header to avoid contain clipping */
   .mobile-nav {
     position: fixed;
     inset: var(--header-height) 0 0 0;
+    z-index: var(--z-nav);
     background: var(--color-canvas);
     border-top: var(--border-hairline);
     padding: var(--space-8) 0 var(--space-12);
     overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
     animation: mobileIn var(--duration-base) var(--ease-out);
   }
 
