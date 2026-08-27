@@ -42,7 +42,7 @@ set -Eeuo pipefail
 #   omp
 #   /wf-bootstrap
 
-VERSION="2.1.0"
+VERSION="2.2.0"
 
 DEFAULT_TEMPLATE_URL="https://github.com/imdanialrashidi/omp-production-workflow-template.git"
 DEFAULT_TEMPLATE_REF="main"
@@ -165,18 +165,31 @@ if [[ "$REPAIR" -eq 1 ]]; then
   [[ -n "$LATEST_BACKUP" && -f "$LATEST_BACKUP/MIGRATION.txt" ]] \
     || die "--repair could not find a previous migration backup under .git/omp-migration-backups/."
 
+  BACKUP_REPO="$(
+    sed -n 's/^Repository:[[:space:]]*//p' "$LATEST_BACKUP/MIGRATION.txt" | head -n 1
+  )"
   ORIGINAL_SHA="$(
     sed -n 's/^Original commit:[[:space:]]*//p' "$LATEST_BACKUP/MIGRATION.txt" | head -n 1
   )"
 
-  if [[ -n "$ORIGINAL_SHA" && "$ORIGINAL_SHA" != "$HEAD_SHA" ]]; then
-    die "Repository HEAD changed since the interrupted migration. Review manually before using --repair."
+  if [[ -n "$BACKUP_REPO" && "$BACKUP_REPO" != "$ROOT" ]]; then
+    die "The latest migration backup belongs to a different repository: $BACKUP_REPO"
   fi
 
-  if [[ -n "$STATUS" ]]; then
-    warn "Repair mode: existing migration changes will be completed in place."
-    warn "Original rollback backup remains: $LATEST_BACKUP"
+  # HEAD may legitimately move between a failed migration and a repair
+  # (for example after a local commit, branch update, or tooling operation).
+  # Repair is still safe because we create a fresh snapshot of the CURRENT
+  # partial state before touching workflow-owned files and never rewrite
+  # product/application state.
+  if [[ -n "$ORIGINAL_SHA" && "$ORIGINAL_SHA" != "$HEAD_SHA" ]]; then
+    warn "Repository HEAD changed since the original migration."
+    warn "Original: $ORIGINAL_SHA"
+    warn "Current:  $HEAD_SHA"
+    warn "Continuing in repair mode with a fresh pre-repair backup."
   fi
+
+  warn "Repair mode: existing migration changes will be completed in place."
+  warn "Original rollback backup remains: $LATEST_BACKUP"
 elif [[ -n "$STATUS" && "$FORCE_DIRTY" -ne 1 ]]; then
   cat >&2 <<'EOF'
 ✗ Working tree is not clean.
@@ -351,29 +364,36 @@ fi
 
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 
+# Always snapshot the CURRENT state before this run.
+# In repair mode this is a pre-repair snapshot, while the original backup is
+# retained separately. This makes repair reversible even when HEAD moved.
 if [[ "$REPAIR" -eq 1 ]]; then
-  BACKUP_ROOT="$LATEST_BACKUP"
-  info "Using existing rollback backup: $BACKUP_ROOT"
+  BACKUP_ROOT="$BACKUP_BASE/${STAMP}-repair"
 else
   BACKUP_ROOT="$BACKUP_BASE/$STAMP"
-  mkdir -p "$BACKUP_ROOT"
+fi
+mkdir -p "$BACKUP_ROOT"
 
-  backup_path() {
-    local path="$1"
-    [[ -e "$path" || -L "$path" ]] || return 0
-    mkdir -p "$BACKUP_ROOT/$(dirname "$path")"
-    cp -a "$path" "$BACKUP_ROOT/$path"
-  }
+backup_path() {
+  local path="$1"
+  [[ -e "$path" || -L "$path" ]] || return 0
+  mkdir -p "$BACKUP_ROOT/$(dirname "$path")"
+  cp -a "$path" "$BACKUP_ROOT/$path"
+}
 
+if [[ "$REPAIR" -eq 1 ]]; then
+  info "Creating fresh pre-repair backup..."
+else
   info "Creating rollback backup..."
-  for p in "${REPLACE_PATHS[@]}"; do backup_path "$p"; done
-  for p in "${REMOVE_PATHS[@]}"; do backup_path "$p"; done
+fi
 
-  backup_path ".gitignore"
-  backup_path "scripts/verify.sh"
-  backup_path ".github/workflows"
+for p in "${REPLACE_PATHS[@]}"; do backup_path "$p"; done
+for p in "${REMOVE_PATHS[@]}"; do backup_path "$p"; done
+backup_path ".gitignore"
+backup_path "scripts/verify.sh"
+backup_path ".github/workflows"
 
-  cat > "$BACKUP_ROOT/MIGRATION.txt" <<EOF
+cat > "$BACKUP_ROOT/MIGRATION.txt" <<EOF
 Pi → OMP migration
 ==================
 
@@ -385,12 +405,12 @@ Original commit:        $HEAD_SHA
 Template URL:           $TEMPLATE_URL
 Template requested ref: $TEMPLATE_REF
 Template resolved SHA:  $TEMPLATE_SHA
+Previous backup:        ${LATEST_BACKUP:-none}
 
 This directory contains the pre-migration state for workflow-owned/patched paths.
 No commit, push, merge, deployment, package installation, or external mutation
 was performed by the migration script.
 EOF
-fi
 
 replace_from_template() {
   local path="$1"
