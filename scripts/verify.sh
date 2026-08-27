@@ -4,7 +4,7 @@ set -Eeuo pipefail
 ROOT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-bash scripts/pi-doctor.sh --ci
+bash scripts/omp-doctor.sh --ci
 
 if [[ -x scripts/project-verify.sh ]]; then
   exec scripts/project-verify.sh
@@ -63,7 +63,7 @@ fi
 
 if [[ "$ran" -eq 0 ]]; then
   if grep -Fxq -- '- Primary users:' docs/PRODUCT.md; then
-    printf '\nTemplate-only verification passed. Run /bootstrap after adding product source.\n'
+    printf '\nTemplate-only verification passed. Run /wf-bootstrap after adding product source.\n'
     exit 0
   fi
   cat >&2 <<'MSG'

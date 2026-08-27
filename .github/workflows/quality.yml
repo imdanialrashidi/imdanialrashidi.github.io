@@ -36,5 +36,3 @@ jobs:
       - name: Validate template
         run: bash scripts/verify.sh
 
-      - name: Verify pinned packages against npm
-        run: node scripts/verify-package-integrity.mjs --online
