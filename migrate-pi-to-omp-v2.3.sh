@@ -42,7 +42,7 @@ set -Eeuo pipefail
 #   omp
 #   /wf-bootstrap
 
-VERSION="2.2.0"
+VERSION="2.3.0"
 
 DEFAULT_TEMPLATE_URL="https://github.com/imdanialrashidi/omp-production-workflow-template.git"
 DEFAULT_TEMPLATE_REF="main"
@@ -522,6 +522,91 @@ if [[ -d .github/workflows ]]; then
       \( -name '*.yml' -o -name '*.yaml' \) -print0
   )
 fi
+
+# The upstream workflow template contains a couple of tests that intentionally
+# assert properties of the untouched TEMPLATE documents. Those assertions are
+# valid in the template repository itself, but become false positives after
+# migration because this script deliberately preserves the target project's
+# already-specialized PRODUCT/QUALITY documents.
+#
+# Normalize only those template-self-tests so they test synthetic template
+# inputs / workflow-owned contracts instead of requiring project docs to be
+# reset to generic template text.
+normalize_migrated_tests() {
+  node <<'NODE'
+const fs = require("node:fs");
+
+function replaceExact(file, before, after) {
+  const text = fs.readFileSync(file, "utf8");
+  if (text.includes(after)) return; // already normalized / idempotent
+  if (!text.includes(before)) {
+    throw new Error(`Expected migration test block not found in ${file}; template changed and needs review.`);
+  }
+  fs.writeFileSync(file, text.replace(before, after));
+  process.stdout.write(`normalized ${file}\n`);
+}
+
+replaceExact(
+  "tests/context-readiness.test.mjs",
+`test("the untouched template is explicitly not ready for product work", () => {
+  const report = analyzeProjectContext();
+  assert.equal(report.ready, false);
+  assert.equal(report.documents.length, contextDocuments.length);
+  assert(report.documents.every((document) => document.signals.length > 0));
+  assert(report.blockedDocuments.includes("docs/PRODUCT.md"));
+});`,
+`test("an untouched template-shaped context is explicitly not ready for product work", () => {
+  const templateDocuments = Object.fromEntries(
+    contextDocuments.map(({ path }) => [
+      path,
+      "# Template contract\\\\n\\\\n- Primary users:\\\\n\\\\nKeep this document short after /wf-bootstrap.\\\\n",
+    ]),
+  );
+  const report = analyzeProjectContext(templateDocuments);
+  assert.equal(report.ready, false);
+  assert.equal(report.documents.length, contextDocuments.length);
+  assert(report.documents.every((document) => document.signals.length > 0));
+  assert(report.blockedDocuments.includes("docs/PRODUCT.md"));
+});`
+);
+
+replaceExact(
+  "tests/test-design-contract.test.mjs",
+`test("the OMP test command can intentionally retain existing evidence", async () => {
+  const [prompt, agents, harness, quality] = await Promise.all([
+    read(".omp/commands/wf-test.md"),
+    read("AGENTS.md"),
+    read("docs/HARNESS.md"),
+    read("docs/QUALITY.md"),
+  ]);
+
+  assert.match(prompt, /Apply the Test Value Gate/);
+  assert.match(prompt, /\`No new test\` is valid/);
+  assert.match(agents, /When tests are added or materially changed, use \`test-design\`/);
+  assert.match(harness, /pass its Test Value Gate/);
+  assert.match(quality, /Coverage, assertion count, and test count are diagnostic signals/);
+});`,
+`test("the OMP test workflow can intentionally retain existing evidence", async () => {
+  const [prompt, agents, harness, skill] = await Promise.all([
+    read(".omp/commands/wf-test.md"),
+    read("AGENTS.md"),
+    read("docs/HARNESS.md"),
+    read(".omp/skills/test-design/SKILL.md"),
+  ]);
+
+  assert.match(prompt, /Apply the Test Value Gate/);
+  assert.match(prompt, /\`No new test\` is valid/);
+  assert.match(agents, /When tests are added or materially changed, use \`test-design\`/);
+  assert.match(harness, /pass its Test Value Gate/);
+  assert.match(skill, /No new test is a valid outcome/);
+  assert.match(skill, /Do not create tests to hit a count, percentage, uncovered line/);
+});`
+);
+NODE
+}
+
+info "Normalizing template-only tests for a migrated real project..."
+normalize_migrated_tests
 
 # Check only operational surfaces.
 # IMPORTANT: .omp/migration-map.json intentionally contains historical Pi paths,
