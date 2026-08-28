@@ -30,19 +30,20 @@ test("test-design requires economical cases and an independent defect oracle", a
   assert.match(source, /Mock only an owned boundary/);
 });
 
-test("the OMP test command can intentionally retain existing evidence", async () => {
-  const [prompt, agents, harness, quality] = await Promise.all([
+test("the OMP test workflow can intentionally retain existing evidence", async () => {
+  const [prompt, agents, harness, skill] = await Promise.all([
     read(".omp/commands/wf-test.md"),
     read("AGENTS.md"),
     read("docs/HARNESS.md"),
-    read("docs/QUALITY.md"),
+    read(".omp/skills/test-design/SKILL.md"),
   ]);
 
   assert.match(prompt, /Apply the Test Value Gate/);
   assert.match(prompt, /`No new test` is valid/);
   assert.match(agents, /When tests are added or materially changed, use `test-design`/);
   assert.match(harness, /pass its Test Value Gate/);
-  assert.match(quality, /Coverage, assertion count, and test count are diagnostic signals/);
+  assert.match(skill, /No new test is a valid outcome/);
+  assert.match(skill, /Do not create tests to hit a count, percentage, uncovered line/);
 });
 
 test("the research record ties policy to behavior, browser, and mutation evidence", async () => {

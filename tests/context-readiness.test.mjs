@@ -2,8 +2,14 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { analyzeDocument, analyzeProjectContext, contextDocuments } from "../scripts/validate-project-context.mjs";
 
-test("the untouched template is explicitly not ready for product work", () => {
-  const report = analyzeProjectContext();
+test("an untouched template-shaped context is explicitly not ready for product work", () => {
+  const templateDocuments = Object.fromEntries(
+    contextDocuments.map(({ path }) => [
+      path,
+      "# Template contract\\n\\n- Primary users:\\n\\nKeep this document short after /wf-bootstrap.\\n",
+    ]),
+  );
+  const report = analyzeProjectContext(templateDocuments);
   assert.equal(report.ready, false);
   assert.equal(report.documents.length, contextDocuments.length);
   assert(report.documents.every((document) => document.signals.length > 0));

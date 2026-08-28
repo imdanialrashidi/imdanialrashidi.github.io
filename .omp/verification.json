@@ -132,6 +132,74 @@
           "--static"
         ]
       ]
+    },
+    {
+      "id": "product-style",
+      "include": [
+        "src/styles/**",
+        "biome.json"
+      ],
+      "commands": [
+        [
+          "npm",
+          "run",
+          "format:check"
+        ]
+      ]
+    },
+    {
+      "id": "product-content",
+      "include": [
+        "src/content/**",
+        "src/content.config.ts",
+        "src/data/site.ts",
+        "src/lib/projects.ts",
+        "src/assets/work/**",
+        "Assets/**",
+        "tests/projects.test.mjs"
+      ],
+      "commands": [
+        [
+          "node",
+          "--test",
+          "tests/projects.test.mjs"
+        ],
+        [
+          "npm",
+          "run",
+          "check"
+        ]
+      ]
+    },
+    {
+      "id": "product-astro",
+      "include": [
+        "src/**",
+        "public/**",
+        "astro.config.mjs",
+        "tsconfig.json",
+        "package.json",
+        "package-lock.json",
+        "scripts/generate-og.mjs",
+        "Assets/**"
+      ],
+      "commands": [
+        [
+          "npm",
+          "run",
+          "check"
+        ],
+        [
+          "node",
+          "--test",
+          "tests/projects.test.mjs"
+        ],
+        [
+          "npm",
+          "run",
+          "build"
+        ]
+      ]
     }
   ],
   "fallback": [

@@ -1,6 +1,6 @@
-# Quality Contract
+# Quality Contract — Danial Rashidi Personal Site
 
-This file defines the evaluator-facing quality bar for meaningful changes. Keep it project-specific after `/bootstrap`; do not turn it into a generic checklist dump.
+Evaluator-facing quality bar for the Astro static portfolio at `https://imdanialrashidi.github.io`. Updated 2026-08-27 from repository evidence.
 
 ## Release rule
 
@@ -125,6 +125,17 @@ The overall task cannot be called complete while a required criterion is `FAIL` 
 
 ## Project-specific quality invariants
 
-`/bootstrap` should replace this paragraph with a concise set of confirmed project-specific rules and canonical commands where the repository provides enough evidence. Examples might include an architectural dependency direction, exact accessibility target, API compatibility guarantee, performance budget, supported browser/device matrix, or canonical release gate.
+Confirmed from `package.json`, `astro.config.mjs`, `src/styles/tokens.css`, `src/content.config.ts`, `src/lib/projects.ts`, `tests/projects.test.mjs`, and CI:
 
-Do not invent quality targets that the product or repository has not accepted.
+- Architecture direction: `src/data/site.ts` (single source for site/social/nav/constants) → `src/content.config.ts` (zod schemas, `glob` loaders for `projects`/`profile`/`now`) → `src/lib/projects.ts` (pure helpers: `isDraft`, `statusLabelFor`, `hrefFor`, `kickerFor`, `variantFor`, `imageFor`, `cardPropsFor`, `getDisplayProjects`/`getFeaturedProjects`/`getClientProjects`) → `src/pages/**` + `src/components/**` + `src/layouts/Layout.astro`. Pages/components import from `lib`/`data`, never the reverse; `content.config.ts` owns validation.
+- Content honesty: No invented metrics/screenshots/testimonials. `hasVisual` defaults `false` (abstract placeholder when no real preview); real hero screenshots in `src/assets/work/*` with provenance `src/assets/work/SOURCES.md`; statuses `draft`/`in_progress`/`published`/`building` filtered via `isDraft` (draft excluded from display) — enforced by `tests/projects.test.mjs`.
+- Security boundary: Author → Git → CI (`npm run check` → `npm run build`) → Pages (`actions/deploy-pages`). No server, no DB, no auth. `caseStudy` links validated by zod refine `/^(\/|https?:\/\/)/` and not `javascript:` (schema level + test). `localStorage` theme only; no cookie; external links `rel="noopener noreferrer"` / `rel="me"` where needed.
+- Accessibility target: WCAG 2.2 AA enforced — text ≥4.5:1, large/UI ≥3:1 per `src/styles/tokens.css` table in `docs/DESIGN.md`; reflow at 320 CSS px verified; 200% zoom usable; visible `:focus-visible` ring `rgba(15,76,255,0.4)`; skip-link; header `role=dialog aria-modal` with `aria-expanded`, Escape + click-away, `ThemeToggle` `aria-pressed`, touch 36–44 px.
+- Performance budget (lab, before RUM): LCP ≤2.5 s, INP ≤200 ms, CLS ≤0.1 as targets at 75th percentile. Enforce via lab budgets: CSS 23K foundation → ~90K inlined shipped (`build.inlineStylesheets: "always"`, `lightningcss`), fonts 139K (`public/fonts/Geist*`), JS 0 external + ~2K inline, portrait `Assets/Danial_photo.webp` 85K → 4 `dist/_astro/Danial_photo.*.webp` variants, OG 30.8K, `Astro` static with `astro:assets` widths `[320,480,640]`.
+- Browser/device matrix: Evergreen Chromium/Firefox/Safari, keyboard + touch + pointer, viewports 320/375/780/1280 (verified no overflow/horizontal scroll), no IE. `font-display: swap`, preload Sans only.
+- Visual contract: `docs/DESIGN.md` tokens/typography/geometry/components are authoritative; no second design system, no Tailwind, no glassmorphism/particles per rejected complexity.
+- Canonical release gate: `bash scripts/ci-install.sh` (npm ci), then `npm run check` (`astro check` strict + content zod) and `npm run build` (`node scripts/generate-og.mjs && astro build`) must pass; PRs additionally require `npm run format:check` (`biome check`) and `bash scripts/verify.sh` (harness doctor + ci fallback). Deploy gate is `deploy.yml` on `main` push (`npm run check` → `npm run build` → `actions/upload-pages-artifact` `dist/` → `actions/deploy-pages`). Previous `main` always deployable (`git revert` rollback, `dist/` ephemeral).
+- Structural checks that are mechanically enforced: `tests/projects.test.mjs` (pure helper parity, `javascript:` block, draft filtering, work-index count, shared `cardPropsFor` usage, `src/lib/projects.ts` export surface), `biome.json` lint/format, `tsconfig.json` strict (`astro/tsconfigs/strict`, `noUncheckedIndexedAccess`), content schema at build time via `astro check`.
+- Failure evidence: Concise — `npm run check` diagnostics, `npm run build` log, `node --test tests/projects.test.mjs` output, Biome `format:check` report, browser console (must be clean, preload warning for Mono removed), and `dist/` existence for build proofs. Secrets never appear in logs/fixtures/screenshots (see `SECURITY.md`).
+- Regression test sensitivity: A new regression test must demonstrably fail on pre-fix behavior (or a narrow focused mutation of the fixed line) and pass after the fix — e.g., `tests/projects.test.mjs` frontmatter `javascript:` caseStudy mutant or draft-filter inversion must fail before fix and pass after; line coverage alone is insufficient.
+- Flaky test handling: Flaky or intermittent paths are defects, not gate-weakening permission — isolate (quarantine suite with explicit `skip` reason and tracking issue), reproduce with fixed seed, quarantine without `retry` normalization; weakening `verify.sh` or adding automatic retries is prohibited until root cause is fixed.
