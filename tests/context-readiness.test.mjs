@@ -6,7 +6,7 @@ test("an untouched template-shaped context is explicitly not ready for product w
   const templateDocuments = Object.fromEntries(
     contextDocuments.map(({ path }) => [
       path,
-      "# Template contract\\n\\n- Primary users:\\n\\nKeep this document short after /wf-bootstrap.\\n",
+      "# Template contract\\n\\n- Primary users:\\n\\nKeep this document short after /bootstrap.\\n",
     ]),
   );
   const report = analyzeProjectContext(templateDocuments);

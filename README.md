@@ -24,6 +24,7 @@ Static [Astro](https://astro.build) site deployed to GitHub Pages at
 This repository also carries an agent-harness layer (`.pi/`, `scripts/`,
 `tests/`, `evals/`) with its own operating rules — see `AGENTS.md`,
 `CONTRIBUTING.md`, and `SECURITY.md` before touching workflow files.
+Tiny low-risk corrections use `/skill:quick-fix`.
 
 ## Site structure
 

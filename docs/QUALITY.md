@@ -28,6 +28,23 @@ For accepted scope:
 - A new regression test should demonstrably fail on pre-fix behavior (or a safe focused mutation/equivalent independent characterization) when practical, then pass after the fix.
 - Generated tests must build, pass reliably, add a distinct behavioral signal, and isolate relevant state; line coverage alone is not acceptance evidence.
 
+### Test Value Gate
+
+A new or materially changed test is retained only when it identifies:
+
+1. an observable contract or invariant;
+2. a plausible failure it can detect;
+3. a gap not already covered by an existing test, type, schema, or deterministic check;
+4. the cheapest faithful layer;
+5. an oracle independent from the implementation under test; and
+6. red-before-green, a controlled focused mutation, or equivalent defect-sensitivity evidence when practical.
+
+If no distinct failure model or evidence gap exists, extend an existing case or add no test. `No new test` is an acceptable professional outcome for behavior-neutral changes or behavior already proved by the suite. Coverage, assertion count, and test count are diagnostic signals—not acceptance goals.
+
+Select one representative per equivalence class and exact material boundaries. Use decision tables, pairwise cases, or properties for meaningful interactions instead of Cartesian enumeration. Prefer the lowest-cost layer that preserves the real contract; use full end-to-end tests only for failures lower layers cannot represent.
+
+Do not compute expected values with the implementation's own logic, mock the subject/authority, verify private calls unless contractual, test framework or third-party behavior, use broad incidental snapshots, blind-update snapshots, sleep/retry away nondeterminism, or duplicate cases that add no distinct behavioral signal. Mocks are reserved for owned boundaries that are expensive, nondeterministic, or unsafe. Browser tests use user-visible behavior and accessible roles/labels, keep independent state, and exercise only the journey that requires a browser.
+
 ## Security and data integrity
 
 For trust-boundary changes, require the `risk-review` workflow.

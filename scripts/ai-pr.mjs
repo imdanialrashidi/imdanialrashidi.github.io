@@ -12,7 +12,7 @@ const REMOTE = "origin";
 const BEGIN = "<!-- ai-pr:begin -->";
 const END = "<!-- ai-pr:end -->";
 const SHA = /^[0-9a-f]{40}$/;
-const blockedPath = /(?:^|\/)(?:\.git|\.artifacts|node_modules|\.ssh|\.aws|\.kube|\.gnupg|\.npmrc|\.netrc|\.pypirc|credentials\.json)(?:\/|$)|(?:^|\/)\.env(?:\.|$)|\.(?:pem|key|p12|pfx|jks|keystore)$|(?:^|\/)storageState.*\.json$|(?:^|\/)\.omp\/(?:agent\.db(?:-wal|-shm)?|config\.local\.ya?ml|models\.ya?ml|sessions|state|mcp-oauth)(?:\/|$)|(?:^|\/)docs\/private(?:\/|$)/i;
+const blockedPath = /(?:^|\/)(?:\.git|\.artifacts|node_modules|\.ssh|\.aws|\.kube|\.gnupg|\.npmrc|\.netrc|\.pypirc|credentials\.json)(?:\/|$)|(?:^|\/)\.env(?:\.|$)|\.(?:pem|key|p12|pfx|jks|keystore)$|(?:^|\/)storageState.*\.json$/i;
 const exampleEnv = /(?:^|\/)\.env\.(?:example|sample|template)$/i;
 const secret = /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|\bgh[pousr]_[A-Za-z0-9_]{20,}|\bgithub_pat_[A-Za-z0-9_]{20,}|\bAKIA[0-9A-Z]{16}|\bsk-[A-Za-z0-9_-]{24,}/;
 
@@ -86,7 +86,7 @@ function readSafe(file, cwd, maxBytes) {
 
 export function runDelivery(argv, { cwd = process.cwd(), env = process.env, run = spawnSync } = {}) {
   const options = parseOptions(argv);
-  requireThat((env.AI_PR_DELIVERY ?? "on") === "on" && env.OMP_GUARD_MODE !== "strict", "Automatic PR delivery is disabled in this local-only, strict, or evaluation session.");
+  requireThat((env.AI_PR_DELIVERY ?? "on") === "on" && env.PI_GUARD_MODE !== "strict", "Automatic PR delivery is disabled in this local-only, strict, or evaluation session.");
   for (const key of ["GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR", "GIT_CONFIG_COUNT"]) {
     requireThat(!env[key], "Custom Git context is not allowed in automatic delivery: " + key);
   }
