@@ -103,6 +103,21 @@ test("deterministic grading catches scope, required-file, and protected-file vio
   assert.equal(result.checks.find((check) => check.id === "required-change:tests/**").status, "FAIL");
 });
 
+test("declared post-checks must have exactly one passing result", () => {
+  const item = {
+    assertions: { completion: "completed", changes: { mode: "none" } },
+    checks: [{ id: "behavior", command: ["node", "check.mjs"] }],
+  };
+  const grade = (checkResults) => evaluateDeterministic(item, {
+    completion: "completed", changes: [], checkResults,
+  }).status;
+  assert.equal(grade([{ id: "behavior", status: "PASS" }]), "PASS");
+  assert.equal(grade(undefined), "FAIL", "missing evidence cannot pass");
+  assert.equal(grade([{ id: "other", status: "PASS" }]), "FAIL", "an unrelated check is not evidence");
+  assert.equal(grade([{ id: "behavior", status: "FAIL" }]), "FAIL");
+  assert.equal(grade([{ id: "behavior", status: "PASS" }, { id: "behavior", status: "PASS" }]), "FAIL");
+});
+
 test("trace analysis exposes failed verification, repair, duplication, and retry cost", () => {
   const events = [
     { type: "tool_execution_start", toolCallId: "t1", toolName: "bash", args: { command: "node --test tests/price.test.mjs" } },

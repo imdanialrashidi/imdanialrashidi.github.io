@@ -1,5 +1,25 @@
 # Changelog
 
+## Unreleased — saved design direction and run cost
+
+- Capture natural-language design preferences in the existing DESIGN contract; preserve owner choices across design, build, bootstrap, and resume, with semantic code-token mappings and optional reference calibration.
+- Show observed tool wall time, post-error model retries, and native foreground USD cost estimates alongside run time and effective tok/s. Unknown pricing stays unavailable; overlapping tools count once.
+- Add no dependencies, tool schemas, or extra setup command.
+
+## Unreleased — deliberate testing
+
+- Make no-new-test decisions explicit in the always-loaded map and review; choose test layers by the actual failure mechanism.
+- Replace prose-matching test-design checks with executable evaluation-grader controls for a copy edit and already-covered behavior; keep the existing defect-sensitive pricing regression.
+- Reject evaluation records that omit declared post-check results. No new dependencies, tools, or mandatory test quotas.
+
+## Unreleased — writing, terminal theme, and run visibility
+
+- Add a Pi-native, MIT-attributed adaptation of Peter Yang’s `no-ai-slop` for substantive prose, with technical and multilingual exceptions.
+- Consolidate the generic `risk-review` skill into `docs/QUALITY.md`; preserve review severity and evidence requirements.
+- Add the dependency-free `slate` dark theme and a footer status for elapsed run time and effective output tok/s. Keep Pi’s native footer and provider/model choice.
+- Measure through automatic recovery until `agent_settled`; show unavailable usage honestly, clean up timers, and keep print mode silent.
+- Add `./p --add-provider` for Pi's four supported custom API protocols; store models and private credentials in the user's Pi config, preserving existing entries.
+
 All notable workflow changes are documented here. This project follows the spirit of Keep a Changelog; versioning begins when the first release is tagged.
 
 ## Unreleased

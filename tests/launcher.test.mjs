@@ -161,3 +161,10 @@ test("launcher rejects an invalid project-trust mode", () => {
   assert.equal(result.status, 2);
   assert.match(result.stderr, /always, ask, never/);
 });
+
+test("custom-provider setup routes through Node before requiring Pi", () => {
+  const result = runLauncher({}, ["--add-provider"]);
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /interactive terminal/);
+  assert.equal(result.stdout, "");
+});

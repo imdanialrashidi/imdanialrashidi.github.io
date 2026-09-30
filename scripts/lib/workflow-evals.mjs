@@ -411,6 +411,14 @@ export function evaluateDeterministic(item, record) {
       `${files.length}/${contract.maxFiles} changed file(s)`,
     ));
   }
+  for (const declared of item.checks ?? []) {
+    const results = (record.checkResults ?? []).filter((result) => result.id === declared.id);
+    checks.push(deterministicCheck(
+      `required-command:${declared.id}`,
+      results.length === 1,
+      results.length === 1 ? "declared check result present" : `expected one result; received ${results.length}`,
+    ));
+  }
   for (const result of record.checkResults ?? []) {
     checks.push(deterministicCheck(
       `command:${result.id}`,
