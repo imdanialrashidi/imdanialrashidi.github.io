@@ -1,11 +1,21 @@
 ---
-import { social } from '../data/site.ts'
+import { site, social } from '../data/site.ts'
 import Layout from '../layouts/Layout.astro'
+
+const contactSchema = [
+  {
+    '@type': 'ContactPage',
+    url: new URL('/contact', site.url).toString(),
+    isPartOf: { '@id': `${site.url}/#website` },
+    mainEntity: { '@id': `${site.url}/#person` },
+  },
+]
 ---
 
 <Layout
-  title="Contact — Danial Rashidi"
-  description="Contact Danial Rashidi — Email, GitHub, X and Noveno are primary. Open to interesting software projects, product collaborations and technical opportunities. No form, no backend."
+  title="Contact Danial Rashidi — Software & Product Work"
+  description="Get in touch with Danial Rashidi by email or GitHub. Open to software projects, product collaboration and technical opportunities — no form, no tracker."
+  schema={contactSchema}
 >
   <section class="contact-hero">
     <div class="container contact-hero__inner">

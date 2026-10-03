@@ -34,7 +34,7 @@ Source of truth for what the shipped product must do. Filled during bootstrap 20
 - [x] Each `/work/<id>` page derives props via `cardPropsFor` / `imageFor` / `statusLabelFor` / `hrefFor` with blocked `javascript:` caseStudy links ( zod refine in `src/content.config.ts`) and provenance noted in `src/assets/work/SOURCES.md`
 - [x] Contact `/contact` exposes primary `mailto:` and secondary outbound links, states “No form · No tracker · Direct”, no backend POST surface
 - [x] Theme persists via `localStorage` `theme=light|dark`, FOUC prevented by inline `is:inline` script before paint, respects `prefers-color-scheme`, toggle preserves `aria-pressed`; reduced-motion disables animations
-- [x] SEO baseline: canonical `new URL(Astro.url.pathname, site.url)`, OG/Twitter, JSON-LD `Person`, `robots.txt`, `sitemap-index.xml` via `@astrojs/sitemap`, 404 editorial page served as `404.html` with recovery links
+- [x] SEO baseline: canonical `new URL(Astro.url.pathname, site.url)`, unique title ≤60 chars and description 120–160 chars per indexable page, robots meta with `max-image-preview:large, max-snippet:-1`, OG/Twitter (`og:type=article` on case studies), one JSON-LD `@graph` per page (`WebSite`, `Person`, `WebPage`, plus `ProfilePage`/`ContactPage`/`CollectionPage`+`ItemList`/`BreadcrumbList` per page), `robots.txt`, `sitemap-index.xml` via `@astrojs/sitemap`, 404 editorial page served as `404.html` with recovery links; drift guarded by `tests/seo-metadata.test.mjs`
 - [x] Draft posts (`status: draft`) excluded from display via `isDraft` filter; “building”/“in_progress” mapped to visible labels
 
 ## Security, privacy, and compliance constraints

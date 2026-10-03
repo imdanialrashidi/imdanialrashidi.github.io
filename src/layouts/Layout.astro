@@ -12,6 +12,13 @@ interface Props {
   noIndex?: boolean
   ogImage?: string
   ogImageAlt?: string
+  // Image used for `primaryImageOfPage` when it differs from the social card image.
+  schemaImage?: string
+  ogType?: 'website' | 'article'
+  // Extra JSON-LD nodes for this page (BreadcrumbList, ItemList, ProfilePage…).
+  schema?: Record<string, unknown>[]
+  // Subject of the page — merged into the WebPage node's `about` relation.
+  about?: { name: string; url?: string }
 }
 
 const {
@@ -21,14 +28,62 @@ const {
   noIndex = false,
   ogImage,
   ogImageAlt,
+  schemaImage,
+  ogType = 'website',
+  schema = [],
+  about,
 } = Astro.props
 
 const rawCanonical = canonical ?? new URL(Astro.url.pathname, site.url).toString()
 // Ensure root canonical matches sitemap (no trailing slash) and respects trailingSlash:never
 const canonicalURL = rawCanonical === site.url + '/' ? site.url : rawCanonical
 const ogImageURL = ogImage ? new URL(ogImage, site.url).toString() : new URL('/og-default.png', site.url).toString()
+const schemaImageURL = schemaImage ? new URL(schemaImage, site.url).toString() : ogImageURL
 const ogImageAltText = ogImageAlt ?? `${site.shortTitle} — Software & Product Builder`
 const ogTitle = title.includes('—') ? title : `${title} — ${site.shortTitle}`
+const robotsContent = noIndex
+  ? 'noindex, nofollow'
+  : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
+
+// One connected graph per page: WebSite → WebPage → this author, plus page-specific nodes.
+const websiteId = `${site.url}/#website`
+const personId = `${site.url}/#person`
+const webPageId = `${canonicalURL}#webpage`
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': websiteId,
+      url: site.url,
+      name: site.title,
+      description: site.description,
+      inLanguage: site.language,
+      publisher: { '@id': personId },
+    },
+    {
+      '@type': 'Person',
+      '@id': personId,
+      name: site.author,
+      url: site.url,
+      jobTitle: 'Software & Product Builder',
+      sameAs: [social.github, social.x, social.instagram, social.telegram, social.noveno],
+      email: `mailto:${social.email}`,
+    },
+    {
+      '@type': 'WebPage',
+      '@id': webPageId,
+      url: canonicalURL,
+      name: ogTitle,
+      description,
+      inLanguage: site.language,
+      isPartOf: { '@id': websiteId },
+      primaryImageOfPage: { '@type': 'ImageObject', url: schemaImageURL },
+      ...(about ? { about: { '@type': 'CreativeWork', ...about } } : {}),
+    },
+    ...schema,
+  ],
+}
 ---
 
 <!doctype html>
@@ -40,7 +95,7 @@ const ogTitle = title.includes('—') ? title : `${title} — ${site.shortTitle}
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
-    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="robots" content={robotsContent} />
     <meta name="author" content={site.author} />
     <meta name="theme-color" content="#fcfcfc" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
@@ -55,7 +110,7 @@ const ogTitle = title.includes('—') ? title : `${title} — ${site.shortTitle}
     />
 
     <!-- Open Graph / Twitter -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={site.shortTitle} />
     <meta property="og:title" content={ogTitle} />
     <meta property="og:description" content={description} />
@@ -70,22 +125,8 @@ const ogTitle = title.includes('—') ? title : `${title} — ${site.shortTitle}
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageURL} />
 
-    <!-- JSON-LD Person -->
-    <script is:inline type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "Person",
-      name: site.author,
-      url: site.url,
-      jobTitle: "Software & Product Builder",
-      sameAs: [
-        social.github,
-        social.x,
-        social.instagram,
-        social.telegram,
-        social.noveno,
-      ],
-      email: `mailto:${social.email}`,
-    })} />
+    <!-- JSON-LD — WebSite, Person, WebPage and any page-specific nodes -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />

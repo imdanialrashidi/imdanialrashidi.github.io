@@ -6,16 +6,25 @@ import CaseFigure from '../../components/case-study/CaseFigure.astro'
 import CaseHero from '../../components/case-study/CaseHero.astro'
 import CaseSection from '../../components/case-study/CaseSection.astro'
 import NextProject from '../../components/case-study/NextProject.astro'
+import { site } from '../../data/site.ts'
 import Layout from '../../layouts/Layout.astro'
 import { statusLabelFor } from '../../lib/projects.ts'
+import { CASE_STUDY_TRAIL, breadcrumbLd } from '../../lib/seo.ts'
 
 const entry = (await getCollection('projects')).find((p) => p.id === 'noveno')
 if (!entry) throw new Error('Missing project entry: noveno')
+
+const trail = [...CASE_STUDY_TRAIL, { name: entry.data.title, href: '/work/noveno' }]
+const schema = [breadcrumbLd(trail)]
+const about = { name: entry.data.title, url: 'https://noveno.ir' }
 ---
 
 <Layout
-  title="Noveno — Danial Rashidi"
-  description="Building Noveno — a customer-acquisition system for service businesses in Iran. Problem, system, customer journey, ownership, product decisions and current status. Static Astro on Cloudflare Pages, email-only lead delivery, no invented metrics."
+  title="Noveno — Customer Acquisition System for Service Businesses"
+  description="Noveno — a customer-acquisition system for service businesses in Iran. The problem, the system, product decisions, ownership and an honest status report."
+  ogType="article"
+  schema={schema}
+  about={about}
 >
   <CaseHero
     kicker={entry.data.kicker ?? 'Founder / Product / Business Systems · Web'}

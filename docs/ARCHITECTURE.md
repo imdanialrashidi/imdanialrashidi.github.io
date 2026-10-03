@@ -33,7 +33,7 @@
 | Navigation | Sticky header + backdrop blur, desktop nav pill, mobile dialog `role=dialog aria-modal` with `aria-expanded`, Escape + click-away + resize listener | Restrained, accessible from start, verified at 320/375/1280, no overflow | If IA adds more items |
 | Content | File-system `src/content.config.ts` with `glob` loaders + zod, `src/data/site.ts` for typed site/social/nav, no CMS | Keeps data separate from presentation, build fails on bad frontmatter later, honest placeholders now | When Fast English/Noveno copy ready |
 | Assets | `Assets/Danial_photo.webp` rendered on Home and About via `astro:assets <Image>` (responsive `widths=[320,480,640]`, eager above fold) | Satisfies brief “optimize only when introduced” | Done — revisit if portrait treatment changes |
-| SEO | Canonical `new URL(Astro.url.pathname, site.url)`, OG/Twitter, JSON-LD `Person`, `robots.txt`, sitemap via `@astrojs/sitemap`, `noindex` on 404 | Baseline for Pages domain, no invented sitemap | If custom domain added (CNAME) |
+| SEO | Canonical `new URL(Astro.url.pathname, site.url)`, unique title/description inside search display budget, robots meta (`max-image-preview:large, max-snippet:-1`), OG/Twitter (`og:type=article` on case studies), one JSON-LD `@graph` per page from `src/layouts/Layout.astro` (`WebSite` + `Person` + `WebPage`, page nodes via `src/lib/seo.ts`), `robots.txt`, sitemap via `@astrojs/sitemap`, `noindex` on 404 | Baseline for Pages domain, no invented sitemap | If custom domain added (CNAME) |
 | Error handling | `src/pages/404.astro` editorial 404 with nav recovery + `404.html` + `/404` via Astro static | Works on GitHub Pages (404.html served) | If custom 404 content needed |
 
 ## Explicitly rejected complexity
