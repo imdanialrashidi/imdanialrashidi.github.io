@@ -13,8 +13,10 @@ from pathlib import Path
 PI_URL = "https://github.com/imdanialrashidi/pi-production-workflow-template.git"
 STATE = ".pi/workflow-migration.json"
 # Deliberately small: these are the workflow's portable runtime surfaces.
+# Pi 1.0 loads project MCP natively from .pi/mcp.json; the former root .mcp.json
+# no longer exists in the template.
 COPY = [
-    ".pi", "p", "Dockerfile.pi", ".mcp.json",
+    ".pi", ".pi/mcp.json", "p", "Dockerfile.pi",
     "scripts/pi-doctor.sh", "scripts/pi-sandbox.sh",
     "scripts/verify-package-integrity.mjs",
     "scripts/run-workflow-evals.mjs",
