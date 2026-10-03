@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased — Pi 1.0 compatibility
+
+- Upgrade the reviewed runtime to Pi 1.0.0, todo to 2.12.0, web search to 0.5.1, and Playwright MCP to 0.0.83; refresh registry integrities.
+- Replace the third-party MCP adapter and root `.mcp.json` with native `.pi/mcp.json` and selective `tool_search`; preserve guard enforcement for direct and nested calls.
+- Use project `defaultTools` instead of a CLI allowlist that hides native MCP tools; remove three unintended startup helpers and forced experimental setup.
+- Pass native CLI subcommands through correctly; update browser guidance, migration notes, theme schema and runtime checks.
+- Retain model/provider choice, design contracts, economical tests, and native run metrics.
+
 ## Unreleased — saved design direction and run cost
 
 - Capture natural-language design preferences in the existing DESIGN contract; preserve owner choices across design, build, bootstrap, and resume, with semantic code-token mappings and optional reference calibration.

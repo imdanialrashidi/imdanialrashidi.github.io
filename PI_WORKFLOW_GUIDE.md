@@ -19,6 +19,8 @@ Convert the user's intent into **one copy-ready Pi prompt**. Do not implement th
 
 Reference: [Pi workflow template at the inspected baseline](https://github.com/imdanialrashidi/pi-production-workflow-template/tree/40d1c630fdea3acbd29dbb1c7a68e3bd2efb0477), reviewed with Pi 0.84.2. The local 2026-09-05 improvements were prepared separately; do not assume that patch is installed or published.
 
+Superseded baseline: this checkout was upgraded to the template's Pi 1.0 workflow on 2026-10-03 (template `e351e66`, Pi `1.0.0`, native MCP in `.pi/mcp.json`, no `pi-mcp-adapter`, `tool_search` instead of an `mcp` proxy). The pinned reference above remains the guide's reviewed snapshot; when it disagrees with the actual checkout, the checkout wins, exactly as the next paragraph requires.
+
 The template repository describes the harness, **not the client's product**. Current user scope and the actual checkout's `AGENTS.md`, `.pi/`, product contracts and available runtime determine execution. If a command changed, use the current equivalent or a direct prompt; do not install replacements to match this guide.
 
 This is an external authoring guide, not a Pi skill or configuration file. Do not paste it into `AGENTS.md`, `APPEND_SYSTEM.md`, or every generated prompt.

@@ -956,4 +956,16 @@ Bounded repair pass addressing the independent review’s launch-blocking WCAG f
 * `src/pages/404.astro` (description)
 * `src/components/Header.astro`, `ThemeToggle.astro` (44×44)
 
+## Update 2026-10-03 — Agent harness upgraded to Pi 1.0 (no product change)
+
+Product, design, deployment and content state above are unaffected. Only the
+agent-harness layer moved, so any earlier harness fact that names `.mcp.json`,
+`pi-mcp-adapter`, or Pi `0.84.2` is superseded:
+
+* Pi `1.0.0` (`@earendil-works/pi-coding-agent`), native MCP from `.pi/mcp.json`; root `.mcp.json` removed.
+* `pi-mcp-adapter` dropped; `@juicesharp/rpiv-todo` `2.12.0`, `@bytetrue/pi-web-search` `0.5.1`, `@playwright/mcp` `0.0.83`.
+* Browser tools are discovered with native `tool_search`; there is no `browser` capability group and no `mcp` proxy tool.
+* Project `defaultTools` in `.pi/settings.json` replaces the launcher `--tools` allowlist (a CLI allowlist hides deferred MCP tools).
+* Rollback point: `.workflow-backups/20261003-161810/`; template base recorded in `.pi/workflow-migration.json` (`e351e66`).
+
 *End of plan. This file is the durable handoff; working tree + verification remain authoritative if divergence occurs.*
