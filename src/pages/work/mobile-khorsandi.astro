@@ -7,25 +7,25 @@ import NextProject from '../../components/case-study/NextProject.astro'
 import Layout from '../../layouts/Layout.astro'
 import previewImg from '../../assets/work/mobile-khorsandi-hero.webp'
 import { site } from '../../data/site.ts'
+import { CASE_STUDY_TRAIL, breadcrumbLd } from '../../lib/seo.ts'
 
-const pageTitle = 'Mobile Khorsandi — Danial Rashidi'
-const pageDescription = 'Mobile Khorsandi — online store for phones, accessories, parts and gadgets. Categories, search, cart, buying guides and support. Public work; no validated order or conversion data claimed.'
+const pageTitle = 'Mobile Khorsandi — Mobile Phone & Accessories Store'
+const pageDescription =
+  'Mobile Khorsandi — an online store for mobile phones, accessories, parts and gadgets. What was built, current status and honest limitations.'
 const canonical = new URL('/work/mobile-khorsandi', site.url).toString()
+const trail = [...CASE_STUDY_TRAIL, { name: 'Mobile Khorsandi', href: '/work/mobile-khorsandi' }]
 ---
 
-<Layout title={pageTitle} description={pageDescription} canonical={canonical} ogImage="/og-default.png">
-  <Fragment slot="head">
-    <script is:inline type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      name: pageTitle,
-      description: pageDescription,
-      url: canonical,
-      isPartOf: { "@type": "WebSite", name: site.shortTitle, url: site.url },
-      primaryImageOfPage: { "@type": "ImageObject", contentUrl: new URL(previewImg.src, site.url).toString() },
-      about: { "@type": "CreativeWork", name: "Mobile Khorsandi", url: "https://mobilekhorsandi.ir" }
-    })} />
-  </Fragment>
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  canonical={canonical}
+  ogImage="/og-default.png"
+  ogType="article"
+  schemaImage={previewImg.src}
+  schema={[breadcrumbLd(trail)]}
+  about={{ name: 'Mobile Khorsandi', url: 'https://mobilekhorsandi.ir' }}
+>
 
   <CaseHero
     kicker="Web · E-commerce · Retail"

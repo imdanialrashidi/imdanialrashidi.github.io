@@ -1,17 +1,42 @@
 ---
 import CompactWorkCard from '../../components/CompactWorkCard.astro'
 import ProjectFeature from '../../components/ProjectFeature.astro'
+import { site } from '../../data/site.ts'
 import Layout from '../../layouts/Layout.astro'
-import { cardPropsFor, getClientProjects, getDisplayProjects, getFeaturedProjects } from '../../lib/projects.ts'
+import { cardPropsFor, getClientProjects, getDisplayProjects, getFeaturedProjects, hrefFor } from '../../lib/projects.ts'
+import { itemListLd } from '../../lib/seo.ts'
 
 const projects = await getDisplayProjects()
 const featured = await getFeaturedProjects()
 const clients = await getClientProjects()
+
+const workUrl = new URL('/work', site.url).toString()
+const pageTitle = 'Work — Web, AI & Automation Projects | Danial Rashidi'
+const workSchema = [
+  {
+    '@type': 'CollectionPage',
+    url: workUrl,
+    name: pageTitle,
+    isPartOf: { '@id': `${site.url}/#website` },
+    mainEntity: { '@id': `${workUrl}#worklist` },
+  },
+  {
+    ...itemListLd(
+      projects.map((p) => ({
+        name: p.data.title,
+        description: p.data.summary,
+        href: hrefFor(p),
+      })),
+    ),
+    '@id': `${workUrl}#worklist`,
+  },
+]
 ---
 
 <Layout
-  title="Work — Danial Rashidi"
-  description="Work by Danial Rashidi — Fast English, Noveno, Elsa Hamrah, Isbatab, Mobile Khorsandi and PHP IELTS House. Curated portfolio with real site screenshots and honest, source-backed profiles."
+  title={pageTitle}
+  description="Selected work by Danial Rashidi — Fast English and Noveno case studies plus four client web projects, with real screenshots, honest status and limitations."
+  schema={workSchema}
 >
   <section class="work-head">
     <div class="container">

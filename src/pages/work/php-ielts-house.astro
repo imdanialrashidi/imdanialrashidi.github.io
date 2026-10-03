@@ -7,25 +7,25 @@ import NextProject from '../../components/case-study/NextProject.astro'
 import Layout from '../../layouts/Layout.astro'
 import previewImg from '../../assets/work/php-ielts-house-hero.webp'
 import { site } from '../../data/site.ts'
+import { CASE_STUDY_TRAIL, breadcrumbLd } from '../../lib/seo.ts'
 
-const pageTitle = 'PHP IELTS House — Danial Rashidi'
-const pageDescription = 'PHP IELTS House — education website for an English/IELTS house in Karaj. Course approach, levels, student results, placement and contact. Public work; no independent enrolment or conversion data claimed.'
+const pageTitle = 'PHP IELTS House — English & IELTS Education Site'
+const pageDescription =
+  'PHP IELTS House — an English and IELTS education website in Karaj. Course approach, levels, site structure and honest limitations.'
 const canonical = new URL('/work/php-ielts-house', site.url).toString()
+const trail = [...CASE_STUDY_TRAIL, { name: 'PHP IELTS House', href: '/work/php-ielts-house' }]
 ---
 
-<Layout title={pageTitle} description={pageDescription} canonical={canonical} ogImage="/og-default.png">
-  <Fragment slot="head">
-    <script is:inline type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      name: pageTitle,
-      description: pageDescription,
-      url: canonical,
-      isPartOf: { "@type": "WebSite", name: site.shortTitle, url: site.url },
-      primaryImageOfPage: { "@type": "ImageObject", contentUrl: new URL(previewImg.src, site.url).toString() },
-      about: { "@type": "CreativeWork", name: "PHP IELTS House", url: "https://phpieltshouse.ir" }
-    })} />
-  </Fragment>
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  canonical={canonical}
+  ogImage="/og-default.png"
+  ogType="article"
+  schemaImage={previewImg.src}
+  schema={[breadcrumbLd(trail)]}
+  about={{ name: 'PHP IELTS House', url: 'https://phpieltshouse.ir' }}
+>
 
   <CaseHero
     kicker="Web · Education · Services"

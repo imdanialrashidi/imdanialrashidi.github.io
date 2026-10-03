@@ -8,14 +8,22 @@ import CaseSection from '../../components/case-study/CaseSection.astro'
 import NextProject from '../../components/case-study/NextProject.astro'
 import Layout from '../../layouts/Layout.astro'
 import { statusLabelFor } from '../../lib/projects.ts'
+import { CASE_STUDY_TRAIL, breadcrumbLd } from '../../lib/seo.ts'
 
 const entry = (await getCollection('projects')).find((p) => p.id === 'fast-english')
 if (!entry) throw new Error('Missing project entry: fast-english')
+
+// No live destination exists yet, so there is no separate CreativeWork entity to
+// relate this page to — `about` is omitted rather than pointed back at the page.
+const trail = [...CASE_STUDY_TRAIL, { name: entry.data.title, href: '/work/fast-english' }]
+const schema = [breadcrumbLd(trail)]
 ---
 
 <Layout
-  title="Fast English — Danial Rashidi"
-  description="Fast English — Persian-first English podcast app for Iranian Android users. Product engineering across React, TypeScript, PocketBase, Capacitor, PWA and Android. Architecture, decisions, validation and current status."
+  title="Fast English — Persian English Learning App"
+  description="Fast English — a Persian-first English podcast app for Iranian learners on Android. React, PocketBase, Capacitor, PWA, architecture and status."
+  ogType="article"
+  schema={schema}
 >
   <CaseHero
     kicker={entry.data.kicker ?? 'Product Engineering · Web · PWA · Android'}

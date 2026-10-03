@@ -1,13 +1,23 @@
 ---
 import { Image } from 'astro:assets'
 import portraitSrc from '../../Assets/Danial_photo.webp'
-import { social } from '../data/site.ts'
+import { site, social } from '../data/site.ts'
 import Layout from '../layouts/Layout.astro'
+
+const aboutSchema = [
+  {
+    '@type': 'ProfilePage',
+    url: new URL('/about', site.url).toString(),
+    isPartOf: { '@id': `${site.url}/#website` },
+    mainEntity: { '@id': `${site.url}/#person` },
+  },
+]
 ---
 
 <Layout
-  title="About — Danial Rashidi"
-  description="About Danial Rashidi — Computer Engineering student and software/product builder from Iran, working across Web, AI, Automation and Product Engineering. Building Noveno, improving foundations, and using AI as leverage with verification."
+  title="About Danial Rashidi — Software & Product Builder"
+  description="Danial Rashidi is a software & product builder from Iran: background, how he works, current direction, and where AI fits into building systems that ship."
+  schema={aboutSchema}
 >
   <!-- Hero -->
   <section class="about-hero">
