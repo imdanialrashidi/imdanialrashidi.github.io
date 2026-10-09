@@ -1,5 +1,30 @@
 # Changelog
 
+## Unreleased — DeepWiki MCP replaces Context7
+
+- Replace `@upstash/context7-mcp@4.1.2` stdio MCP with the official DeepWiki remote MCP (`https://mcp.deepwiki.com/mcp`, hidden, deferred `read_wiki_structure`/`read_wiki_contents`/`ask_wiki_question` via `tool_search`). No package install, no API key for public repos; private repos stay out of scope.
+- Drop the `CONTEXT7_API_KEY` env mapping and sandbox passthrough; doctor rejects a stale `context7` server, non-official URLs, stdio commands, and hardcoded keys on the DeepWiki entry.
+- Retarget the docs secret/path guard and eval contract to DeepWiki inputs (`repoName`/`question`); legacy Context7 tool names stay guarded.
+- Remove the Context7 integrity record (remote servers need none); refresh doctor/integrity/test/docs coverage.
+
+- Replace third-party `@dreki-gg/pi-doc-search@0.3.2` with official `@upstash/context7-mcp@4.1.2` as a native deferred MCP server (`resolve-library-id`, `query-docs` via `tool_search`).
+- Remove the `docs` capability from `harness_tools`; docs now follows the same native MCP pattern as Playwright. Legacy `doc_search_*` schemas are cleared on reset/resume for pre-migration sessions; unknown capabilities are ignored without crashing.
+- Keep `CONTEXT7_API_KEY` out of Git via `${CONTEXT7_API_KEY}` env mapping; unauthenticated use stays at lower rate limits. Refresh registry integrities and doctor/integrity/test coverage.
+
+## Unreleased — hardening and Pi 1.0.4
+
+- Re-pin reviewed runtime `1.0.0` → `1.0.4` across launcher, Docker, integrity, setup, doctor, and theme schema; structural validation passes on installed `1.0.4` (per-version upstream changelog deltas not individually audited).
+- Fix `verify-package-integrity.mjs --online`: unwrap the array `npm view --json` returns so registry comparisons read the real record.
+- Block secrets and sensitive file references in Context7 `resolve-library-id`/`query-docs` calls; ordinary docs questions pass.
+- Add `docs-mcp-workflow` eval case locking the local-first, `tool_search` + `mcp__context7__*` resolve-then-query contract with no live fetch.
+- Document Context7 rate limits, retry behavior, no-cache tradeoff, direct `/org/project` IDs, and key handling.
+
+## Unreleased — LSP host dependency repair
+
+- Correct the reviewed `pi-lsp-adapter@0.1.3` installed manifest before launcher startup: Pi TUI and TypeBox become optional wildcard peers supplied by Pi, preserving LSP source and all unrelated settings.
+- Reapply after successful launcher install/update commands; prepare missing LSP on the first trusted session and keep help/opt-out runs free of pre-installs.
+- Add a read-only doctor check and focused preservation/idempotence/drift regressions. Keep other extension warnings visible.
+
 ## Unreleased — Pi 1.0 compatibility
 
 - Upgrade the reviewed runtime to Pi 1.0.0, todo to 2.12.0, web search to 0.5.1, and Playwright MCP to 0.0.83; refresh registry integrities.

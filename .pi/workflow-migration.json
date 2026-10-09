@@ -1,26 +1,39 @@
 {
   "version": 1,
   "template": "https://github.com/imdanialrashidi/pi-production-workflow-template.git",
-  "template_commit": "e351e66d9e6b5a777b675d447f9e1c6b3b26f429",
+  "template_commit": "29a1b562a5589dab0f07be451e06113060298182",
   "managed": {
-    ".pi": "c6c7725b8164e687c62cd5bf0ac7985eb10ac8d9d055bbc478844e72bcf81ba5",
-    ".pi/mcp.json": "eec4021e188f48b5d5c5691b183462cc411d0254cc7349fa3e7d4acc4aa3a18b",
-    "p": "655b5962445f127290b6c4dbc4be2fd13b2c823a57f45aaa13895f6c6456b16b",
-    "Dockerfile.pi": "ac4e9dc3458cdfaad403afdadebe771e1fdacab27ac151837ab2059f7eba12d4",
-    "scripts/pi-doctor.sh": "890ab6a16fafe63133b1e0d36294e8c5ac76966053dd6b98b89c803765bc846b",
-    "scripts/pi-sandbox.sh": "a9999f243fcd03eef1e67f08feb4e47c1e428ff19a3cdf93b0d87c6e6640e6ea",
-    "scripts/verify-package-integrity.mjs": "9105cbfd6f88c27027f72f28ff82d8652ee1928f1867aaaae91beb4995271873",
+    ".pi": "b280105c202220bfb83b4dbb4685662a42adc4030650bb08cfe3e20ccb5a5f84",
+    ".pi/mcp.json": "2641f4d0b15550b1272955df59ee1839f43bd4c21d7b13d0f2b3edacc6eabd1c",
+    "p": "229a0dcc6f0672db0d9eb72bc58b6007053f9b29eff5e9d879997a2234812951",
+    "Dockerfile.pi": "41500b5879049af9cc9100164efbcad629633172df8036d37d7145a887501857",
+    "scripts/pi-doctor.sh": "c0b0f7b42501f5af3f1e2111c14e6380d6ec2d17fbb31119dab615a8709cd0da",
+    "scripts/pi-sandbox.sh": "2016484778ce5e17bab8b3a6059194cc191f456f985aa3018104e2f3e9750a2e",
+    "scripts/verify-package-integrity.mjs": "3f52b332479691a0a7828a36ce3a90dad8de7169feaa986732343d71462e102f",
+    "scripts/pi-extension-compat.mjs": "eeaa002e0a6b5949ac645d03e212634742ed4af0856366722dd0e8884e4f9978",
     "scripts/run-workflow-evals.mjs": "d25ba3a83d812eb6ffc3f13aaede73e2c84ba3f423e691bbdc8440ef06090ebb",
     "scripts/lib/workflow-evals.mjs": "221feb3f8847de2945fe56d9237153fba59b2f3660be381d945d9a93471be52f",
     "scripts/lib/eval-isolation.mjs": "b8b4a861d43c8a5f147024d468f8a04d06ad71f16d813b5aa70f0ca8f1bce037",
-    "docs/HARNESS.md": "10dcc81af4df7ec8c94e58a2ce823fbd8b57f87b8dceb28de684951cadac8a20",
+    ".pi/settings.json": "977bdd0c276bc4db94d6c4a051bc84b9c161f1037ab7afae093fa98cde5e9408",
+    ".pi/verification.json": "b32df0bf1d78b3b58c9de5ed3a32e5e4ed437e495c527191582b566f419e0340",
+    ".pi/package-integrity.json": "e8a93fa1fa1a019f4f6a13ab2291509ae78ec9c49ac8a0dbcfa7ea901053296b",
+    ".pi/themes/slate.json": "7c45dd2d344238a26ef660b5f4cc74727bb2a85375fe0be4dc7f5654a52bb210",
+    "docs/HARNESS.md": "eed261e428d60c93b1b39556566a8263fb5118c188e923bc421ac43d6703042b",
     "docs/EVALUATION.md": "7bc6b17f7cfb4e6f017cbb43b976f0444eea0f7fd5d482b14f45c0265d99609c",
-    "docs/RESEARCH.md": "9d34ab56208a9d5bb7fc3092aaf77bfef9d9c8c5fda8a911599c7d683fff51eb",
-    "docs/GIT_POLICY.md": "894d8bc5191f17218a11679c0832e3814f3da3e229580a2fd668439beb4bf69a"
+    "docs/RESEARCH.md": "08f05be60df06032818658cdb7ad72e6dd623442420593e2bdc148486ea38f4e",
+    "docs/GIT_POLICY.md": "894d8bc5191f17218a11679c0832e3814f3da3e229580a2fd668439beb4bf69a",
+    "docs/TOOLING_SETUP.md": "57510268c45d5a17e67446a1c9245310f4ee5186eba51ee78da8a47a8f493289",
+    "evals/cases.json": "7ee15f748f7f1240ab0a9f786e098a49b4a5e43be044a065c4d20de25f3ed9a4",
+    "tests/harness-runtime.test.mjs": "3971aa1709d5c69d5b9060ce96c81c9db751578c18015c55cb03e9e3d2e3de80",
+    "tests/launcher.test.mjs": "a7445ffe55f3ce98280b3b21b28641617d08eb73d9c734d0fe7e1722e0e0123e",
+    "tests/safety-guard.test.mjs": "f9815107c2708eb19b623be3611d2f8407b01341cbc5aec7af76e39e33915920",
+    "tests/pi-extension-compat.test.mjs": "e6171d8b7e20896f05878e06e6205e6344315e1bf6bc4f8ee88cd49446ca573f"
   },
   "preserved": [
     "README.md",
-    "docs/DESIGN.md"
+    "CHANGELOG.md",
+    "docs/DESIGN.md",
+    "p:PI_CACHE_RETENTION=short"
   ],
-  "backup": "/home/danial/Documents/GitHub/imdanialrashidi.github.io/.workflow-backups/20261003-161810"
+  "backup": "/home/danial/Documents/GitHub/imdanialrashidi.github.io/.workflow-backups/20261007-213514"
 }

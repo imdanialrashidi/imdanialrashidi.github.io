@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "template": "https://github.com/imdanialrashidi/pi-production-workflow-template.git",
+  "template_commit": "e351e66d9e6b5a777b675d447f9e1c6b3b26f429",
+  "managed": {
+    ".pi": "c6c7725b8164e687c62cd5bf0ac7985eb10ac8d9d055bbc478844e72bcf81ba5",
+    ".pi/mcp.json": "eec4021e188f48b5d5c5691b183462cc411d0254cc7349fa3e7d4acc4aa3a18b",
+    "p": "655b5962445f127290b6c4dbc4be2fd13b2c823a57f45aaa13895f6c6456b16b",
+    "Dockerfile.pi": "ac4e9dc3458cdfaad403afdadebe771e1fdacab27ac151837ab2059f7eba12d4",
+    "scripts/pi-doctor.sh": "890ab6a16fafe63133b1e0d36294e8c5ac76966053dd6b98b89c803765bc846b",
+    "scripts/pi-sandbox.sh": "a9999f243fcd03eef1e67f08feb4e47c1e428ff19a3cdf93b0d87c6e6640e6ea",
+    "scripts/verify-package-integrity.mjs": "9105cbfd6f88c27027f72f28ff82d8652ee1928f1867aaaae91beb4995271873",
+    "scripts/run-workflow-evals.mjs": "d25ba3a83d812eb6ffc3f13aaede73e2c84ba3f423e691bbdc8440ef06090ebb",
+    "scripts/lib/workflow-evals.mjs": "221feb3f8847de2945fe56d9237153fba59b2f3660be381d945d9a93471be52f",
+    "scripts/lib/eval-isolation.mjs": "b8b4a861d43c8a5f147024d468f8a04d06ad71f16d813b5aa70f0ca8f1bce037",
+    "docs/HARNESS.md": "10dcc81af4df7ec8c94e58a2ce823fbd8b57f87b8dceb28de684951cadac8a20",
+    "docs/EVALUATION.md": "7bc6b17f7cfb4e6f017cbb43b976f0444eea0f7fd5d482b14f45c0265d99609c",
+    "docs/RESEARCH.md": "9d34ab56208a9d5bb7fc3092aaf77bfef9d9c8c5fda8a911599c7d683fff51eb",
+    "docs/GIT_POLICY.md": "894d8bc5191f17218a11679c0832e3814f3da3e229580a2fd668439beb4bf69a"
+  },
+  "preserved": [
+    "README.md",
+    "docs/DESIGN.md"
+  ],
+  "backup": "/home/danial/Documents/GitHub/imdanialrashidi.github.io/.workflow-backups/20261003-161810"
+}
