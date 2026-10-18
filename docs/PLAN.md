@@ -62,7 +62,7 @@ Execution state for the shipped static portfolio at `https://imdanialrashidi.git
 
 ### 8. Learning loop
 - Scope: Product outcomes, failures, support signals, agent/harness evals.
-- Exit evidence: Validated learning updates `docs/PRODUCT.md`, roadmap priorities, regression tests (`tests/projects.test.mjs`), or `evals/cases.json` / `docs/EVALUATION.md`. Review cadence: per shipped slice / at each polish plan completion.
+- Exit evidence: Validated learning updates `docs/PRODUCT.md`, roadmap priorities, or regression tests (`tests/projects.test.mjs`). Review cadence: per shipped slice / at each polish plan completion.
 
 ## Critical path and risks
 | Risk / dependency | Control or experiment | Owner | Decision date / trigger |
