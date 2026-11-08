@@ -35,5 +35,5 @@ Delete this section when no rendered interface changed.
 
 - [ ] No unrelated change, secret, private artifact, debug bypass, or generated output is included.
 - [ ] New/updated dependencies were source-reviewed, exactly pinned, integrity-recorded, and tested.
-- [ ] Documentation, eval cases, and changelog are current where applicable.
+- [ ] Documentation, verification evidence, and changelog are current where applicable.
 - [ ] No commit, release, deployment, or production mutation is implied by local verification.

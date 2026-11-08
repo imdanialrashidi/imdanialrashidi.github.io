@@ -6,6 +6,8 @@ Owner: Danial Rashidi (@imdanialrashidi)
 Repo: https://github.com/imdanialrashidi/imdanialrashidi.github.io
 Plan type: Complex — durable decisions, cross-cutting design + content + infra
 
+> Workflow note (2026-11-04): this plan is retained as decision and evidence history. Paths and commands below that name the Pi/omp harness are historical; the current workflow is `AGENTS.md` plus the skills in `.dsh/skills/`.
+
 ---
 
 ## 1. Goal and Explicit Non-Goals
@@ -89,7 +91,7 @@ Deliverable is a static-first, fast, maintainable site with the required page/IA
 ## 4. Existing Patterns / Components / Contracts to Reuse
 
 ### Preserve (Do Not Rewrite)
-- **Pi harness contract:** `AGENTS.md`, `docs/HARNESS.md`, `docs/QUALITY.md`, `docs/GIT_POLICY.md`, `scripts/verify.sh` fallback, `scripts/pi-doctor.sh`, `scripts/verify-affected.mjs`, `scripts/verify-package-integrity.mjs`, `.pi/*`, `p`, `.mcp.json` Playwright lazy MCP, `SECURITY.md`, `CONTRIBUTING.md`, `CHANGELOG.md` — these are project delivery infrastructure, not product UI.
+- **Workflow contract:** `AGENTS.md`, `.dsh/skills/`, `docs/QUALITY.md`, `docs/GIT_POLICY.md`, `scripts/verify.sh`, `scripts/pr.mjs`, `.github/workflows/`, `SECURITY.md`, `CONTRIBUTING.md`, `CHANGELOG.md` — project delivery infrastructure, not product UI.
 - **`.github/workflows/quality.yml` structure** — extend, don't replace; add product jobs (typecheck/lint/test/build/a11y) without removing harness doctor + integrity.
 - **`.gitignore` posture** — keep harness ignores; add `dist/`, `.astro/`, `coverage/`, `playwright-report/` (already present) — no change beyond Astro outputs.
 - **License of harness tools** — MIT integrity pins; re-verify on any pin bump via `verify-package-integrity.mjs --online`.

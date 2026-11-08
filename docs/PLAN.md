@@ -43,16 +43,16 @@ Execution state for the shipped static portfolio at `https://imdanialrashidi.git
 ### 4. Internal alpha
 - Scope: Team use (single author) with realistic data and controlled failure testing.
 - Exit evidence: No release-blocking correctness/security/accessibility issues; support/recovery via `git revert` + redeploy exercised logically; `tests/projects.test.mjs` + `npm run check` enforce invariants. ✅ complete
-- Feedback sample / owner: Author self-review + harness tests (89 tests at template baseline).
+- Feedback sample / owner: Author self-review + project tests.
 
 ### 5. External beta
 - Scope: Bounded cohort (public GitHub Pages visitors), reversible static rollout, support via email.
-- Exit evidence: Activation (work/contact clicks) observable via future analytics; guardrails `npm run check && npm run build` + `npm run format:check` on PR (`quality.yml`). Field performance unmeasured (RUM deferred). Status: shipped, guardrails active, RUM pending.
+- Exit evidence: Activation (work/contact clicks) observable via future analytics; guardrails `npm run check && npm run build` run on PR (`quality.yml`); `npm run format:check` is a separate non-gating hygiene lane. Field performance unmeasured (RUM deferred). Status: shipped, guardrails active, RUM pending.
 - Rollback trigger: Build or Pages deploy failure → `git revert` on `main` and redeploy previous green commit; `dist/` ephemeral.
 
 ### 6. Release candidate
 - Scope: Frozen release boundary — compatibility, data, security, visual, performance hardening (plans 001–019 + polish tracks).
-- Exit evidence: `/ship` equivalent is `bash scripts/verify.sh` (harness doctor + `npm run ci` + format:check + tests) passing; no unresolved BLOCKER/MAJOR per `docs/QUALITY.md`. ✅ enforced via `quality.yml` on PR and `main`.
+- Exit evidence: `bash scripts/verify.sh` (repository self-checks + `npm run ci`) passes and is enforced by `quality.yml` on PR and `main`; `node --test tests/*.test.mjs` passes as a separate manual lane. No unresolved BLOCKER/MAJOR per `docs/QUALITY.md`.
 - Sign-off owners: Danial Rashidi.
 
 ### 7. Staged production
@@ -61,8 +61,13 @@ Execution state for the shipped static portfolio at `https://imdanialrashidi.git
 - Stages and stop conditions: Single stage (static). Stop on `npm run check` or `npm run build` failure in `deploy.yml`; in `quality.yml` stop on `format:check` or `verify.sh` failure. Manual rollback via revert.
 
 ### 8. Learning loop
+<<<<<<< Updated upstream
 - Scope: Product outcomes, failures, support signals, agent/harness evals.
 - Exit evidence: Validated learning updates `docs/PRODUCT.md`, roadmap priorities, regression tests (`tests/projects.test.mjs`), or `evals/cases.json` / `docs/EVALUATION.md`. Review cadence: per shipped slice / at each polish plan completion.
+=======
+- Scope: Product outcomes, failures, support signals, and agent workflow evidence.
+- Exit evidence: Validated learning updates `docs/PRODUCT.md`, roadmap priorities, or regression tests (`tests/projects.test.mjs`). Review cadence: per shipped slice / at each polish plan completion.
+>>>>>>> Stashed changes
 
 ## Critical path and risks
 | Risk / dependency | Control or experiment | Owner | Decision date / trigger |

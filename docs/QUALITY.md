@@ -1,6 +1,10 @@
 # Quality Contract — Danial Rashidi Personal Site
 
+<<<<<<< Updated upstream
 Evaluator-facing quality bar for the Astro static portfolio at `https://imdanialrashidi.github.io`. Updated 2026-08-27 from repository evidence.
+=======
+Evaluator-facing quality bar for the Astro static portfolio at `https://imdanialrashidi.github.io`. Updated 2026-11-04 from repository evidence; workflow sections follow the DSH Workflow (dsh-workflow v0.1).
+>>>>>>> Stashed changes
 
 ## Release rule
 
@@ -28,6 +32,7 @@ For accepted scope:
 - A new regression test should demonstrably fail on pre-fix behavior (or a safe focused mutation/equivalent independent characterization) when practical, then pass after the fix.
 - Generated tests must build, pass reliably, add a distinct behavioral signal, and isolate relevant state; line coverage alone is not acceptance evidence.
 
+<<<<<<< Updated upstream
 ### Test Value Gate
 
 A new or materially changed test is retained only when it identifies:
@@ -46,6 +51,9 @@ A test must justify what could break, why existing evidence misses it, and how i
 Select one representative per equivalence class and exact material boundaries. Use decision tables, pairwise cases, or properties for meaningful interactions instead of Cartesian enumeration. Prefer the lowest-cost layer that preserves the real contract; use full end-to-end tests only for failures lower layers cannot represent.
 
 Do not compute expected values with the implementation's own logic, mock the subject/authority, verify private calls unless contractual, test framework or third-party behavior, use broad incidental snapshots, blind-update snapshots, sleep/retry away nondeterminism, or duplicate cases that add no distinct behavioral signal. Mocks are reserved for owned boundaries that are expensive, nondeterministic, or unsafe. Browser tests use user-visible behavior and accessible roles/labels, keep independent state, and exercise only the journey that requires a browser.
+=======
+`test-design` owns the Test Value Gate — apply it before adding or materially changing tests. `No new test` is acceptable for behavior-neutral changes or behavior the suite already proves.
+>>>>>>> Stashed changes
 
 ## Security and data integrity
 
@@ -63,7 +71,11 @@ At minimum:
 
 Review only the accepted scope and actual diff. Trace changed trust boundaries, input-to-sink data flows, state transitions, public contracts, dependencies, and operational behavior; check the actual controls and tests before reporting a finding.
 
+<<<<<<< Updated upstream
 Check only relevant failure paths: authorization/tenant isolation, injection and unsafe files/URLs, credential/session handling, payment/replay/idempotency, races and partial writes, timeout/cancellation/recovery, unbounded work, inaccessible/error states, dependency/CI mismatch, and migration rollback. The correctness, security, UX, and reliability sections define the underlying contracts.
+=======
+Check only relevant failure paths: authorization/tenant isolation, injection and unsafe files/URLs, credential/session handling, payment/replay/idempotency, races and partial writes, timeout/cancellation/recovery, unbounded work, inaccessible/error states, dependency/CI mismatch, migration rollback. For High-risk scopes prefer a `review` pass; otherwise a direct evidence-focused pass.
+>>>>>>> Stashed changes
 
 For each evidence-backed finding give severity, `file:line` or symbol, a concrete failure/attack scenario, why the current control is insufficient, the smallest safe fix, and a proof test. Prefer a few actionable findings over speculative checklist output.
 
@@ -72,13 +84,17 @@ For each evidence-backed finding give severity, `file:line` or symbol, a concret
 - **MINOR:** bounded defect or maintenance risk.
 - **NIT:** optional clarity/style improvement; never a release blocker.
 
-Return the acceptance evidence and one verdict: `PASS`, `PASS WITH FIXES`, or `BLOCK`. `PASS` requires proven required criteria and no unresolved BLOCKER/MAJOR. Use `/review` for the complete review procedure.
+Return the acceptance evidence and one verdict: `PASS`, `PASS WITH FIXES`, or `BLOCK`. `PASS` requires proven required criteria and no unresolved BLOCKER/MAJOR. Use the `review` skill for the complete review procedure.
 
 ## User-facing quality
 
 For rendered interfaces:
 
+<<<<<<< Updated upstream
 - exercise the critical journey in the real browser when browser behavior matters;
+=======
+- exercise the critical journey in a real browser when a browser-capable tool is available; otherwise mark visual and interaction criteria `UNPROVEN`;
+>>>>>>> Stashed changes
 - preserve keyboard access, visible focus, semantic controls, labels, contrast, touch targets, and reduced-motion behavior;
 - check realistic data, long text, localization/RTL when relevant, and at least one narrow viewport for mobile-facing surfaces;
 - follow the accepted `docs/DESIGN.md`; use existing design tokens/components when they remain sound and change them deliberately when the accepted direction requires it;
@@ -127,18 +143,30 @@ For production web surfaces without accepted product-specific field budgets, use
 - Keep public interfaces small and backward-compatible unless a breaking change is accepted.
 - Keep business rules separable from presentation/transport when the existing architecture supports it.
 - New abstractions should solve more than one real current use case or remove a demonstrated risk/duplication.
+<<<<<<< Updated upstream
 - New dependencies require a concrete benefit over existing/platform capabilities.
+=======
+- New dependencies require a concrete benefit over existing/platform capabilities — DSH already ships skills, subagents, web search/fetch, and bash; adding a package that duplicates them needs justification.
+>>>>>>> Stashed changes
 - Architecture invariants that matter repeatedly should be enforced mechanically with types, lint rules, structural tests, schemas, or CI rather than prose alone.
 
 ## Evidence hierarchy
 
 Prefer stronger evidence when practical:
 
+<<<<<<< Updated upstream
 1. deterministic automated test of the accepted behavior;
 2. real browser/API/database exercise of the relevant journey;
 3. type/lint/structural/static analysis for invariant classes;
 4. reproducible measurement for performance/reliability claims;
 5. focused independent-evaluator inspection for aspects that cannot be automated economically.
+=======
+1. deterministic automated check of the accepted behavior;
+2. a real `bash`/runtime run or a browser exercise when available;
+3. type/lint/structural analysis and `astro check` diagnostics for invariant classes;
+4. reproducible measurement for performance/reliability claims;
+5. focused independent review (`review` skill or fresh subagent) for aspects that cannot be automated economically.
+>>>>>>> Stashed changes
 
 A reviewer or subagent opinion alone is not proof.
 
@@ -168,7 +196,11 @@ Confirmed from `package.json`, `astro.config.mjs`, `src/styles/tokens.css`, `src
 - Performance budget (lab, before RUM): LCP ≤2.5 s, INP ≤200 ms, CLS ≤0.1 as targets at 75th percentile. Enforce via lab budgets: CSS 23K foundation → ~90K inlined shipped (`build.inlineStylesheets: "always"`, `lightningcss`), fonts 139K (`public/fonts/Geist*`), JS 0 external + ~2K inline, portrait `Assets/Danial_photo.webp` 85K → 4 `dist/_astro/Danial_photo.*.webp` variants, OG 30.8K, `Astro` static with `astro:assets` widths `[320,480,640]`.
 - Browser/device matrix: Evergreen Chromium/Firefox/Safari, keyboard + touch + pointer, viewports 320/375/780/1280 (verified no overflow/horizontal scroll), no IE. `font-display: swap`, preload Sans only.
 - Visual contract: `docs/DESIGN.md` tokens/typography/geometry/components are authoritative; no second design system, no Tailwind, no glassmorphism/particles per rejected complexity.
+<<<<<<< Updated upstream
 - Canonical release gate: `bash scripts/ci-install.sh` (npm ci), then `npm run check` (`astro check` strict + content zod) and `npm run build` (`node scripts/generate-og.mjs && astro build`) must pass; PRs additionally require `npm run format:check` (`biome check`) and `bash scripts/verify.sh` (harness doctor + ci fallback). Deploy gate is `deploy.yml` on `main` push (`npm run check` → `npm run build` → `actions/upload-pages-artifact` `dist/` → `actions/deploy-pages`). Previous `main` always deployable (`git revert` rollback, `dist/` ephemeral).
+=======
+- Canonical release gate: `bash scripts/ci-install.sh` (npm ci), then `npm run ci` (`astro check` strict + content zod + `node scripts/generate-og.mjs && astro build`) must pass; `bash scripts/verify.sh` (repository self-checks, then `npm run ci`) is the canonical gate locally and in `quality.yml`. `npm run format:check` (`biome check`) is a separate hygiene lane with pre-existing drift (see remaining risks); `npm run lint` likewise reports pre-existing `useTemplate` style findings in `scripts/pr.mjs`. Neither lane is part of the canonical gate. Deploy gate is `deploy.yml` on `main` push (`npm run check` → `npm run build` → `actions/upload-pages-artifact` `dist/` → `actions/deploy-pages`). Previous `main` always deployable (`git revert` rollback, `dist/` ephemeral).
+>>>>>>> Stashed changes
 - Structural checks that are mechanically enforced: `tests/projects.test.mjs` (pure helper parity, `javascript:` block, draft filtering, work-index count, shared `cardPropsFor` usage, `src/lib/projects.ts` export surface), `biome.json` lint/format, `tsconfig.json` strict (`astro/tsconfigs/strict`, `noUncheckedIndexedAccess`), content schema at build time via `astro check`.
 - Failure evidence: Concise — `npm run check` diagnostics, `npm run build` log, `node --test tests/projects.test.mjs` output, Biome `format:check` report, browser console (must be clean, preload warning for Mono removed), and `dist/` existence for build proofs. Secrets never appear in logs/fixtures/screenshots (see `SECURITY.md`).
 - Regression test sensitivity: A new regression test must demonstrably fail on pre-fix behavior (or a narrow focused mutation of the fixed line) and pass after the fix — e.g., `tests/projects.test.mjs` frontmatter `javascript:` caseStudy mutant or draft-filter inversion must fail before fix and pass after; line coverage alone is insufficient.

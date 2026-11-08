@@ -19,12 +19,12 @@ Static [Astro](https://astro.build) site deployed to GitHub Pages at
 
     npm run check           # astro check (types + content schema)
     npm run build           # must succeed
-    bash scripts/verify.sh  # full gate: harness doctor + tests + check + build
+    bash scripts/verify.sh  # full gate: workflow self-checks + check + build
 
-This repository also carries an agent-harness layer (`.pi/`, `scripts/`,
-`tests/`, `evals/`) with its own operating rules — see `AGENTS.md`,
-`CONTRIBUTING.md`, and `SECURITY.md` before touching workflow files.
-Tiny low-risk corrections use `/skill:quick-fix`.
+This repository also carries a DSH workflow layer (`.dsh/skills/`, `docs/`,
+`scripts/`) with its own operating rules — see `AGENTS.md`, `CONTRIBUTING.md`,
+and `SECURITY.md` before touching workflow files.
+Tiny low-risk corrections use `/quick-fix`.
 
 ## Site structure
 

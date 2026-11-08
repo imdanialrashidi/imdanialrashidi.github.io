@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+<<<<<<< Updated upstream
+=======
+# Canonical verification gate for this repository.
+# Repository self-checks first, then the cheapest project lane that applies.
+>>>>>>> Stashed changes
 set -Eeuo pipefail
 
 ROOT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -6,6 +11,47 @@ cd "$ROOT_DIR"
 
 bash scripts/pi-doctor.sh --ci
 
+<<<<<<< Updated upstream
+=======
+# 1. Whitespace errors in tracked changes.
+if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  git --no-pager diff --check || bad "git diff --check reported whitespace errors."
+fi
+
+# 2. The six project workflow skills must exist and carry matching frontmatter.
+expected_skills=(quick-fix spec build verify review test-design)
+for name in "${expected_skills[@]}"; do
+  [[ -f ".dsh/skills/$name/SKILL.md" ]] || bad "missing workflow skill: .dsh/skills/$name/SKILL.md"
+done
+for skill in .dsh/skills/*/SKILL.md; do
+  [[ -f "$skill" ]] || continue
+  dir="$(basename "$(dirname "$skill")")"
+  front="$(sed -n '1,/^---$/p' "$skill" | sed '1d;$d')"
+  grep -Eq '^name: .+' <<<"$front" || bad "$skill is missing frontmatter name."
+  grep -Eq '^description: .+' <<<"$front" || bad "$skill is missing frontmatter description."
+  grep -Eq "^name: [\"']?${dir}[\"']?$" <<<"$front" || bad "$skill name does not match directory '$dir'."
+done
+
+# 3. Registry-managed project skills also need frontmatter.
+for skill in .agents/skills/*/SKILL.md; do
+  [[ -f "$skill" ]] || continue
+  front="$(sed -n '1,/^---$/p' "$skill" | sed '1d;$d')"
+  grep -Eq '^name: .+' <<<"$front" || bad "$skill is missing frontmatter name."
+  grep -Eq '^description: .+' <<<"$front" || bad "$skill is missing frontmatter description."
+done
+
+# 4. PR helper must parse.
+if command -v node >/dev/null 2>&1; then
+  node --check scripts/pr.mjs || bad "scripts/pr.mjs does not parse."
+else
+  note "SKIP: node not installed; cannot syntax-check scripts/pr.mjs."
+fi
+
+[[ "$fail" -eq 0 ]] || exit 1
+note "Repository self-checks passed."
+
+# 5. Project override wins when the repo defines its own gate.
+>>>>>>> Stashed changes
 if [[ -x scripts/project-verify.sh ]]; then
   exec scripts/project-verify.sh
 fi

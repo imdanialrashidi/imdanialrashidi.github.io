@@ -8,13 +8,20 @@ Include the affected version/commit, impact, prerequisites, a minimal reproducti
 
 ## Execution boundary
 
+<<<<<<< Updated upstream
 Pi runs with the operating-system permissions of the account that starts it. Project trust, prompts, tool allowlists, and `.pi/extensions/safety-guard.js` are defense in depth; they are not a sandbox and cannot reliably parse every shell/interpreter behavior or redirect. This matches Pi's official security model: project trust controls repository-provided input, while real isolation must come from the operating system, container, or VM.
 
 For a trusted working copy, `./p` is autonomous by default: it passes `--approve`, allows routine full-workspace and browser execution, and does not insert confirmation popups. Git/GitHub mutation is independently denied by default; read-only inspection remains available. The guard also blocks high-blast-radius patterns such as credential-store access, destructive deletion, publication/deployment, production mutation, and browser file upload. `PI_PROJECT_TRUST=ask|never` and `PI_GUARD_MODE=strict` remain explicit diagnostic/restriction overrides.
+=======
+DSH runs with the operating-system permissions of the account that starts it. Its approval policy, sandbox mode, project skills (`.dsh/skills/`), prompts, and the scoped `scripts/pr.mjs` helper are defense in depth; they are not a sandbox and cannot reliably parse every shell/interpreter behavior or redirect. Real isolation must come from the operating system, container, or VM.
+
+Solo default: never commit, push, merge, release, deploy, or mutate production. Only when the user explicitly asks for team delivery ("open a PR", "commit this", or equivalent), follow `docs/GIT_POLICY.md` exactly — scoped explicit files on the fixed `ai-changes` lane, secret scan, compare-and-swap push guard, no `--no-verify`, no force, no main writes, no auto-merge. Read-only/local-only work never publishes; `DSH_PR_DELIVERY=off` opts out.
+>>>>>>> Stashed changes
 
 For an untrusted repository, unreviewed third-party instructions, or work exposed to meaningful credentials/private data:
 
 1. Prefer an OS/container/VM boundary with only the required workspace and credentials.
+<<<<<<< Updated upstream
 2. Use `scripts/pi-sandbox.sh` for a simple local Docker boundary, or follow Pi's official [containerization guidance](https://pi.dev/docs/latest/containerization) for Gondolin/OpenShell alternatives.
 3. Pass only the provider keys required for the task. The wrapper intentionally does not mount the host Pi home, SSH keys, cloud credentials, or Docker socket.
 4. Review the repository, `.pi/settings.json`, packages, extensions, skills, prompts, and MCP configuration before trusting them.
@@ -23,6 +30,14 @@ For an untrusted repository, unreviewed third-party instructions, or work expose
 The Docker build context is reduced by `.dockerignore` to the Dockerfile only. At runtime the wrapper bind-mounts this repository read/write, so the agent can still modify repository files. It uses a read-only container filesystem, drops Linux capabilities, disables privilege escalation, and applies process/resource limits. Model/API traffic still requires network access; use a policy-controlled sandbox when network/credential egress must be restricted.
 
 Autonomous Playwright may navigate public HTTP(S) pages and use focused page evaluation. File upload/drop and MCP scripting stay unavailable; strict mode also makes navigation local-only and blocks page evaluation. None of these settings is a network security boundary or redirect containment. Use network policy/container isolation when browsing untrusted applications or when egress matters.
+=======
+2. Use a policy-controlled sandbox when network/credential egress must be restricted.
+3. Pass only the provider keys required for the task. Do not mount host SSH keys, cloud credentials, or the Docker socket into an untrusted environment.
+4. Review the repository, `.dsh/skills/`, scripts, and workflow before trusting them.
+5. Review diffs and outputs before copying or deploying them to a trusted/production environment.
+
+Bash and any browser-capable tooling may run broad code; DSH approvals and its sandbox apply. They are not a network security boundary or redirect containment. Use network policy/container isolation when browsing untrusted applications or when egress matters.
+>>>>>>> Stashed changes
 
 ## Third-party packages
 

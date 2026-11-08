@@ -54,5 +54,9 @@ Rules:
 - Record outcomes and pointers to evidence instead.
 - Do not mark acceptance complete without proof.
 - Preserve unresolved hypotheses as hypotheses, not facts.
+<<<<<<< Updated upstream
 - Update the plan before native `/handoff` or a deliberate context reset.
+=======
+- Update the plan before a context reset or handoff to a fresh session.
+>>>>>>> Stashed changes
 - The working tree and actual tests remain authoritative if the plan becomes stale.

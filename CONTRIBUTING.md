@@ -5,8 +5,13 @@ Contributions should improve representative task outcomes, reduce risk/cost, or 
 ## Setup
 
 1. Use Node.js 22.19.0 or newer.
+<<<<<<< Updated upstream
 2. Install the reviewed Pi pin per `docs/TOOLING_SETUP.md` (packages, MCP, Playwright, LSP — reload via `/reload` after pin changes).
 3. Review project-local packages/extensions before trusting the repository.
+=======
+2. Run DSH (`npx @deepseek-ai/dsh web`) and pick a model. The project workflow ships as six DSH skills under `.dsh/skills/` plus this repository's `AGENTS.md`; no separate install is required.
+3. Review project-local scripts and workflow configuration before trusting the repository.
+>>>>>>> Stashed changes
 4. Run `bash scripts/verify.sh` before and after a workflow change.
 5. Use the direct autonomous launcher for trusted work. For an untrusted repository or meaningful credential/private-data exposure, use `bash scripts/pi-sandbox.sh` or another boundary described in `SECURITY.md`.
 
@@ -24,7 +29,11 @@ Preserve unrelated work and keep one primary writer. Do not add dependencies wit
 
 ## Workflow-policy changes
 
+<<<<<<< Updated upstream
 Workflow maintenance is allowed in the default autonomous mode. Keep it explicitly scoped, update all affected source-of-truth documents, doctor assertions, integrity records, eval cases, and `CHANGELOG.md`, and rely on the tested diff/CI evidence rather than a startup flag.
+=======
+Workflow maintenance is allowed in the default autonomous mode. Keep it explicitly scoped, update all affected source-of-truth documents and `CHANGELOG.md`, and rely on the tested diff/CI evidence. The six skills in `.dsh/skills/` are vendored from dsh-workflow v0.1; when updating them, copy the upstream `SKILL.md` files and rerun `bash scripts/verify.sh`.
+>>>>>>> Stashed changes
 
 Run:
 
@@ -34,7 +43,11 @@ node scripts/verify-package-integrity.mjs --online  # when package pins change
 node scripts/run-workflow-evals.mjs --dry-run       # when evals/runner change
 ```
 
+<<<<<<< Updated upstream
 For a material harness change, compare baseline/candidate on representative cases as described in `docs/EVALUATION.md`. Do not publish model-eval artifacts containing repository content or credentials.
+=======
+For a material workflow change, compare baseline/candidate on representative product tasks with repeated matched-model trials. Do not publish artifacts containing repository content or credentials.
+>>>>>>> Stashed changes
 
 ## Frontend contributions
 
