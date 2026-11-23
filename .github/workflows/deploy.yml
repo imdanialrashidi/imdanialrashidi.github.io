@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: https://imdanialrashidi.github.io
     timeout-minutes: 10
 
     steps:
@@ -50,25 +50,20 @@ jobs:
         with:
           path: dist
 
-      # The Actions artifact API is eventually consistent: the deploy action can
-      # query too early (observed on 2026-11-24: artifact finalized 20ms before
-      # deploy started, API returned 0 artifacts and the job failed). Wait until
-      # the uploaded artifact is visible before deploying.
-      - name: Wait for artifact indexing
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          for attempt in $(seq 1 30); do
-            count="$(gh api "repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts?name=github-pages" --jq '.total_count')"
-            if [ "${count}" -ge 1 ]; then
-              echo "github-pages artifact is visible to the API (attempt ${attempt})"
-              exit 0
-            fi
-            sleep 2
-          done
-          echo "github-pages artifact never became visible to the API" >&2
-          exit 1
-
+      # The Actions artifact service is eventually consistent. On 2026-11-24 the
+      # deploy action listed the run artifacts 20ms after upload finalization,
+      # saw none, and failed even though the uploaded artifact existed (a manual
+      # rerun a minute later succeeded). Give the service a head start and retry
+      # the deploy once if it still reports no artifact.
       - name: Deploy to GitHub Pages
         id: deployment
+        continue-on-error: true
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+
+      - name: Wait for artifact service retry
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 90
+
+      - name: Deploy to GitHub Pages (retry)
+        if: steps.deployment.outcome == 'failure'
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
