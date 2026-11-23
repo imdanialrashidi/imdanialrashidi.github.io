@@ -1,349 +1,293 @@
 ---
-import { social } from '../data/site.ts'
+import CtaBand from '../components/CtaBand.astro'
+import { site } from '../data/site.ts'
 import Layout from '../layouts/Layout.astro'
+import { HOME_TRAIL } from '../lib/seo.ts'
 
-// Keep this easy to update — one place, one date, no CMS.
-// Update `lastUpdated` when the content below changes.
-const lastUpdated = 'August 21, 2026'
+const updated = '2026-11-23'
+const updatedLabel = '23 November 2026'
+
+const description =
+  'What Danial Rashidi is doing now: building Noveno, Study Center, Fast English and Gym Log, what he is learning, and what he is open to.'
+
+const currently = [
+  {
+    label: 'Building',
+    title: 'Noveno',
+    body: 'The main project: customer-acquisition systems for small businesses, built one working piece at a time. The site is live, the rest is still moving.',
+    links: [
+      { label: 'Case study', href: '/work/noveno/' },
+      { label: 'noveno.ir', href: 'https://noveno.ir' },
+    ],
+  },
+  {
+    label: 'Growing',
+    title: 'Study Center',
+    body: 'Interactive course websites for subjects that are hard to learn from a textbook. Each course is its own site, and new ones are added as they are finished.',
+    links: [{ label: 'Case study', href: '/work/study/' }],
+  },
+  {
+    label: 'In development',
+    title: 'Fast English',
+    body: 'A focused English-learning product for Persian speakers: web first, then Android. Still in development, and the case study says exactly what is open.',
+    links: [{ label: 'Case study', href: '/work/fast-english/' }],
+  },
+  {
+    label: 'Maintaining',
+    title: 'Gym Log',
+    body: 'The offline Android workout journal I use myself. Version 0.2.1 is released under the MIT license, and it gets fixes when real use finds problems.',
+    links: [
+      { label: 'Case study', href: '/work/gym-log/' },
+      { label: 'GitHub', href: 'https://github.com/imdanialrashidi/gym-log' },
+    ],
+  },
+]
+
+const learning = [
+  'Stronger TypeScript and backend foundations, especially around data models that survive real use.',
+  'Product engineering: deciding what not to build, and how to scope a release honestly.',
+  'AI-assisted workflows where the leverage is real, without handing over verification.',
+]
+
+const openTo = [
+  'Remote software work and product collaborations.',
+  'Business websites that need to be fast, clear, and easy to maintain.',
+  'Small automation projects that remove repeated manual work.',
+]
 ---
 
 <Layout
-  title="Now — What Danial Rashidi Is Working On"
-  description="What Danial Rashidi is focused on now: building Noveno, shipping software in small increments, and exploring AI application and agent workflows."
+  title="Now: what I am working on"
+  description={description}
+  path="/now/"
+  image="/og/now.jpg"
+  imageAlt="What Danial Rashidi is working on now"
+  pageType="WebPage"
+  breadcrumbs={[HOME_TRAIL, { name: "Now", href: "/now/" }]}
+  updated={updated}
+  about={{ name: site.name, url: site.url }}
 >
-  <section class="now-hero">
-    <div class="container now-hero__inner">
-      <div class="now-hero__label">
-        <span class="now-hero__eyebrow">Now</span>
-        <span class="now-hero__rule" aria-hidden="true"></span>
-        <span class="now-hero__meta">Last updated: {lastUpdated}</span>
-      </div>
-      <h1 class="now-hero__title">What I’m focused on now</h1>
-      <p class="now-hero__lede">
-        This page is intentionally the dynamic part of the site. It is easy to update and stays current — if it is stale, assume I am heads-down building.
-        Inspired by <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer">nownownow.com</a>.
+  <header class="container now-hero">
+    <p class="eyebrow eyebrow--accent">Now</p>
+    <h1 class="h1 now-hero__title">What I am doing now</h1>
+    <p class="lede now-hero__lede">
+      A snapshot, not a roadmap. Last updated
+      <time datetime={updated}>{updatedLabel}</time>. If this page looks old, I
+      am heads-down on something.
+    </p>
+    <p class="now-hero__note">
+      This page follows the <a class="link" href="https://nownownow.com/about" rel="noopener">now page</a>
+      convention.
+    </p>
+  </header>
+
+  <section class="container now-section" aria-labelledby="building-title">
+    <h2 class="h2 now-section__title" id="building-title">Building</h2>
+    <ol class="current-list">
+      {
+        currently.map((item, i) => (
+          <li>
+            <span class="current-list__num" aria-hidden="true">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <div class="current-list__body">
+              <p class="eyebrow">{item.label}</p>
+              <h3 class="current-list__title">{item.title}</h3>
+              <p class="current-list__text">{item.body}</p>
+              <ul class="current-list__links">
+                {item.links.map((link) => (
+                  <li>
+                    <a href={link.href} rel={link.href.startsWith("http") ? "noopener" : undefined}>
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="container now-columns">
+    <div class="now-column" aria-labelledby="learning-title">
+      <h2 class="h2 now-section__title" id="learning-title">Learning</h2>
+      <ul class="dot-list">
+        {learning.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+    <div class="now-column" aria-labelledby="open-title">
+      <h2 class="h2 now-section__title" id="open-title">Open to</h2>
+      <ul class="dot-list">
+        {openTo.map((item) => <li>{item}</li>)}
+      </ul>
+      <p class="now-column__cta">
+        <a class="btn btn--primary" href="/contact/">Start a conversation</a>
       </p>
     </div>
   </section>
 
-  <section class="now-body">
-    <div class="container now-body__inner">
-      <div class="now-grid">
-        <section class="now-card now-card--accent" aria-labelledby="building-title">
-          <div class="now-card__head">
-            <span class="now-card__num">01</span>
-            <h2 id="building-title" class="now-card__title">Building</h2>
-          </div>
-          <ul class="now-card__list" role="list">
-            <li class="now-card__item">
-              <span class="now-card__dot" aria-hidden="true"></span>
-              <span><strong>Software and products</strong> — shipping incrementally, keeping the personal site and product work honest and verifiable.</span>
-            </li>
-            <li class="now-card__item">
-              <span class="now-card__dot" aria-hidden="true"></span>
-              <span><strong>Noveno</strong> — the customer-acquisition system for service businesses. Design, implementation and measurement; see <a href={social.noveno} target="_blank" rel="noopener noreferrer">{social.noveno.replace("https://", "")} ↗</a> for the product, <a href="/work/noveno">Building Noveno →</a> for the founder view.</span>
-            </li>
-            <li class="now-card__item">
-              <span class="now-card__dot" aria-hidden="true"></span>
-              <span>Improving the editorial and engineering quality of shipped surfaces — typography, readability, contrast and reduced-motion behavior — without theoretical polish.</span>
-            </li>
-          </ul>
-        </section>
-
-        <section class="now-card" aria-labelledby="learning-title">
-          <div class="now-card__head">
-            <span class="now-card__num">02</span>
-            <h2 id="learning-title" class="now-card__title">Learning</h2>
-          </div>
-          <ul class="now-card__list" role="list">
-            <li class="now-card__item">
-              <span class="now-card__dot" aria-hidden="true"></span>
-              <span>Stronger software engineering foundations — tightening TypeScript, backend modeling and product engineering judgment through shipped work (Fast English, Noveno).</span>
-            </li>
-            <li class="now-card__item">
-              <span class="now-card__dot" aria-hidden="true"></span>
-              <span>Practical backend thinking: PocketBase hooks, transactions and entitlement checks as the simplest boundary beyond the browser.</span>
-            </li>
-          </ul>
-        </section>
-
-        <section class="now-card" aria-labelledby="exploring-title">
-          <div class="now-card__head">
-            <span class="now-card__num">03</span>
-            <h2 id="exploring-title" class="now-card__title">Exploring</h2>
-          </div>
-          <ul class="now-card__list" role="list">
-            <li class="now-card__item">
-              <span class="now-card__dot" aria-hidden="true"></span>
-              <span><strong>AI application engineering</strong> — agents, automation and product systems where AI creates real leverage, with verification and testing kept explicit.</span>
-            </li>
-            <li class="now-card__item">
-              <span class="now-card__dot" aria-hidden="true"></span>
-              <span>Product systems that behave well under real constraints — mobile-first, unstable network, tools that are actually available in Iran.</span>
-            </li>
-          </ul>
-        </section>
-
-        <section class="now-card now-card--compact" aria-labelledby="based-title">
-          <div class="now-card__head">
-            <span class="now-card__num">04</span>
-            <h2 id="based-title" class="now-card__title">Based in</h2>
-          </div>
-          <p class="now-card__text">Iran — working in English, building for real local conditions and international standards.</p>
-          <div class="now-card__links">
-            <a href="/about" class="now-card__link">About →</a>
-            <a href="/work" class="now-card__link">Work →</a>
-            <a href="/contact" class="now-card__link">Contact →</a>
-          </div>
-        </section>
-      </div>
-
-      <div class="now-foot">
-        <p class="now-foot__note">
-          This page will stay current. The evergreen narrative lives on <a href="/about">About</a> and the homepage; current material lives here rather than polluting those pages. Long-term or private goals stay private.
-        </p>
-        <p class="now-foot__meta">Last updated: <time datetime="2026-08-21">{lastUpdated}</time> · <span class="now-foot__hint">Update this date whenever the sections above change.</span></p>
-      </div>
-    </div>
+  <section class="container now-section now-based" aria-labelledby="based-title">
+    <h2 class="h2 now-section__title" id="based-title">Based in</h2>
+    <p class="now-based__text">
+      {site.location}, working remotely with people elsewhere. The Persian home
+      of this site is <a class="link" href={site.persianSite} hreflang="fa" lang="fa">danialrashidi.ir</a>.
+    </p>
   </section>
+
+  <CtaBand />
 </Layout>
 
 <style>
   .now-hero {
-    padding: clamp(1.75rem, 5vw, 2.75rem) 0 clamp(1.25rem, 4vw, 1.75rem);
-    border-bottom: var(--border-hairline);
-    background:
-      linear-gradient(180deg, color-mix(in srgb, var(--color-accent-soft) 34%, transparent) 0%, transparent 62%),
-      radial-gradient(ellipse at 72% 0%, color-mix(in srgb, var(--color-border) 14%, transparent) 0%, transparent 54%);
-    position: relative;
-    overflow: clip;
-  }
-
-  .now-hero::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, var(--color-accent) 0%, transparent 44%);
-    opacity: 0.45;
-  }
-
-  .now-hero__inner {
-    position: relative;
-    max-width: var(--width-prose);
-  }
-
-  .now-hero__label {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    flex-wrap: wrap;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-weight: 700;
-    color: var(--color-text-faint);
-  }
-
-  .now-hero__eyebrow { color: var(--color-text); }
-
-  .now-hero__rule {
-    width: 28px;
-    height: 1px;
-    background: var(--color-border-strong);
-    opacity: 0.7;
-  }
-
-  .now-hero__meta {
-    font-weight: 600;
-    letter-spacing: 0.06em;
+    display: grid;
+    gap: 1rem;
+    padding-top: clamp(2.5rem, 6vw, 5rem);
+    padding-bottom: clamp(2rem, 5vw, 3.5rem);
   }
 
   .now-hero__title {
-    margin-top: var(--space-4);
-    font-size: clamp(1.875rem, 4.5vw, 2.5rem);
-    line-height: 0.95;
-    letter-spacing: -0.03em;
-    font-weight: 680;
+    font-size: clamp(2.75rem, 7vw, 5.5rem);
+    max-width: 14ch;
   }
 
   .now-hero__lede {
-    margin-top: var(--space-4);
-    font-size: var(--text-md);
-    line-height: 1.65;
-    color: var(--color-text-muted);
-    max-width: 60ch;
+    max-width: 38rem;
   }
 
-  .now-hero__lede a {
-    color: var(--color-text-muted);
-    text-decoration: underline;
-    text-decoration-color: var(--color-border-strong);
-    text-underline-offset: 3px;
-  }
-  .now-hero__lede a:hover { color: var(--color-accent); text-decoration-color: var(--color-accent); }
-
-  .now-body {
-    padding: clamp(1.5rem, 4vw, 2.25rem) 0 clamp(2.5rem, 6vw, 4rem);
-  }
-
-  .now-body__inner {
-    max-width: var(--width-prose);
-  }
-
-  .now-grid {
-    display: grid;
-    gap: var(--space-4);
-  }
-
-  .now-card {
-    padding: var(--space-6);
-    background: var(--color-surface);
-    border: var(--border-hairline);
-    border-radius: var(--radius-lg);
-  }
-
-  .now-card--accent {
-    background: var(--color-accent-soft);
-    border-color: color-mix(in srgb, var(--color-accent) 14%, var(--color-border));
-  }
-
-  .now-card--compact {
-    background: var(--color-surface-raised);
-  }
-
-  .now-card__head {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    padding-bottom: var(--space-3);
-    border-bottom: var(--border-hairline);
-  }
-
-  .now-card--accent .now-card__head { border-color: color-mix(in srgb, var(--color-accent) 14%, var(--color-border)); }
-
-  .now-card__num {
+  .now-hero__note {
     font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: var(--color-accent);
-    background: var(--color-surface);
-    border: 1px solid color-mix(in srgb, var(--color-accent) 14%, var(--color-border));
-    padding: 3px 7px;
-    border-radius: var(--radius-pill);
-    flex-shrink: 0;
+    font-size: var(--text-xs);
+    color: var(--ink-faint);
   }
 
-  .now-card--accent .now-card__num {
-    background: var(--color-surface);
-    color: var(--color-accent);
+  .now-section {
+    padding-block: clamp(2rem, 5vw, 3.5rem);
+    border-top: 1px solid var(--line);
   }
 
-  .now-card__title {
-    font-size: var(--text-lg);
-    line-height: 1.15;
-    letter-spacing: -0.015em;
-    font-weight: 650;
+  .now-section__title {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
   }
 
-  .now-card__list {
-    margin-top: var(--space-4);
+  .current-list {
     list-style: none;
     padding: 0;
+    margin-top: 1.5rem;
+    display: grid;
+  }
+
+  .current-list li {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    column-gap: 1rem;
+    padding-block: clamp(1rem, 3vw, 1.75rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .current-list li:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .current-list__num {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.35rem;
+    color: var(--accent);
+    line-height: 1.2;
+  }
+
+  .current-list__body {
+    display: grid;
+    gap: 0.4rem;
+    max-width: 44rem;
+  }
+
+  .current-list__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    line-height: 1.1;
+    color: var(--ink);
+  }
+
+  .current-list__text {
+    color: var(--ink-soft);
+    font-size: var(--text-base);
+  }
+
+  .current-list__links {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-
-  .now-card__item {
-    display: flex;
-    gap: var(--space-3);
-    align-items: flex-start;
-    font-size: var(--text-md);
-    line-height: 1.65;
-    color: var(--color-text-muted);
-  }
-
-  .now-card__dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--color-accent);
-    margin-top: 10px;
-    flex-shrink: 0;
-    opacity: 0.95;
-  }
-
-  .now-card__item strong { color: var(--color-text); font-weight: 600; }
-  .now-card__item a {
-    color: var(--color-accent);
-    font-weight: 500;
-    text-decoration: underline;
-    text-decoration-color: color-mix(in srgb, var(--color-accent) 28%, transparent);
-    text-underline-offset: 3px;
-    overflow-wrap: anywhere;
-  }
-  .now-card__item a:hover { color: var(--color-accent-hover); text-decoration-color: var(--color-accent); }
-
-  .now-card__text {
-    margin-top: var(--space-4);
-    font-size: var(--text-md);
-    line-height: 1.65;
-    color: var(--color-text-muted);
-    max-width: 60ch;
-  }
-
-  .now-card__links {
-    margin-top: var(--space-4);
-    display: flex;
-    gap: var(--space-4);
     flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    list-style: none;
+    padding: 0.25rem 0 0;
   }
 
-  .now-card__link {
-    font-size: var(--text-sm);
-    font-weight: 600;
-    color: var(--color-text-muted);
-    border-bottom: 1px solid transparent;
-    padding-bottom: 2px;
-    transition: color var(--duration-fast) var(--ease-default), border-color var(--duration-fast) var(--ease-default);
-  }
-  .now-card__link:hover { color: var(--color-accent); border-color: var(--color-accent); }
-
-  .now-foot {
-    margin-top: var(--space-8);
-    border-top: var(--border-hairline);
-    padding-top: var(--space-6);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-
-  .now-foot__note {
-    font-size: var(--text-sm);
-    line-height: 1.65;
-    color: var(--color-text-faint);
-    max-width: 66ch;
-  }
-
-  .now-foot__note a {
-    color: var(--color-text-muted);
-    text-decoration: underline;
-    text-decoration-color: var(--color-border-strong);
-    text-underline-offset: 3px;
-  }
-  .now-foot__note a:hover { color: var(--color-accent); }
-
-  .now-foot__meta {
+  .current-list__links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
     font-family: var(--font-mono);
-    font-size: 11px;
-    line-height: 1.5;
-    color: var(--color-text-faint);
-    border-left: 2px solid var(--color-border);
-    padding-left: 10px;
+    font-size: var(--text-xs);
+    color: var(--ink-soft);
   }
 
-  .now-foot__hint { color: var(--color-text-faint); }
+  .current-list__links a:hover {
+    color: var(--accent);
+  }
+
+  .now-columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(2rem, 5vw, 4rem);
+    padding-block: clamp(2rem, 5vw, 3.5rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .dot-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 1.25rem;
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .dot-list li {
+    position: relative;
+    padding-left: 1.25rem;
+    color: var(--ink-soft);
+    max-width: 32rem;
+  }
+
+  .dot-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 0.3rem;
+    height: 0.3rem;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .now-column__cta {
+    margin-top: 1.5rem;
+  }
+
+  .now-based {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .now-based__text {
+    color: var(--ink-soft);
+    max-width: 38rem;
+  }
+
+  @media (max-width: 760px) {
+    .now-columns {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>

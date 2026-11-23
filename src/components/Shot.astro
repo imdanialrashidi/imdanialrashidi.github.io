@@ -1,0 +1,53 @@
+---
+import { Image } from 'astro:assets'
+import type { ImageMetadata } from 'astro'
+
+interface Props {
+  image: ImageMetadata
+  alt: string
+  caption?: string
+  meta?: string
+  sizes?: string
+  widths?: number[]
+  priority?: boolean
+  class?: string
+  quality?: number
+}
+
+const {
+  image,
+  alt,
+  caption,
+  meta,
+  sizes = '(max-width: 760px) 100vw, 640px',
+  widths = [480, 800, 1200, 1600],
+  priority = false,
+  class: className,
+  quality = 82,
+} = Astro.props
+
+const available = widths.filter((width) => width <= image.width)
+const srcWidths = available.length > 0 ? available : [image.width]
+---
+
+<figure class:list={["shot", className]}>
+  <Image
+    src={image}
+    alt={alt}
+    widths={srcWidths}
+    sizes={sizes}
+    format="webp"
+    quality={quality}
+    loading={priority ? "eager" : "lazy"}
+    fetchpriority={priority ? "high" : "auto"}
+    decoding={priority ? "sync" : "async"}
+  />
+  {
+    (caption || meta) && (
+      <figcaption class="shot__caption">
+        {caption && <span>{caption}</span>}
+        {meta && <span>{meta}</span>}
+      </figcaption>
+    )
+  }
+</figure>

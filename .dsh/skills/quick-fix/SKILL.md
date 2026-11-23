@@ -14,7 +14,7 @@ Use this for a localized defect, a small test addition, or an obvious correction
 2. Confirm the failure or the requested behavior from code or an actual check. Do not guess the cause.
 3. Implement the smallest coherent fix. Preserve unrelated behavior and do not refactor opportunistically.
 4. Add or update a test only when it would detect the defect or protect the intended behavior.
-5. Run the narrowest real check that exercises the change. Use the project's actual command; record the command, working directory, exit code, and meaningful output.
+5. Run the narrowest real check that exercises the changed caller and confirm the intended case was selected. Use the project's actual command; record the command, working directory, exit code, and meaningful output.
 6. Inspect the final diff. Remove accidental edits, debug output, unused code, and unrelated formatting.
 7. Report the change, the check result, and anything not verified.
 

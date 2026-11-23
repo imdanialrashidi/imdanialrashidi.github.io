@@ -1,168 +1,135 @@
-/* — Design Tokens — Editorial × Engineering × Product — monochrome + electric blue — light-first */
+/* =============================================================================
+   Design tokens, Danial Rashidi (English site)
+   Direction: editorial premium. Warm paper canvas, ink type, one vermilion
+   signal, serif display voice over a technical sans and mono ledger labels.
+   Every text/background pair below is verified at WCAG 2.2 AA or better;
+   ratios are recorded in docs/DESIGN.md.
+   ============================================================================= */
 
 :root {
-  /* Color — light (default) */
-  --color-canvas: #fcfcfc;
-  --color-surface: #ffffff;
-  --color-surface-raised: #f5f5f3;
-  --color-surface-hover: #efefed;
-  --color-border: #e9e9e7;
-  --color-border-strong: #d6d6d4;
-  --color-border-faint: #f0f0ef;
-  --color-text: #0f1419;
-  --color-text-muted: #5f6368;
-  --color-text-faint: #71717a;
-  --color-text-inverse: #ffffff;
-  --color-accent: #0f4cff;
-  --color-accent-hover: #0a3dd1;
-  --color-accent-pressed: #0833b0;
-  --color-accent-soft: #eef2ff;
-  --color-accent-soft-hover: #e0e7ff;
-  --color-focus: #0f4cff;
-  --color-focus-ring: rgba(15, 76, 255, 0.4);
+  color-scheme: light;
 
-  /* Typography */
-  --font-sans: "Geist", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    "Liberation Mono", "Courier New", monospace;
+  /* Paper and ink */
+  --bg: #f6f2ea;
+  --bg-raised: #fffdf8;
+  --bg-sunk: #efe9dd;
+  --ink: #191612;
+  --ink-soft: #4e483f;
+  --ink-faint: #6b655a;
+  --line: #ded5c4;
+  --line-strong: #c2b7a3;
+
+  /* The single signal color */
+  --accent: #b8320c;
+  --accent-hover: #8f2508;
+  --on-accent: #fffdf8;
+  --accent-wash: #f1dbd2;
+
+  /* Status (text always accompanies the color; never color alone) */
+  --status-live: #1f7a3d;
+  --status-building: #a3570a;
+
+  --focus: #b8320c;
+  --shadow: 20 16 10;
+
+  /* Type */
+  --font-display: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --font-sans: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
   --text-xs: 0.75rem;
-  --text-sm: 0.8125rem;
-  --text-base: 1rem;
-  --text-md: 1.0625rem;
+  --text-sm: 0.875rem;
+  --text-base: 1.0625rem;
   --text-lg: 1.1875rem;
-  --text-xl: 1.375rem;
-  --text-2xl: 1.75rem;
-  --text-3xl: 2.125rem;
-  --text-4xl: 2.625rem;
-  --text-5xl: 3.5rem;
+  --text-xl: clamp(1.3125rem, 1.9vw, 1.625rem);
+  --display-h1: clamp(2.875rem, 7.2vw, 6rem);
+  --display-h2: clamp(2.125rem, 4.6vw, 3.375rem);
+  --display-h3: clamp(1.4375rem, 2.2vw, 1.875rem);
+  --display-quote: clamp(1.625rem, 3.4vw, 2.5rem);
 
-  --leading-tight: 1.1;
-  --leading-snug: 1.25;
-  --leading-normal: 1.55;
-  --leading-relaxed: 1.7;
+  --leading-tight: 1.02;
+  --leading-snug: 1.18;
+  --leading-body: 1.65;
 
-  --tracking-tight: -0.02em;
-  --tracking-normal: -0.01em;
-  --tracking-wide: 0.02em;
-
-  --font-weight-regular: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-
-  /* Spacing — 4pt base */
+  /* Space */
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --container: 76rem;
+  --measure: 40rem;
+  --section-y: clamp(3.5rem, 8vw, 7.5rem);
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
   --space-4: 1rem;
-  --space-5: 1.25rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
-  --space-10: 2.5rem;
-  --space-12: 3rem;
-  --space-16: 4rem;
-  --space-20: 5rem;
-  --space-24: 6rem;
-  --space-32: 8rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
 
-  /* Layout */
-  --width-prose: 42rem; /* 672px — 66ch measure */
-  --width-content: 72rem; /* 1152px — wide */
-  --width-wide: 80rem;
-  --width-gutter: clamp(1rem, 4vw, 2rem);
-  --width-gutter-sm: clamp(1rem, 3vw, 1.5rem);
-  --header-height: 64px;
-
-  /* Borders */
-  --border-width: 1px;
-  --border-hairline: 1px solid var(--color-border);
-  --border-strong: 1px solid var(--color-border-strong);
-  --border-faint: 1px solid var(--color-border-faint);
-
-  /* Radius */
-  --radius-xs: 4px;
-  --radius-sm: 8px;
-  --radius-md: 12px;
+  /* Shape */
+  --radius-xs: 2px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
   --radius-lg: 16px;
-  --radius-xl: 20px;
-  --radius-pill: 999px;
 
   /* Motion */
-  --duration-fast: 120ms;
-  --duration-base: 200ms;
-  --duration-slow: 360ms;
-  --ease-default: cubic-bezier(0.2, 0, 0, 1);
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur-fast: 140ms;
+  --dur-base: 220ms;
+  --dur-slow: 420ms;
 
-  /* Shadows — restrained */
-  --shadow-sm: 0 1px 2px rgba(15, 20, 25, 0.04), 0 1px 1px rgba(15, 20, 25, 0.04);
-  --shadow-md: 0 4px 12px rgba(15, 20, 25, 0.06), 0 1px 3px rgba(15, 20, 25, 0.08);
-  --shadow-focus: 0 0 0 3px var(--color-focus-ring);
-
-  /* Z */
+  --header-h: 4.25rem;
   --z-header: 50;
-  --z-nav: 40;
 }
 
-/* — Dark theme tokens — polished, not inverted */
 :root[data-theme="dark"] {
-  --color-canvas: #09090b;
-  --color-surface: #111113;
-  --color-surface-raised: #1a1a1e;
-  --color-surface-hover: #212126;
-  --color-border: #232326;
-  --color-border-strong: #2e2e32;
-  --color-border-faint: #1a1a1e;
-  --color-text: #f4f4f5;
-  --color-text-muted: #a1a1aa;
-  --color-text-faint: #94969c;
-  --color-text-inverse: #09090b;
-  --color-accent: #4f7cff;
-  --color-accent-hover: #6b8fff;
-  --color-accent-pressed: #3b5bdb;
-  --color-accent-soft: #151c30;
-  --color-accent-soft-hover: #1d2540;
-  --color-focus: #4f7cff;
-  --color-focus-ring: rgba(79, 124, 255, 0.45);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.5);
-  --shadow-focus: 0 0 0 3px var(--color-focus-ring);
+  color-scheme: dark;
+
+  --bg: #11100e;
+  --bg-raised: #171613;
+  --bg-sunk: #0b0a09;
+  --ink: #f4f0e6;
+  --ink-soft: #b5ae9f;
+  --ink-faint: #8a8375;
+  --line: #2b2823;
+  --line-strong: #3d3831;
+
+  --accent: #ff6a3a;
+  --accent-hover: #ff875f;
+  --on-accent: #11100e;
+  --accent-wash: #2b1a12;
+
+  --status-live: #5fd08a;
+  --status-building: #e9a23b;
+
+  --focus: #ff6a3a;
+  --shadow: 0 0 0;
 }
 
-/* System preference fallback when no explicit data-theme is set (FOUC window before JS) */
+/* Fallback for the rare no-JS first paint. The inline theme script sets
+   data-theme before paint in normal use. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
-    --color-canvas: #09090b;
-    --color-surface: #111113;
-    --color-surface-raised: #1a1a1e;
-    --color-surface-hover: #212126;
-    --color-border: #232326;
-    --color-border-strong: #2e2e32;
-    --color-border-faint: #1a1a1e;
-    --color-text: #f4f4f5;
-    --color-text-muted: #a1a1aa;
-    --color-text-faint: #94969c;
-    --color-text-inverse: #09090b;
-    --color-accent: #4f7cff;
-    --color-accent-hover: #6b8fff;
-    --color-accent-pressed: #3b5bdb;
-    --color-accent-soft: #151c30;
-    --color-accent-soft-hover: #1d2540;
-    --color-focus: #4f7cff;
-    --color-focus-ring: rgba(79, 124, 255, 0.45);
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.5);
-    --shadow-focus: 0 0 0 3px var(--color-focus-ring);
-  }
-}
+    color-scheme: dark;
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  :root {
-    --duration-fast: 0.01ms;
-    --duration-base: 0.01ms;
-    --duration-slow: 0.01ms;
+    --bg: #11100e;
+    --bg-raised: #171613;
+    --bg-sunk: #0b0a09;
+    --ink: #f4f0e6;
+    --ink-soft: #b5ae9f;
+    --ink-faint: #8a8375;
+    --line: #2b2823;
+    --line-strong: #3d3831;
+
+    --accent: #ff6a3a;
+    --accent-hover: #ff875f;
+    --on-accent: #11100e;
+    --accent-wash: #2b1a12;
+
+    --status-live: #5fd08a;
+    --status-building: #e9a23b;
+
+    --focus: #ff6a3a;
+    --shadow: 0 0 0;
   }
 }

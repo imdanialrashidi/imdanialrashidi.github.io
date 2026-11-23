@@ -1,65 +1,95 @@
-# Product Contract — Danial Rashidi Personal Site
+# Product Contract: Danial Rashidi Personal Site
 
-Source of truth for what the shipped product must do. Filled during bootstrap 2026-08-27 from repository evidence at `main` (Astro 7.2.4, `src/data/site.ts`, `src/content.config.ts`, `docs/DESIGN.md`, `docs/ARCHITECTURE.md`).
+Source of truth for what the shipped product must do. Updated 2026-11-23 for the English parity rebuild from repository evidence and the recorded verification bundle. System and trust boundaries live in [ARCHITECTURE.md](ARCHITECTURE.md); the visual contract lives in [DESIGN.md](DESIGN.md); the evidence bar lives in [QUALITY.md](QUALITY.md); stage status lives in [PLAN.md](PLAN.md); the rebuild's durable handoff is [exec-plans/active/english-parity-rebuild.md](exec-plans/active/english-parity-rebuild.md).
 
 ## Users and problem
-- Primary users: Hiring managers and recruiters scanning for a software & product builder; technical peers and product collaborators; Noveno-referred visitors.
-- Context, ability, language, and device assumptions: English LTR only (v1); technically literate readers; evergreen browsers (Chromium, Firefox, Safari) with keyboard + touch + pointer; viewports 320, 375, 780, 1280; system prefers-color-scheme and prefers-reduced-motion respected; no auth, no required account.
-- Problem being solved: No single, fast, verifiable hub answers in ~15 seconds who Danial is, what he builds and has shipped, how he thinks, and how to reach him without invented proof or scattered social links.
-- Current alternative / workaround: Scattered profiles (GitHub `imdanialrashidi`, X `@imdaniarshidi`, Instagram, Telegram) plus external `https://noveno.ir` link; no owned searchable site with curated case studies.
-- Why now: Portfolio must honestly represent six public projects (Fast English, Noveno, plus four Noveno client sites) with provenance and remain cheap to host as static HTML; Astro static on GitHub Pages satisfies this without backend.
+
+- Primary users: hiring managers and recruiters scanning for a software and product builder; technical peers and product collaborators; visitors referred from Noveno; English-speaking readers who need the English surface while the Persian sibling covers Persian.
+- Context and ability: English LTR, technically literate readers, evergreen browsers (Chromium, Firefox, Safari) with keyboard, touch and pointer; viewports 320, 375, 768 and 1280; system `prefers-color-scheme` and `prefers-reduced-motion` respected; no account, auth or required script.
+- Problem: no single fast English hub answers in about 15 seconds who Danial is, what he has built, what the work is like, and how to reach him, without invented proof or a scattered social trail. The Persian site at `https://danialrashidi.ir` is the Persian home and the source for this English rebuild; the two sites are siblings, not translations of each other.
+- Current alternative: scattered profiles (GitHub, X, Instagram, Telegram), the Persian site, and the external Noveno site.
+- Why now: the Persian site already carries the honest project record. The English rebuild presents the same work to an English audience with real screenshots, case studies, and a static setup that costs nothing to host.
+
+## Shipped product (v1, English)
+
+- 14 indexable routes plus a 404: `/`, `/work/`, `/work/noveno/`, `/work/fast-english/`, `/work/study/`, `/work/gym-log/`, `/work/elsa-hamrah/`, `/work/isbatab/`, `/work/mobile-khorsandi/`, `/work/php-ielts-house/`, `/travels/`, `/about/`, `/now/`, `/contact/`. Every URL uses the trailing-slash form.
+- Content: eight English case studies, four own products (Noveno, Fast English, Study Center, Gym Log) and four client sites (Elsa Hamrah, Isbatab, Mobile Khorsandi, PHP IELTS House); three travel notes (Dalakhani Valley, Dareh Marg, Yakh Morad Cave); rewritten About, Now and Contact pages.
+- Evidence: eight real screenshots from live or shipped work. A project with no public screen would render a typographic plate instead of an invented interface. Provenance is [src/assets/SOURCES.md](../src/assets/SOURCES.md). There are no invented metrics, screenshots or testimonials.
+- Design: editorial premium direction with a warm paper palette, Instrument Serif display type over Geist and Geist Mono, one vermilion accent, real screenshots as evidence, light and dark themes.
+- Delivery: static Astro 7.2.4 output on GitHub Pages at `https://imdanialrashidi.github.io`. No backend, database, form endpoint, analytics, cookies, auth, CMS or secrets. Contact is `mailto:` plus public profiles.
 
 ## MVP outcome
-- Measurable outcome: Visitor can in ≤15 seconds articulate focus — “Software & Product Builder — Web · AI · Automation · Product Engineering, Building Noveno” — and reach `/work` or `/contact` in one click. Lab targets LCP ≤2.5 s, CLS ≤0.1 on 1280 and 375 (see Performance budgets below).
-- Riskiest product assumption: Honest case studies with explicit limitations and real screenshots (no invented metrics, traffic, or testimonials) still convey credibility to hiring managers versus polished, metric-heavy portfolios.
-- Smallest experiment that tests it: Ship static site with two featured product efforts (Fast English `in_progress`, Noveno `building`) and four client web profiles (Elsa Hamrah, Isbatab, Mobile Khorsandi, PHP IELTS House) with real hero screenshots (`src/assets/work/SOURCES.md`), mailto CTA, and measure inbound email/click-through vs. prior scattered links.
-- Deadline / hard constraints: No calendar deadline. Must remain static HTML only (`output: static`, `trailingSlash: never`), zero framework runtime, no backend, no analytics/RUM v1, no CMS per brief, Geist fonts vendored to `public/fonts` (no CDN), no invented proof.
-- Supported platforms and environments: GitHub Pages `https://imdanialrashidi.github.io` static; source `main`, build `node scripts/generate-og.mjs && astro build` → `dist/`; Node ≥22.19 (CI pins 22.23.2); Astro 7.2.4 + TypeScript 5.9 strict via `astro check`; no server, no DB.
+
+- Measurable outcome: a visitor can state the focus in about 15 seconds and reach `/work/` or `/contact/` in one click from the hero. Lab targets are LCP ≤ 2.5 s and CLS ≤ 0.1 on 1280 and 375, with WCAG 2.2 AA as the accessibility target.
+- Riskiest product assumption: honest case studies with explicit limits and real screenshots still convey credibility to hiring managers better than polished, metric-heavy portfolios. Status: assumed. No analytics or funnel instrument exists, so the assumption stays unmeasured until real conversation or email evidence arrives.
+- Smallest experiment that tests it: ship the English rebuild, watch direct email and conversation quality, and read owner feedback. There is no tracker by design, so this is a qualitative signal rather than a metric.
+- Hard constraints: static HTML only (`output: "static"`, `trailingSlash: "always"`), zero external JavaScript chunks, Node ≥ 22.19, no backend or tracker, no invented proof, generated social cards and icons committed to the repository.
 
 ## Must-have user flows
-1. Land and orient — Visitor lands on `/` → reads hero eyebrow/title/lede/capabilities/principles → clicks “View selected work” (`/work`) or “Get in touch” (`/contact`) without horizontal scroll at 320.
-2. Evaluate work — Visitor opens `/work` → sees featured deep-work section (2) and selected client work grid (4) → opens any `/work/<id>` profile → reads Problem / What was built / Status / Limitations / Sources with real hero screenshot, follows outbound live link (`links.live`/`links.noveno`) or returns to index.
-3. Contact — Visitor opens `/contact` → copies or activates `mailto:imdanialrashidi@gmail.com` (primary) → follows secondary links (GitHub, X, Instagram, Telegram, noveno.ir) with `rel="me noopener noreferrer"` where applicable; no form POST.
+
+1. Land and orient: `/` shows the identity hero, capabilities and principles, selected work with real screenshots, travel notes, and a closing contact band. "See the work" and "Start a conversation" are one click away.
+2. Evaluate work: `/work/` lists eight projects, four own products and four client sites, each with a real preview, an honest status and a link. `/work/<slug>/` renders the Markdown case study, the stack, the honest limits and the next project.
+3. See the human side: `/travels/` shows three travel notes with real photographs. `/about/` covers background, working style and direction. `/now/` records the current focus and a "last updated" date.
+4. Contact: `/contact/` leads with the direct email, then public profiles, with explicit "No form, no tracker" copy. There is no POST surface.
+5. Recover: `/404.html` is a noindex page with recovery links to Work, Travels, About and Contact, plus the email.
 
 ## Non-goals
-- Blog/notes under `/writing` (deferred until cadence exists)
-- CMS, database, authentication, newsletter, or backend contact service (explicitly deferred; mailto suffices)
-- Analytics or RUM instrumentation v1 (deferred per brief)
-- Heavy animation, WebGL/particles, scroll-jacking, glassmorphism, or framework islands (rejected per ARCHITECTURE.md)
-- Tailwind / CSS-in-JS or client-side data fetching (monochrome tokens in `src/styles/tokens.css` remain authoritative)
+
+- `/writing` or a blog/notes section until a writing cadence exists.
+- CMS, database, authentication, newsletter or a backend contact service. `mailto:` is the contact path.
+- Analytics, RUM, pixels or any tracker in v1.
+- Framework islands, a client router, Tailwind, CSS-in-JS, WebGL, particles, scroll-jacking or decorative motion.
+- A Persian mirror or `hreflang` cluster on this domain. The content sets are not 1:1. The Persian site remains the Persian home and is linked with `lang="fa"`; revisit only when every page has a true twin.
+- Mirroring the Persian support page. The Persian site owns support; this site does not collect money or support details.
+- A custom domain or CNAME. The `username.github.io` origin is the published URL.
 
 ## Acceptance criteria
-- [x] Home `/` renders hero (eyebrow, `clamp(2.125rem,5vw,3.5rem)` display, lede, CTAs, meta) plus portrait `Assets/Danial_photo.webp` via `astro:assets` at 1280/375/320 without layout shift or horizontal overflow
-- [x] Work index `/work` derives count and grouping from `src/content/projects/*.md` via `getDisplayProjects()` / `getFeaturedProjects()` / `getClientProjects()` — 2 featured + 4 client profiles, honest “Details coming soon” where `hasVisual` is false
-- [x] Each `/work/<id>` page derives props via `cardPropsFor` / `imageFor` / `statusLabelFor` / `hrefFor` with blocked `javascript:` caseStudy links ( zod refine in `src/content.config.ts`) and provenance noted in `src/assets/work/SOURCES.md`
-- [x] Contact `/contact` exposes primary `mailto:` and secondary outbound links, states “No form · No tracker · Direct”, no backend POST surface
-- [x] Theme persists via `localStorage` `theme=light|dark`, FOUC prevented by inline `is:inline` script before paint, respects `prefers-color-scheme`, toggle preserves `aria-pressed`; reduced-motion disables animations
-- [x] SEO baseline: canonical `new URL(Astro.url.pathname, site.url)`, unique title ≤60 chars and description 120–160 chars per indexable page, robots meta with `max-image-preview:large, max-snippet:-1`, OG/Twitter (`og:type=article` on case studies), one JSON-LD `@graph` per page (`WebSite`, `Person`, `WebPage`, plus `ProfilePage`/`ContactPage`/`CollectionPage`+`ItemList`/`BreadcrumbList` per page), `robots.txt`, `sitemap-index.xml` via `@astrojs/sitemap`, 404 editorial page served as `404.html` with recovery links; drift guarded by `tests/seo-metadata.test.mjs`
-- [x] Draft posts (`status: draft`) excluded from display via `isDraft` filter; “building”/“in_progress” mapped to visible labels
 
-## Security, privacy, and compliance constraints
-- Data classification: Public only — name, email (`imdanialrashidi@gmail.com`), portfolio copy, public screenshots, vendored Geist fonts and portrait. No sensitive PII, no secrets in repo; `.env.example` contains only placeholder `APP_ENV`.
-- Critical access rules: No authentication. Write path is Author → Git → CI (`npm run check` + `npm run build`) → Pages (`actions/deploy-pages`). Visitor is read-only static. Theme stored in `localStorage` (`theme`), no cookie or server session. External links use `noopener noreferrer`; `caseStudy` links validated against `javascript:` at schema level.
-- External/payment providers: None. Outbound links only to `github.com`, `x.com`, `instagram.com`, `t.me`, `noveno.ir`, and live client domains; no payment, callback, or subscription flow.
-- Retention/deletion requirements: Git is source of truth; `dist/` is ephemeral and rebuilt via `npm run build`. `public/fonts` and `Assets/Danial_photo.webp` are committed. Visitor can clear `localStorage` to reset theme.
+Evidence for the shipped state is the recorded bundle of 2026-11-23; see [QUALITY.md](QUALITY.md) for commands and exact outputs. Statuses below use the same labels as the evaluator rubric.
+
+| ID | Criterion | Evidence | Status |
+| --- | --- | --- | --- |
+| A1 | 14 indexable routes plus 404; canonical, sitemap and internal links all use the trailing-slash form | `node scripts/check-built-site.mjs`: 14 page URLs in sitemap, every one in trailing-slash form | PASS |
+| A2 | Eight case studies (four product, four client) and three travel notes pass the content schema and the project invariants | `npm test` (18 tests) and `npm run check` (0 errors, 0 warnings, 0 hints) | PASS |
+| A3 | Honest evidence: eight real screenshots, provenance in SOURCES.md, no invented metrics or testimonials | `tests/projects.test.mjs` cover 1:1 and body rules; `src/assets/SOURCES.md` | PASS |
+| A4 | Design contract matches the shipped editorial system and its states | `docs/DESIGN.md`; rendered acceptance follows [VISUAL_REVIEW.md](VISUAL_REVIEW.md) | PASS at document level |
+| A5 | SEO baseline: canonical, robots meta, sitemap, robots.txt, per-page social card, manifest and icons, one JSON-LD `@graph` per page, `rel="me"`, 404 noindex and sitemap exclusion | `node scripts/check-built-site.mjs` and `tests/seo-metadata.test.mjs` | PASS |
+| A6 | Static performance: zero external JavaScript chunks, external hashed CSS, 103K vendored fonts, lab Lighthouse home desktop 100/100/100/100 and mobile 99/100/100/100 | Recorded lab run of 2026-11-23; see QUALITY.md | PASS as lab evidence; field data UNPROVEN |
+| A7 | Accessibility: WCAG 2.2 AA target, Lighthouse accessibility 100 on `/`, `/work/`, `/work/noveno/`, `/about/` and `/contact/` | Recorded lab run of 2026-11-23 | PASS on audited routes; manual AT and cross-browser UNPROVEN |
+| A8 | Contact is email first with public profiles second, no form and no tracker | `src/pages/contact.astro` (mailto only, no form element) and the built contact page | PASS |
+| A9 | 404 is noindex, offers recovery links, and is excluded from the sitemap | `node scripts/check-built-site.mjs` | PASS |
+| A10 | Static-only contract: no external JS, analytics, cookies, backend, CMS, auth or secrets | Built artifact, `package.json` dependency set, static-first assertions in `tests/projects.test.mjs` | PASS |
+| A11 | Activation and funnel behaviour | No instrumentation by decision | UNPROVEN (open decision) |
+| A12 | Cross-browser visual parity in Chromium, Firefox and Safari | Recorded lab evidence is Chromium headless only | UNPROVEN |
+
+## Security, privacy and compliance constraints
+
+- Data classification: public only. Name, public email, public social links, project copy, public screenshots, public portrait and photographs, and vendored fonts. No sensitive PII, no private logs, no customer data, no secrets in the repository; `.env.example` is a placeholder.
+- Boundaries: Author -> Git -> CI -> GitHub Pages -> visitor. The visitor is read-only static; the only browser storage is the `theme` key in `localStorage`; there is no cookie, session, form POST or server.
+- External links: outbound to GitHub, X, Instagram, Telegram, the Persian site, Noveno, and live client and product sites. No payment, subscription, callback or third-party script.
+- Retention and recovery: Git is the source of truth; `dist/` is ephemeral; generated cards and icons are committed; rollback is `git revert` plus a Pages redeploy.
 
 ## Performance and UX budgets
-- Core page/API target: Core Web Vitals `good` at 75th percentile as targets — LCP ≤2.5 s, INP ≤200 ms, CLS ≤0.1. Lab measured via `npm run build && npm run preview --port 4321` + Lighthouse manually (field data/RUM not yet present; see Deferred decisions).
-- Supported device/network baseline: Viewports 320, 375, 780, 1280 verified (no overflow); touch targets 36–44 px; evergreen browsers; no IE. Font budget Geist 69K + Geist Mono 70K (139K) vendored, preload Sans only, `font-display: swap`. CSS 23K foundation (7K tokens + 16K global) shipped ~90K inlined via `build.inlineStylesheets: "always"` after plan 013. JS 0 external + ~2K inline (theme + nav). Portrait source `Assets/Danial_photo.webp` 85K → 4 responsive `dist/_astro/Danial_photo.*.webp` variants. OG default `public/og-default.png` 30.8K (1200×630, regenerated by `scripts/generate-og.mjs`).
-- Accessibility target: WCAG 2.2 AA — text ≥4.5:1, large/UI ≥3:1 (tokens measured in DESIGN.md), reflow at 320 CSS px, 200% zoom, visible `:focus-visible` ring `rgba(15,76,255,0.4)`, skip-link, header `role=dialog aria-modal` with `aria-expanded`, Escape + click-away + resize listener, ThemeToggle `aria-pressed`.
-- Brand character (x, not y): Calm & precise, not noisy; technically literate, not buzzword AI; editorial restraint, not generic SaaS/gradient/cyberpunk.
-- Visual ambition (utility / product / flagship): Product-level — editorial × engineering with considered tokens, composition, and states, not flagship experimental. Single electric blue `#0f4cff`/`#4f7cff` over monochrome canvas is the only chromatic signal.
-- Required locales and directions (LTR/RTL): English LTR only v1 (`site.language: en`, `locale: en_US`); logical properties used for future RTL readiness; no translation infrastructure.
-- Link to accepted visual contract: `docs/DESIGN.md` (editorial thesis, token tables, geometry, components, screen acceptance).
+
+- Field targets: Core Web Vitals `good` at the 75th percentile (LCP ≤ 2.5 s, INP ≤ 200 ms, CLS ≤ 0.1). No RUM or field data exists; the measured numbers are lab evidence only and must be labelled that way.
+- Static build budget: 15 pages; dist under 5MB including 14 social cards and 97 image variants; largest HTML 46K and all HTML 434K; fonts 103K vendored; zero external JavaScript chunks; five inline script elements on content pages (theme FOUC guard, theme behavior, mobile dialog, JSON-LD, speculation rules); external hashed CSS; `sharp` used offline at build and asset-generation time only.
+- Enforced budgets in `scripts/check-built-site.mjs`: sitemap 14 URLs; total HTML under 700K; no image over 300K; dist under 8MB; no external JS; every page links the external stylesheet; canonical and sitemap agree.
+- UX targets: WCAG 2.2 AA; reflow at 320 CSS px; 200% text zoom; visible focus; light and dark themes; reduced motion respected; no horizontal overflow at 320, 375, 768 and 1280.
+- Brand character (x, not y): calm and precise, not noisy; technically literate, not buzzword AI; editorial restraint, not generic SaaS or gradient cyberpunk. The warm paper palette with one vermilion signal is the only chromatic move.
 
 ## Measurement and operations
-- Activation / success event: Visitor clicks “View selected work” or “Contact/Get in touch” / activates mailto, and can state focus without confusion (hero → work/contact funnel).
-- Guardrail metrics: `npm run check` (astro check strict) and `npm run build` must pass locally and in CI (`deploy.yml`, `quality.yml`); no browser console errors; layout-stable at 320; `robots.txt` and `sitemap-index.xml` valid; OG image present at `/og-default.png`.
-- Required product telemetry: UNKNOWN — none v1 by decision. Manual Lighthouse preview is the lab budget; no analytics endpoint is shipped. See Open product decisions for RUM plan.
-- Support / recovery expectation: Copy on `/contact` promises response within a day or two via email. Rollback is `git revert` + redeploy; previous `main` remains deployable. No DB to migrate; `dist/` rebuilt deterministically. GitHub Pages artifact is `dist/` via `actions/upload-pages-artifact`.
+
+- Activation and success event: a visitor reaches the work index or sends an email. There is no client-side event; email and conversation are the only signals.
+- Guardrails: `bash scripts/verify.sh` is the canonical gate (workflow pin, format, tests, type/content check, build, artifact check). CI runs it in `.github/workflows/quality.yml`; deployment runs `npm run check` and `npm run build` in `.github/workflows/deploy.yml`.
+- Telemetry: none, by decision. No analytics endpoint or RUM exists. See open decisions.
+- Support and recovery: email is the support path; rollback is revert plus redeploy; previous `main` remains deployable; no database to migrate; generated assets are reproducible with `npm run og` (local Chrome needed) and `npm run icons`.
 
 ## Open product decisions
-- Whether/when to add RUM/analytics (e.g., Plausible/Umami) and acceptable script budget without breaking zero-tracker promise on `/contact`.
-- Depth of long-form case studies for Fast English and Noveno once verifiable narrative/assets exist (without inventing outcomes).
-- Adding `/writing`/notes or a CMS once writing cadence justifies it.
-- Custom domain (CNAME) vs. `username.github.io` — would require updating `site.url`, `astro.config.mjs` `site`, canonical and sitemap, and re-verifying `.nojekyll`.
+
+- Field performance: decide whether RUM or analytics is worth breaking the no-tracker promise, and what script budget would be acceptable. Until then, lab evidence only.
+- Writing: add `/writing` or notes only when a writing cadence justifies the content and maintenance cost.
+- Custom domain: a CNAME would change `site.url`, canonical URLs, the sitemap, social card URLs and the Pages settings; revisit with a migration plan.
+- Persian parity and hreflang: no `hreflang` cluster today because the two content sets are not 1:1. Revisit only when every English page has a true Persian twin and the reverse mapping is stable.
+- Persian support page: not mirrored. If support is ever added in English, it must be a deliberate product decision, not a translated payment surface.
+- Client screenshot freshness: captures age. Regenerate screenshots and social cards when the owner supplies new captures; do not describe a current site from an old image.
+- Fast English status: the live website, public repository and Android 1.0.0 build are real as of 2026-11-24; revisit the label and case-study details if the product changes.

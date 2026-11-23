@@ -1,126 +1,67 @@
 ---
-import { social } from '../data/site.ts'
+import { site } from '../data/site.ts'
 import Layout from '../layouts/Layout.astro'
+
+const description =
+  'That page does not exist. Start from the work, the travels, or send an email directly: imdanialrashidi@gmail.com.'
 ---
 
-<Layout
-  title="Not found — Danial Rashidi"
-  description="The page you’re looking for doesn’t exist. Find your way back to Home, Work, and Contact."
-  noIndex
->
-  <section class="notfound">
-    <div class="container notfound__inner">
-      <div class="notfound__code">404</div>
-      <h1 class="notfound__title">This page doesn’t exist</h1>
-      <p class="notfound__desc">
-        The link may be broken, or the page may have been moved. Try one of these instead.
-      </p>
-      <div class="notfound__actions">
-        <a href="/" class="btn btn--primary">Go home</a>
-        <a href="/work" class="btn btn--ghost">View work</a>
-        <a href="/contact" class="btn btn--ghost">Contact</a>
-      </div>
-      <div class="notfound__meta">
-        <span>Need to reach me? </span>
-        <a href={`mailto:${social.email}`}>{social.email}</a>
-      </div>
-    </div>
+<Layout title="Page not found" description={description} noIndex>
+  <section class="not-found container">
+    <p class="eyebrow eyebrow--accent">404</p>
+    <h1 class="h1 not-found__title">Wrong turn.</h1>
+    <p class="lede not-found__lede">
+      The page you asked for is not here. It may have moved, or never existed
+      in the first place. These are the routes that do.
+    </p>
+    <ul class="not-found__links">
+      <li><a class="link" href="/work/">See the work</a></li>
+      <li><a class="link" href="/travels/">Travel notes</a></li>
+      <li><a class="link" href="/about/">About me</a></li>
+      <li><a class="link" href="/contact/">Contact</a></li>
+    </ul>
+    <p class="not-found__email">
+      Or go straight to <a href={`mailto:${site.email}`}>{site.email}</a>.
+    </p>
   </section>
 </Layout>
 
 <style>
-  .notfound {
-    padding: clamp(3rem, 10vw, 6rem) 0;
+  .not-found {
     display: grid;
-    place-items: center;
-    min-height: 48dvh;
+    gap: 1.25rem;
+    padding-block: clamp(4rem, 10vw, 8rem);
+    max-width: 44rem;
   }
 
-  .notfound__inner {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-4);
+  .not-found__title {
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: 0.92;
   }
 
-  .notfound__code {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--color-text-faint);
-    background: var(--color-surface-raised);
-    border: var(--border-hairline);
-    padding: var(--space-1) var(--space-3);
-    border-radius: var(--radius-pill);
+  .not-found__lede {
+    max-width: 32rem;
   }
 
-  .notfound__title {
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    letter-spacing: var(--tracking-tight);
-    line-height: var(--leading-tight);
-  }
-
-  .notfound__desc {
-    font-size: var(--text-md);
-    line-height: var(--leading-normal);
-    color: var(--color-text-muted);
-    max-width: 38ch;
-  }
-
-  .notfound__actions {
-    margin-top: var(--space-2);
+  .not-found__links {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-3);
-    justify-content: center;
+    gap: 0.5rem 2rem;
+    list-style: none;
+    padding: 1.25rem 0 0;
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--line);
   }
 
-  .btn {
+  .not-found__links a {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    padding: 0.68rem 1.15rem;
-    font-size: var(--text-sm);
-    font-weight: var(--font-weight-medium);
-    border-radius: var(--radius-pill);
-    border: var(--border-hairline);
-    transition: background var(--duration-fast) var(--ease-default),
-      color var(--duration-fast) var(--ease-default),
-      border-color var(--duration-fast) var(--ease-default);
+    min-height: 2.75rem;
+    font-size: var(--text-lg);
   }
 
-  .btn--primary {
-    background: var(--color-text);
-    color: var(--color-canvas);
-    border-color: var(--color-text);
-  }
-  .btn--primary:hover {
-    background: color-mix(in srgb, var(--color-text) 88%, var(--color-accent));
-  }
-  .btn--ghost {
-    background: var(--color-surface);
-    color: var(--color-text);
-  }
-  .btn--ghost:hover {
-    background: var(--color-surface-hover);
-    border-color: var(--color-border-strong);
-  }
-
-  .notfound__meta {
-    margin-top: var(--space-6);
+  .not-found__email {
+    color: var(--ink-soft);
     font-size: var(--text-sm);
-    color: var(--color-text-faint);
-  }
-  .notfound__meta a {
-    color: var(--color-text);
-    text-decoration: underline;
-    text-decoration-color: var(--color-border-strong);
-    text-underline-offset: 3px;
-  }
-  .notfound__meta a:hover {
-    color: var(--color-accent);
-    text-decoration-color: var(--color-accent);
   }
 </style>

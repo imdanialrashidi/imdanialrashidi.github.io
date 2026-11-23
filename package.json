@@ -3,17 +3,19 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Danial Rashidi — Software & Product Builder",
+  "description": "Danial Rashidi \u2014 Software & Product Builder",
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/generate-og.mjs && astro build",
+    "build": "astro build",
     "preview": "astro preview --port 4321",
     "check": "astro check",
-    "typecheck": "astro check",
     "ci": "npm run check && npm run build",
+    "test": "node --test tests/projects.test.mjs tests/seo-metadata.test.mjs",
     "lint": "biome lint ./src ./scripts",
     "format": "biome format ./src ./scripts",
-    "format:check": "biome check ./src ./scripts"
+    "format:check": "biome check ./src ./scripts",
+    "og": "node scripts/generate-og.mjs",
+    "icons": "node scripts/generate-icons.mjs"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",

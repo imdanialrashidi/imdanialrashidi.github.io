@@ -1,85 +1,42 @@
-# Pi → OMP migration
+# Workflow migration record
 
-## Pinned inputs
+This file records how the repository's agent workflow moved between harness generations. It is history and decision context; [WORKFLOW.md](WORKFLOW.md) is the current source of truth for the workflow pin and update procedure.
 
-- Source: `imdanialrashidi/pi-production-workflow-template` at
-  `40d1c630fdea3acbd29dbb1c7a68e3bd2efb0477` (77 files).
-- Runtime: OMP `v18.0.6`, commit `b4e8e856ad40294167679a3f88417c07429fe59b`.
-- Destination: `imdanialrashidi/omp-production-workflow-template`.
+## DSH Workflow v0.2 (2026-11-23)
 
-The complete machine-readable inventory is [migration-map.json](../.omp/migration-map.json).
-Every original file has its blob identity, disposition, destination(s) and reason.
-No private profile information is part of this template.
+**Source:** [imdanialrashidi/dsh-workflow](https://github.com/imdanialrashidi/dsh-workflow) v0.2 at `cb887ce9da9708fd84e22fd31250d937abb8b824`.
 
-## Invariants retained
+### What changed
 
-The four task classes, acceptance criteria, one writer, bounded delegation,
-test-value gate, independent oracle, red-before-green proof, two repair rounds,
-truthful evidence vocabulary, visual product/studio passes, craft thresholds,
-security/data boundaries, fixed PR lane, recovery and durable ExecPlans survive.
-Eight project prompts and seven focused skills remain after the native-surface
-audit. Three skills protect workflow evidence and four conditional domain skills
-cover accessibility, web performance, public technical SEO, and RTL/i18n without
-shipping duplicate browser, test, designer, or agent runtimes. Wrappers duplicated
-by OMP commands, bundled agents or the default system workflow were removed. All
-17 source eval IDs remain and now exercise native surfaces directly where their
-former wrapper disappeared.
+- Replaced the six-skill DSH Workflow v0.1 vendoring with the upstream v0.2 seven-skill set: `quick-fix`, `spec`, `build`, `verify`, `review`, `test-design`, and `production`. `verify` was rewritten to decide between verified, failed, and incomplete.
+- Added `.dsh/workflow.json`, which pins the upstream version, commit, retrieval date, and sha256 of every skill file. `scripts/verify-workflow.mjs` enforces the pin, the exact seven-skill set, the one-file-per-skill layout, and frontmatter name/description; `scripts/verify.sh` runs it.
+- Rewrote `AGENTS.md` as a short project map and moved workflow detail into [WORKFLOW.md](WORKFLOW.md). Removed the duplicated instructions that had diverged across `AGENTS.md`, `CONTRIBUTING.md`, `SECURITY.md`, `QUALITY.md`, and `GIT_POLICY.md`.
+- Resolved the unresolved merge conflicts that had left conflict markers in `AGENTS.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md`, `scripts/verify.sh`, `docs/ARCHITECTURE.md`, `docs/PLAN.md`, `docs/QUALITY.md`, `docs/GIT_POLICY.md`, and `docs/exec-plans/README.md`.
+- Replaced the automatic, standing PR-delivery policy with explicit authorization per action and target ([GIT_POLICY.md](GIT_POLICY.md)). Both duplicate delivery helpers (`scripts/ai-pr.mjs` and `scripts/pr.mjs`) and their tests were removed. This aligns the project with the DSH Workflow authority model.
+- Rebuilt `scripts/verify.sh` around the project's real lanes: conflict/whitespace checks, workflow and skill checks, `npm run format:check`, `npm test`, and `npm run ci`. `quality.yml` now runs that one canonical gate.
+- Added the `npm test` script and documented the full command set in [QUALITY.md](QUALITY.md).
 
-## Component decisions
+### Removed
 
-| Previous component | Decision | OMP-native replacement / retained gap |
-|---|---|---|
-| Ordinary build and quick-fix wrappers | Remove project command/skill | OMP default implementation workflow; bundled `sonic` or `task` when delegation adds value |
-| Discovery wrapper | Remove project command | Bundled `scout` |
-| Review and risk wrappers | Remove project command/skill/agent | Bundled `reviewer` and `security-reviewer`; project quality contract remains |
-| UI build/design-review wrappers and frontend skill | Remove | Bundled `designer` plus native `browser`; retain `docs/VISUAL_REVIEW.md` as an acceptance rubric, not a tool |
-| Plan, handoff and resume wrappers | Remove | Native `/plan`, `/handoff`, `/resume`, sessions and `todo` |
-| `p` launcher and model overlay example | Remove | Run `omp` directly; use native `/model`, `/setup`, `/settings` and CLI overlays |
-| `pi-sub-agent` | Remove package | Native `task` and bundled specialist roles |
-| `rpiv-todo` | Remove package | Native `todo` and plan mode |
-| `pi-lsp-adapter` | Remove package | Native LSP, diagnostics, semantic/AST tools |
-| `pi-web-search` | Remove package | Native web search/provider routing |
-| `pi-doc-search` | Remove default dependency | Installed types/source + primary URL/GitHub reads; optional native MCP only for a demonstrated gap |
-| `pi-mcp-adapter` | Remove package | Native MCP lifecycle and `xd://` discovery |
-| Playwright MCP server | Remove | Native browser; keep project Playwright tests when appropriate |
-| `harness_tools` dynamic loader | Remove | Native lazy devices/catalog |
-| Smart Read wrapper | Remove | Native structural reads and output artifacts; exact selectors for evidence |
-| Continuity capsule | Remove | Native session/compaction plus explicit ExecPlans |
-| Failure-only third-call block | Native adaptation | Native repeated-call steering + unchanged two-failure workflow stop rule |
-| Runtime Vision metadata | Remove | Native image blocks and explicit inspect/re-capture discipline |
-| `models.env`, Pi CLI flags | Remove | Native model roles and optional CLI config overlay |
-| Pi package integrity list | Replace | Reviewed OMP version/source/schema pin; no obsolete package list |
-| Safety guard | Port and extend | Repo policy not supplied by native approvals; covers native GitHub and `xd://` |
-| PR helper | Preserve | Native `github pr_push/pr_create` do not provide its scoped fixed-lane/CAS/receipt contract |
-| Affected router and project gates | Preserve | OMP executing a command is not dependency-aware verification selection |
-| RPC eval runner | Port | Terminal `agent_end`, not Pi `agent_settled`; preserve slash expansion |
+- The retired Pi/OMP runtime: `.pi/` (extensions, prompts, skills, settings, MCP and integrity records), the `p` launcher, `Dockerfile.pi`, `.dockerignore`, `PI_WORKFLOW_GUIDE.md`, and the Pi migration script.
+- Pi/OMP workflow scripts: `pi-doctor.sh`, `pi-provider.mjs`, `pi-sandbox.sh`, `verify-package-integrity.mjs`, `verify-affected.mjs`, `validate-project-context.mjs`, `run-workflow-evals.mjs`, and `scripts/lib/`.
+- The eval suite (`evals/`), its tests, and the related docs (`EVALUATION.md`, `VALIDATION.md`, `PROJECT_CONTEXT.md`, `TOOLING_SETUP.md`, `RESEARCH.md`, `RESEARCH_PI_BASELINE.md`).
+- The untracked-content backup directories under `.workflow-backups/` (335 tracked files), the historical `plans/` set, and Python bytecode.
+- Twelve test files that exercised removed runtime machinery. `tests/projects.test.mjs` and `tests/seo-metadata.test.mjs` remain and cover the product.
+- The lockfile's mirror-hosted `resolved` URLs were normalized to `registry.npmjs.org` (386 entries) so the documented `npm ci` path works under npm 12's default remote-tarball policy. No package version or integrity hash changed; a clean install from the public registry succeeded under both npm 12.2.3 and the CI runtime (Node 22.23.2 / npm 10.9.8).
+- Removed the stale `frontend-design` entry from `skills-lock.json`; the installed registry-managed domain skills are `accessibility`, `astro`, and `seo`.
 
-## Deliberate non-equivalences
+### Retained
 
-- Native `/plan`, `/handoff` and `/resume` keep their meanings; review uses the
-  bundled `reviewer`. The eight remaining project prompts are uniformly prefixed
-  `wf-`; undocumented shell-style `${ARGUMENTS:-...}` is replaced with supported
-  `$ARGUMENTS` and explicit fallback prose.
-- Native planning can forbid writing `docs/exec-plans/` while active. Use its
-  plan file and transfer durable state after approved exit; never bypass the guard.
-- Native repeated-call steering is not a failure-only hard block. Do not claim
-  mechanical equivalence; validate the two-attempt policy on real failure cases.
-- Native browser/eval execute broad code. They require approval in normal mode
-  and are denied in strict/default eval mode. This intentionally avoids treating
-  page-only Playwright permissions as sufficient for the new runtime.
-- The bundled reviewer has Bash in OMP 18.0.6. The project no longer shadows it;
-  native agent instructions, the project guard and the one-active-writer policy
-  define the remaining boundary.
-- Native GitHub operations remain useful for reads, but mutations cannot bypass
-  the reviewed PR helper. Native cloud security scans do not imply permission to
-  transmit repository data or create external findings.
-- Canonical OMP environment variables can retain a `PI_` prefix upstream
-  (`PI_CODING_AGENT_DIR`). Do not mechanically rename genuine native APIs.
+- Product contracts: `PRODUCT.md`, `DESIGN.md`, `ARCHITECTURE.md`, `PLAN.md`, and the active execution plan.
+- The static Astro site, its content schemas, product tests, deployment workflow, and design tokens.
+- Registry-managed domain skills in `.agents/skills/` and `skills-lock.json`.
+- Historical Pi/OMP notes in `CHANGELOG.md` as changelog history.
 
-## Upgrade and rollback
+### Rollback
 
-Update the source pin and schema snapshot together, review native API changes,
-run deterministic and native discovery checks, then compare repeated matched-model
-trials. Do not claim output quality improved from dependency count alone.
-Keep the preceding verified Git commit/tag as the recovery point; rollback is an
-owner-authorized normal revert, never a destructive reset or force push.
+Git history is the recovery point. The state immediately before this migration is commit `3124ca2`; restore any removed file from that commit or revert this migration commit. No remote history was rewritten, no package version changed, and no deployment occurred as part of this work.
+
+### Verification
+
+`bash scripts/verify.sh` after the migration: workflow lock, syntax, skill frontmatter, format check, 15 product tests, `astro check`, and the static build. The exact outcomes are recorded in the migration handoff.

@@ -1,0 +1,81 @@
+---
+import type { ProjectEntry } from '../lib/work.ts'
+
+interface Props {
+  entry: ProjectEntry
+  compact?: boolean
+}
+
+const { entry, compact = false } = Astro.props
+---
+
+<div
+  class:list={["plate", { "plate--compact": compact }]}
+  role="img"
+  aria-label={`${entry.data.title}: no screenshot available, shown as a typographic plate`}
+>
+  <span class="plate-kicker">{entry.data.kicker}</span>
+  <span class="plate-title">{entry.data.title}</span>
+  <span class="plate-foot">
+    <span>{entry.data.year}</span>
+    <span class="plate-status">{entry.data.statusLabel}</span>
+  </span>
+</div>
+
+<style>
+  .plate {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.5rem;
+    aspect-ratio: 16 / 10;
+    padding: clamp(1rem, 2.5vw, 2rem);
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+
+  .plate-kicker,
+  .plate-foot {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--bg) 62%, transparent);
+  }
+
+  .plate-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--bg);
+  }
+
+  .plate-foot {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid color-mix(in srgb, var(--bg) 18%, transparent);
+  }
+
+  .plate--compact {
+    padding: 0.85rem;
+    gap: 0.5rem;
+  }
+
+  .plate--compact .plate-kicker {
+    display: none;
+  }
+
+  .plate--compact .plate-title {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+  }
+
+  .plate--compact .plate-foot {
+    font-size: 0.5625rem;
+    padding-top: 0.4rem;
+  }
+</style>

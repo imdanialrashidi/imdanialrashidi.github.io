@@ -31,6 +31,10 @@ Start from behavior and failure modes, not from file structure or coverage perce
 - Keep fixtures small and local. Do not share mutable global state between tests.
 - If a failure cannot be reproduced deterministically, report it as a limitation instead of writing a flaky test and calling it evidence.
 
+## When the suite can pass for the wrong reason
+
+Trace one assertion to the normal entry point and the observable state it reads. For a denied operation, check the protected record, queued work or file as applicable. For a retried operation, check the final effect count. Inspect filter selection, skipped cases, mocks and fixture changes together with the production diff. Compare a regression case on the unchanged base and candidate when safe. Record a missing baseline explicitly.
+
 ## High-risk coverage
 
 For security, data, migration, authorization, payment, or destructive-operation changes, require:

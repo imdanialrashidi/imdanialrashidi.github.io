@@ -1,0 +1,16 @@
+{
+  "name": "Danial Rashidi · Software & Product Builder",
+  "short_name": "Danial Rashidi",
+  "description": "Software and product builder in Iran. Products, client websites, and honest case studies.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6f2ea",
+  "theme_color": "#f6f2ea",
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

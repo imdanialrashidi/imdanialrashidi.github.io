@@ -1,509 +1,549 @@
 ---
 import { Image } from 'astro:assets'
-import portraitSrc from '../../Assets/Danial_photo.webp'
-import { site, social } from '../data/site.ts'
+import portrait from '../assets/portrait/danial-portrait.webp'
+import CtaBand from '../components/CtaBand.astro'
+import { site } from '../data/site.ts'
 import Layout from '../layouts/Layout.astro'
+import { HOME_TRAIL } from '../lib/seo.ts'
 
-const aboutSchema = [
+const description =
+  'Danial Rashidi is a software and product builder from Iran: client websites, products he owns, how he works, and life outside the editor.'
+
+const timeline = [
   {
-    '@type': 'ProfilePage',
-    url: new URL('/about', site.url).toString(),
-    isPartOf: { '@id': `${site.url}/#website` },
-    mainEntity: { '@id': `${site.url}/#person` },
+    year: '2024',
+    title: 'Client websites',
+    body: 'Four businesses: an online phone store, a safety inspection company, a second store, and a language institute in Karaj. Design and implementation, shipped.',
+    links: [
+      { label: 'Elsa Hamrah', href: '/work/elsa-hamrah/' },
+      { label: 'Isbatab', href: '/work/isbatab/' },
+      { label: 'PHP IELTS House', href: '/work/php-ielts-house/' },
+    ],
+  },
+  {
+    year: '2025',
+    title: 'Noveno and the move to products',
+    body: 'I started building my own systems instead of only client sites. Noveno is the umbrella: less talk, more working software, released in small pieces.',
+    links: [{ label: 'Noveno', href: '/work/noveno/' }],
+  },
+  {
+    year: '2026',
+    title: 'Products in use',
+    body: 'Study Center, Fast English, and Gym Log. Different platforms, the same rule: the thing has to run in the real world, not just in a plan.',
+    links: [
+      { label: 'Study Center', href: '/work/study/' },
+      { label: 'Fast English', href: '/work/fast-english/' },
+      { label: 'Gym Log', href: '/work/gym-log/' },
+    ],
+  },
+]
+
+const working = [
+  {
+    title: 'The real problem first',
+    body: 'I write down what is actually broken before writing any code. A feature that does not change the outcome gets cut.',
+  },
+  {
+    title: 'Working software early',
+    body: 'A runnable version gets tested against reality sooner. Plans are useful, but they are not evidence.',
+  },
+  {
+    title: 'AI as leverage',
+    body: 'I use coding models for research, implementation, and debugging, and I review what comes back. The judgement and the last check stay human.',
+  },
+  {
+    title: 'Simple enough to hand over',
+    body: 'Readable code and plain structure survive maintenance, and they are cheaper for whoever touches the project next.',
   },
 ]
 ---
 
 <Layout
-  title="About Danial Rashidi — Software & Product Builder"
-  description="Danial Rashidi is a software & product builder from Iran: background, how he works, current direction, and where AI fits into building systems that ship."
-  schema={aboutSchema}
+  title="About: software and product builder"
+  description={description}
+  path="/about/"
+  image="/og/about.jpg"
+  imageAlt="Portrait of Danial Rashidi, software and product builder"
+  pageType="AboutPage"
+  breadcrumbs={[HOME_TRAIL, { name: "About", href: "/about/" }]}
+  about={{ name: site.name, url: site.url }}
 >
-  <!-- Hero -->
-  <section class="about-hero">
-    <div class="container about-hero__inner">
-      <div class="about-hero__label">
-        <span class="about-hero__eyebrow">About</span>
-        <span class="about-hero__rule" aria-hidden="true"></span>
-        <span class="about-hero__meta">Iran · Student · Builder</span>
+  <header class="container about-hero">
+    <div>
+      <p class="eyebrow eyebrow--accent">About</p>
+      <h1 class="h1 about-hero__title">Danial Rashidi</h1>
+      <p class="lede about-hero__lede">
+        Software and product builder in Iran. I take a vague idea and turn it
+        into a system someone can use, then stay with it long enough to find out
+        whether it actually works.
+      </p>
+      <dl class="about-hero__facts">
+        <div>
+          <dt>Based in</dt>
+          <dd>{site.location}</dd>
+        </div>
+        <div>
+          <dt>Focus</dt>
+          <dd>Software, product, automation</dd>
+        </div>
+        <div>
+          <dt>Open to</dt>
+          <dd>{site.availability}</dd>
+        </div>
+        <div>
+          <dt>Right now</dt>
+          <dd>Noveno, Study Center, Fast English, Gym Log</dd>
+        </div>
+      </dl>
+    </div>
+    <figure class="about-hero__portrait">
+      <Image
+        src={portrait}
+        alt="Portrait of Danial Rashidi"
+        widths={[320, 480, 640]}
+        sizes="(max-width: 860px) 70vw, 320px"
+        format="webp"
+        quality={82}
+        loading="eager"
+        fetchpriority="high"
+        decoding="sync"
+      />
+      <figcaption>Danial Rashidi, {site.location}</figcaption>
+    </figure>
+  </header>
+
+  <section class="section" aria-labelledby="path-title">
+    <div class="container">
+      <h2 class="h2 about-section-title" id="path-title">The path so far</h2>
+      <p class="note">
+        Short version: client work taught me what a working system has to do,
+        product work taught me that nobody will tell you when it is finished.
+      </p>
+      <ol class="timeline">
+        {
+          timeline.map((item) => (
+            <li>
+              <span class="timeline__year">{item.year}</span>
+              <h3 class="timeline__title">{item.title}</h3>
+              <p class="timeline__body">{item.body}</p>
+              <ul class="timeline__links">
+                {item.links.map((link) => (
+                  <li>
+                    <a href={link.href}>{link.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="methods-title">
+    <div class="container methods">
+      <div class="methods__intro">
+        <h2 class="h2 about-section-title" id="methods-title">How I work</h2>
+        <p class="methods__text">
+          Calm, precise, and biased toward shipping. I care more about systems
+          that keep working than demos that look good once.
+        </p>
+        <p class="methods__text">
+          AI is part of the workflow: implementation, research, debugging, and
+          the repetitive parts of building. It is not part of the judgement.
+          Anything that models produce is reviewed before it ships, and nothing
+          is presented as verified because a tool suggested it.
+        </p>
       </div>
+      <ol class="methods__list">
+        {
+          working.map((item, i) => (
+            <li>
+              <span class="methods__num" aria-hidden="true">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <h3 class="methods__title">{item.title}</h3>
+              <p class="methods__body">{item.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
 
-      <div class="about-hero__grid">
-        <div class="about-hero__text">
-          <h1 class="about-hero__title">Danial Rashidi</h1>
-          <p class="about-hero__role">Computer Engineering student and software&nbsp;&amp; product builder.</p>
-          <p class="about-hero__lede">
-            I build practical software — web products, AI-assisted systems and automations — from vague idea to working implementation. I am interested in software, AI, products and entrepreneurship, and in turning ambiguity into something a person can actually use.
-          </p>
-        </div>
-
-        <div class="about-hero__media">
-          <figure class="about-hero__figure">
-            <Image
-              src={portraitSrc}
-              alt="Portrait of Danial Rashidi"
-              widths={[320, 480, 640]}
-              sizes="(max-width: 820px) 100vw, 360px"
-              loading="eager"
-              fetchpriority="high"
-              decoding="async"
-              class="about-hero__portrait"
-            />
-            <figcaption class="about-hero__caption">
-              <span class="about-hero__captionName">Danial Rashidi</span>
-              <span class="about-hero__captionMeta">Software & Product Builder · Iran</span>
-            </figcaption>
-          </figure>
-        </div>
+  <section class="section" aria-labelledby="now-title">
+    <div class="container now-block">
+      <div>
+        <h2 class="h2 about-section-title" id="now-title">What I am doing now</h2>
+        <p class="now-block__text">
+          Most of the week goes into Noveno and the products around it. Fast
+          English is in development, Study Center grows course by course, and
+          Gym Log is released and maintained. The now page records the current
+          state honestly.
+        </p>
+        <p class="now-block__links">
+          <a class="link" href="/now/">Read the now page</a>
+          <a class="link link--quiet" href="/work/">See the work</a>
+        </p>
+      </div>
+      <div>
+        <h2 class="h2 about-section-title">Beyond software</h2>
+        <p class="now-block__text">
+          Mountains, canyoning, camping, music, and street photography. I also
+          joined a cave survey for national registration, which is the closest
+          thing to software I have found: patient measurement, careful
+          teamwork, and respect for the thing you are mapping.
+        </p>
+        <p class="now-block__links">
+          <a class="link" href="/travels/">Travel notes and photos</a>
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- Body -->
-  <section class="about-body">
-    <div class="container about-body__inner">
-      <div class="about-body__grid">
-        <div class="about-body__main">
-          <section class="about-section" aria-labelledby="background-title">
-            <h2 id="background-title" class="about-section__title">Background</h2>
-            <div class="about-section__prose">
-              <p>
-                I am from Iran and study Computer Engineering. The path into product and software building was not a title change — it was a gradual move from writing code to owning the problem itself: what is being built, for whom, with what trade-offs, and how it stays maintainable.
-              </p>
-              <p>
-                I work across <strong>software products</strong>, <strong>web</strong>, <strong>AI-assisted software development</strong>, <strong>automation</strong> and <strong>practical product engineering</strong>. Most of the work I value lives at the intersection of engineering discipline and product judgment — not demo depth, but systems that survive real use.
-              </p>
-              <p>
-                The interest in AI, products and entrepreneurship is connected: each is leverage for the other. I explore practical automation and agent-assisted workflows specifically where they reduce repetitive work or clarify a business path, not as a style.
-              </p>
-            </div>
-          </section>
-
-          <section class="about-section" aria-labelledby="how-title">
-            <h2 id="how-title" class="about-section__title">How I work</h2>
-            <div class="about-section__prose">
-              <p>
-                I prefer calm, precise systems over noisy ones. A product is valuable when it becomes usable — the earlier it is runnable, the earlier it can be tested against reality. That means small releases, honest unknowns, and explicit responsibility for verification.
-              </p>
-              <p>
-                AI is part of the workflow — implementation, research, debugging, repetitive tasks and iteration go faster with it. But requirements, architecture, verification, testing and the final decision stay human. AI coding tools are leverage that must not replace verification or judgment. Nothing is presented as reviewed because a model approved it.
-              </p>
-            </div>
-            <ul class="about-principles" role="list">
-              <li class="about-principles__item">
-                <span class="about-principles__num">01</span>
-                <span class="about-principles__text"><strong>Solve the actual problem</strong> — avoid complexity that does not improve the outcome.</span>
-              </li>
-              <li class="about-principles__item">
-                <span class="about-principles__num">02</span>
-                <span class="about-principles__text"><strong>Ship working systems</strong> — ideas become valuable when they become usable.</span>
-              </li>
-              <li class="about-principles__item">
-                <span class="about-principles__num">03</span>
-                <span class="about-principles__text"><strong>Use AI as leverage</strong> — faster implementation should not mean weaker verification.</span>
-              </li>
-              <li class="about-principles__item">
-                <span class="about-principles__num">04</span>
-                <span class="about-principles__text"><strong>Keep systems understandable</strong> — readable, testable systems are easier to maintain and improve.</span>
-              </li>
-            </ul>
-          </section>
-
-          <section class="about-section" aria-labelledby="direction-title">
-            <h2 id="direction-title" class="about-section__title">Direction</h2>
-            <div class="about-section__prose">
-              <p>
-                The current direction is specific: become a stronger product engineer, build useful software, improve engineering foundations, and build <a href={social.noveno} target="_blank" rel="noopener noreferrer">Noveno</a> incrementally. Not a broad aspiration list — a few things done well and repeatedly, with evidence.
-              </p>
-              <p>
-                The longer aim is practical: more working products, better foundations in TypeScript, backend and product engineering, and systems that stay honest under real constraints — mobile, unstable network, limited tools.
-              </p>
-            </div>
-          </section>
-
-          <section class="about-section about-section--beyond" aria-labelledby="beyond-title">
-            <h2 id="beyond-title" class="about-section__title">Beyond software</h2>
-            <div class="about-section__prose">
-              <p>
-                Outside work I stay active — bodybuilding, the mountains, camping — and care about travel, music and exploring how technology and the near future evolve. Those interests keep the work grounded: life outside the editor is not separate from judgment inside it.
-              </p>
-            </div>
-          </section>
-        </div>
-
-        <aside class="about-aside" aria-label="At a glance">
-          <div class="about-card">
-            <div class="about-card__label">Focus</div>
-            <ul class="about-card__list" role="list">
-              <li>Software products</li>
-              <li>Web</li>
-              <li>AI-assisted development</li>
-              <li>Automation</li>
-              <li>Product Engineering</li>
-            </ul>
-          </div>
-
-          <div class="about-card">
-            <div class="about-card__label">Currently</div>
-            <ul class="about-card__list" role="list">
-              <li>Strengthening engineering foundations (TypeScript / backend / product)</li>
-              <li>Building Noveno — customer acquisition system</li>
-              <li>Shipping Fast English increments</li>
-            </ul>
-          </div>
-
-          <div class="about-card">
-            <div class="about-card__label">Elsewhere</div>
-            <div class="about-card__links">
-              <a href={social.github} target="_blank" rel="me noopener noreferrer">GitHub</a>
-              <a href={social.x} target="_blank" rel="me noopener noreferrer">X {social.xHandle}</a>
-              <a href={`mailto:${social.email}`}>{social.email}</a>
-              <a href={social.noveno} target="_blank" rel="noopener noreferrer">{social.noveno.replace("https://", "")} ↗</a>
-            </div>
-          </div>
-
-          <a href="/contact" class="about-aside__cta">Get in touch <span aria-hidden="true">→</span></a>
-          <p class="about-aside__note">No form, no tracker — direct contact. The fastest reply is email.</p>
-        </aside>
+  <section class="section" aria-labelledby="elsewhere-title">
+    <div class="container elsewhere">
+      <div>
+        <h2 class="h2 about-section-title" id="elsewhere-title">Elsewhere</h2>
+        <p class="note">
+          The quickest route is email. The rest is where the work and the photos
+          end up.
+        </p>
       </div>
+      <ul class="elsewhere__list">
+        <li>
+          <a href={`mailto:${site.email}`}>
+            <span class="elsewhere__label">Email</span>
+            <span class="elsewhere__value">{site.email}</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/imdanialrashidi" rel="me noopener">
+            <span class="elsewhere__label">GitHub</span>
+            <span class="elsewhere__value">github.com/imdanialrashidi</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://x.com/imdanialrashidi" rel="me noopener">
+            <span class="elsewhere__label">X</span>
+            <span class="elsewhere__value">@imdanialrashidi</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://instagram.com/imdanialrashidi" rel="me noopener">
+            <span class="elsewhere__label">Instagram</span>
+            <span class="elsewhere__value">@imdanialrashidi</span>
+          </a>
+        </li>
+        <li>
+          <a href={site.persianSite} hreflang="fa" lang="fa">
+            <span class="elsewhere__label">Persian site</span>
+            <span class="elsewhere__value">danialrashidi.ir</span>
+          </a>
+        </li>
+      </ul>
     </div>
   </section>
+
+  <CtaBand />
 </Layout>
 
 <style>
-  /* — Hero — */
   .about-hero {
-    padding: clamp(1.75rem, 5vw, 2.75rem) 0 clamp(1.5rem, 4vw, 2rem);
-    border-bottom: var(--border-hairline);
-    background:
-      linear-gradient(180deg, color-mix(in srgb, var(--color-accent-soft) 30%, transparent) 0%, transparent 58%),
-      radial-gradient(ellipse at 76% 0%, color-mix(in srgb, var(--color-border) 16%, transparent) 0%, transparent 52%);
-    position: relative;
-    overflow: clip;
-  }
-
-  .about-hero::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, var(--color-accent) 0%, transparent 42%);
-    opacity: 0.5;
-  }
-
-  .about-hero__inner {
-    position: relative;
-    max-width: var(--width-content);
-  }
-
-  .about-hero__label {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-weight: 700;
-    color: var(--color-text-faint);
-  }
-
-  .about-hero__eyebrow {
-    color: var(--color-text);
-  }
-
-  .about-hero__rule {
-    width: 28px;
-    height: 1px;
-    background: var(--color-border-strong);
-    opacity: 0.7;
-  }
-
-  .about-hero__meta {
-    font-weight: 600;
-    color: var(--color-text-faint);
-  }
-
-  .about-hero__grid {
-    margin-top: var(--space-6);
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
-    gap: clamp(1.5rem, 4vw, 3rem);
-    align-items: center;
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: end;
+    padding-top: clamp(2.5rem, 6vw, 5rem);
+    padding-bottom: clamp(2.5rem, 6vw, 4rem);
   }
 
   .about-hero__title {
-    font-size: clamp(2rem, 5vw, 3rem);
+    margin-top: 0.35rem;
+    font-size: clamp(3rem, 8vw, 6rem);
     line-height: 0.92;
-    letter-spacing: -0.032em;
-    font-weight: 680;
-  }
-
-  .about-hero__role {
-    margin-top: var(--space-3);
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    font-weight: 600;
-    color: var(--color-text-faint);
   }
 
   .about-hero__lede {
-    margin-top: var(--space-4);
-    font-size: clamp(1.02rem, 1.9vw, 1.15rem);
-    line-height: 1.65;
-    color: var(--color-text-muted);
-    max-width: 52ch;
+    margin-top: 1.25rem;
+    max-width: 36rem;
   }
 
-  .about-hero__figure {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-3);
-    max-width: 360px;
-    margin-inline: auto;
+  .about-hero__facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem 2rem;
+    margin-top: 1.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .about-hero__facts dt {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .about-hero__facts dd {
+    margin-top: 0.15rem;
+    color: var(--ink-soft);
+    font-size: var(--text-sm);
+    max-width: 22rem;
   }
 
   .about-hero__portrait {
+    display: grid;
+    gap: 0.6rem;
+    justify-self: end;
+    max-width: 22rem;
+  }
+
+  .about-hero__portrait img {
     width: 100%;
     height: auto;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: var(--radius-xl);
-    border: var(--border-hairline);
-    box-shadow: var(--shadow-sm);
-    display: block;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
   }
 
-  .about-hero__caption {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .about-hero__captionName {
-    font-size: var(--text-sm);
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--color-text);
-  }
-
-  .about-hero__captionMeta {
+  .about-hero__portrait figcaption {
     font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    color: var(--color-text-faint);
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
   }
 
-  @media (max-width: 820px) {
-    .about-hero__grid {
-      grid-template-columns: 1fr;
-    }
-    .about-hero__figure { max-width: 420px; }
-    .about-hero__portrait { aspect-ratio: 4 / 3; object-position: center 26%; }
+  .about-section-title {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    margin-bottom: 0.85rem;
   }
 
-  @media (max-width: 480px) {
-    .about-hero__figure { max-width: 100%; }
-  }
-
-  /* — Body — */
-  .about-body {
-    padding: clamp(1.5rem, 4vw, 2.5rem) 0 clamp(2.5rem, 6vw, 4rem);
-  }
-
-  .about-body__inner {
-    max-width: var(--width-content);
-  }
-
-  .about-body__grid {
+  .timeline {
+    list-style: none;
+    padding: 0;
+    margin-top: clamp(1.5rem, 4vw, 2.5rem);
     display: grid;
-    grid-template-columns: 1.58fr 0.82fr;
-    gap: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .timeline li {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr);
+    column-gap: clamp(1rem, 3vw, 2rem);
+    row-gap: 0.4rem;
+    padding-block: clamp(1.25rem, 3vw, 2rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .timeline li:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .timeline__year {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.5rem;
+    line-height: 1.1;
+    color: var(--accent);
+  }
+
+  .timeline__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.375rem, 2.2vw, 1.75rem);
+    line-height: 1.1;
+    color: var(--ink);
+  }
+
+  .timeline__body {
+    grid-column: 2;
+    color: var(--ink-soft);
+    font-size: var(--text-sm);
+    max-width: 40rem;
+  }
+
+  .timeline__links {
+    grid-column: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    list-style: none;
+    padding: 0.25rem 0 0;
+  }
+
+  .timeline__links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: fit-content;
+    min-height: 2.25rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .timeline__links a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .methods {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(2rem, 5vw, 5rem);
     align-items: start;
   }
 
-  .about-section + .about-section {
-    margin-top: clamp(1.5rem, 4vw, 2.25rem);
-    padding-top: clamp(1.5rem, 4vw, 2rem);
-    border-top: var(--border-hairline);
+  .methods__text {
+    color: var(--ink-soft);
+    margin-top: 1rem;
+    max-width: 34rem;
   }
 
-  .about-section--beyond {
-    background: var(--color-surface-raised);
-    border: var(--border-hairline);
-    border-radius: var(--radius-lg);
-    padding: var(--space-5) var(--space-6);
-    margin-top: clamp(1.5rem, 4vw, 2.25rem);
-  }
-
-  .about-section--beyond .about-section__title {
-    font-size: var(--text-lg);
-  }
-
-  .about-section__title {
-    font-size: clamp(1.2rem, 2.2vw, 1.45rem);
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    font-weight: 650;
-  }
-
-  .about-section__prose {
-    margin-top: var(--space-4);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-    max-width: 60ch;
-  }
-
-  .about-section__prose p {
-    font-size: var(--text-md);
-    line-height: 1.75;
-    color: var(--color-text-muted);
-  }
-
-  .about-section__prose a {
-    color: var(--color-accent);
-    text-decoration: underline;
-    text-decoration-color: color-mix(in srgb, var(--color-accent) 28%, transparent);
-    text-underline-offset: 3px;
-  }
-  .about-section__prose a:hover { color: var(--color-accent-hover); text-decoration-color: var(--color-accent); }
-  .about-section__prose strong { color: var(--color-text); font-weight: 600; }
-
-  .about-principles {
-    margin-top: var(--space-5);
+  .methods__list {
     list-style: none;
     padding: 0;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-3) var(--space-4);
-    max-width: 60ch;
   }
 
-  .about-principles__item {
+  .methods__list li {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    column-gap: 1rem;
+    row-gap: 0.35rem;
+    padding-block: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .methods__list li:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .methods__num {
+    grid-row: 1 / 3;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.35rem;
+    color: var(--accent);
+    line-height: 1.2;
+  }
+
+  .methods__title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+
+  .methods__body {
+    color: var(--ink-soft);
+    font-size: var(--text-sm);
+    max-width: 30rem;
+  }
+
+  .now-block {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  .now-block__text {
+    color: var(--ink-soft);
+    max-width: 32rem;
+  }
+
+  .now-block__links {
     display: flex;
-    gap: var(--space-3);
-    align-items: flex-start;
-    padding: var(--space-3);
-    background: var(--color-surface);
-    border: var(--border-hairline);
-    border-radius: var(--radius-md);
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin-top: 1rem;
   }
 
-  .about-principles__num {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: var(--color-accent);
-    background: var(--color-accent-soft);
-    border: 1px solid color-mix(in srgb, var(--color-accent) 14%, transparent);
-    width: 22px;
-    height: 22px;
+  .now-block__links a {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    flex-shrink: 0;
-    margin-top: 2px;
+    min-height: 2.75rem;
+    font-weight: 500;
   }
 
-  .about-principles__text {
-    font-size: var(--text-sm);
-    line-height: 1.6;
-    color: var(--color-text-muted);
-  }
-  .about-principles__text strong { color: var(--color-text); }
-
-  @media (max-width: 720px) {
-    .about-principles { grid-template-columns: 1fr; }
+  .elsewhere {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(2rem, 5vw, 5rem);
   }
 
-  /* — Aside — */
-  .about-aside {
-    position: sticky;
-    top: 84px;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-  }
-
-  .about-card {
-    padding: var(--space-5);
-    background: var(--color-surface);
-    border: var(--border-hairline);
-    border-radius: var(--radius-md);
-  }
-
-  .about-card__label {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-weight: 700;
-    color: var(--color-text-faint);
-  }
-
-  .about-card__list {
-    margin-top: var(--space-3);
+  .elsewhere__list {
     list-style: none;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-    font-size: var(--text-sm);
-    line-height: 1.6;
-    color: var(--color-text-muted);
+    display: grid;
   }
 
-  .about-card__links {
-    margin-top: var(--space-3);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
+  .elsewhere__list li {
+    border-top: 1px solid var(--line);
   }
 
-  .about-card__links a {
+  .elsewhere__list li:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .elsewhere__list a {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1.5rem;
+    min-height: 3rem;
+    padding-block: 0.85rem;
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  .elsewhere__list a:hover {
+    color: var(--accent);
+  }
+
+  .elsewhere__label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .elsewhere__value {
     font-size: var(--text-sm);
-    font-weight: 500;
-    color: var(--color-text-muted);
+    color: var(--ink-soft);
     overflow-wrap: anywhere;
   }
-  .about-card__links a:hover { color: var(--color-accent); }
 
-  .about-aside__cta {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 10px 16px;
-    border-radius: var(--radius-pill);
-    background: var(--color-text);
-    color: var(--color-canvas);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    transition: transform var(--duration-fast) var(--ease-default), background var(--duration-fast) var(--ease-default);
-  }
-  .about-aside__cta:hover {
-    background: color-mix(in srgb, var(--color-text) 88%, var(--color-accent));
-    transform: translateY(-1px);
+  @media (max-width: 860px) {
+    .about-hero,
+    .methods,
+    .now-block,
+    .elsewhere {
+      grid-template-columns: 1fr;
+    }
+
+    .about-hero__portrait {
+      justify-self: start;
+      max-width: 16rem;
+    }
   }
 
-  .about-aside__note {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    line-height: 1.6;
-    color: var(--color-text-faint);
-    border-left: 2px solid var(--color-border);
-    padding-left: 10px;
-  }
+  @media (max-width: 560px) {
+    .timeline li {
+      grid-template-columns: 1fr;
+    }
 
-  @media (max-width: 820px) {
-    .about-body__grid { grid-template-columns: 1fr; }
-    .about-aside { position: static; }
+    .timeline__body,
+    .timeline__links {
+      grid-column: 1;
+    }
+
+    .about-hero__facts {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

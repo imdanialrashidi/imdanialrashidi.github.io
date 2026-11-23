@@ -17,6 +17,10 @@ Use this skill only when the task needs a decision or shared understanding. For 
 5. **Verification strategy** — the actual checks that will prove each criterion. Name candidate commands or test layers, but do not invent commands that the project does not provide.
 6. **Open questions** — only questions that materially change implementation. Recommend a default answer and its consequence.
 
+## For consequential decisions
+
+Before coding, pair each required criterion with an example input, observable outcome and owner of any unresolved decision. For sensitive or cross-service work, name the actor, protected asset, trust boundary, invariant and failure effect. Include compatibility, rollout or recovery only where the change depends on them. Use the project’s existing limits for latency, accessibility and data handling. If a limit determines acceptance and is unknown, surface that decision.
+
 ## Rules
 
 - Keep a small spec to a short list. A large specification is justified only by genuine uncertainty or high risk.

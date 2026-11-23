@@ -1,0 +1,120 @@
+---
+interface Props {
+  index?: string
+  title: string
+  note?: string
+  href?: string
+  linkLabel?: string
+  id?: string
+  class?: string
+}
+
+const { index, title, note, href, linkLabel, id, class: className } = Astro.props
+---
+
+<header class:list={["section-head", className]}>
+  <div class="section-head__row">
+    {index && <span class="eyebrow section-head__index" aria-hidden="true">{index}</span>}
+    {
+      href && linkLabel && (
+        <a class="section-head__link" href={href}>
+          {linkLabel}
+          <svg
+            class="section-head__arrow"
+            width="14"
+            height="14"
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.4"
+            aria-hidden="true"
+          >
+            <path d="M2 8h11M9 3.5 13.5 8 9 12.5"></path>
+          </svg>
+        </a>
+      )
+    }
+  </div>
+  <h2 class="h2 section-head__title" id={id}>{title}</h2>
+  {note && <p class="section-head__note">{note}</p>}
+</header>
+
+<style>
+  .section-head {
+    display: grid;
+    gap: 0.9rem;
+    margin-bottom: clamp(1.75rem, 6vw, 3.5rem);
+  }
+
+  .section-head__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .section-head__index {
+    color: var(--accent);
+  }
+
+  .section-head__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.75rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ink-soft);
+  }
+
+  .section-head__link:hover {
+    color: var(--accent);
+  }
+
+  .section-head__arrow {
+    transition: transform var(--dur-fast) var(--ease);
+  }
+
+  .section-head__link:hover .section-head__arrow {
+    transform: translateX(0.2rem);
+  }
+
+  .section-head__title {
+    max-width: 22ch;
+  }
+
+  .section-head__note {
+    max-width: 34rem;
+    color: var(--ink-soft);
+    font-size: var(--text-base);
+  }
+
+  @media (min-width: 900px) {
+    .section-head {
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      column-gap: 3rem;
+      align-items: end;
+    }
+
+    .section-head__row {
+      grid-column: 1 / -1;
+    }
+
+    .section-head__title {
+      margin: 0;
+    }
+
+    .section-head__note {
+      justify-self: end;
+      align-self: end;
+      text-align: right;
+      font-size: var(--text-sm);
+      max-width: 26rem;
+    }
+  }
+</style>

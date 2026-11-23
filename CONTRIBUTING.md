@@ -1,19 +1,15 @@
 # Contributing
 
-Contributions should improve representative task outcomes, reduce risk/cost, or make the workflow easier to operate. More prompt text or orchestration is not automatically an improvement.
+Contributions should improve representative task outcomes, reduce risk or cost, or make the workflow easier to operate. More prompt text or orchestration is not automatically an improvement.
 
 ## Setup
 
-1. Use Node.js 22.19.0 or newer.
-<<<<<<< Updated upstream
-2. Install the reviewed Pi pin per `docs/TOOLING_SETUP.md` (packages, MCP, Playwright, LSP — reload via `/reload` after pin changes).
-3. Review project-local packages/extensions before trusting the repository.
-=======
-2. Run DSH (`npx @deepseek-ai/dsh web`) and pick a model. The project workflow ships as six DSH skills under `.dsh/skills/` plus this repository's `AGENTS.md`; no separate install is required.
-3. Review project-local scripts and workflow configuration before trusting the repository.
->>>>>>> Stashed changes
-4. Run `bash scripts/verify.sh` before and after a workflow change.
-5. Use the direct autonomous launcher for trusted work. For an untrusted repository or meaningful credential/private-data exposure, use `bash scripts/pi-sandbox.sh` or another boundary described in `SECURITY.md`.
+1. Use Node.js 22.19.0 or newer (CI pins 22.23.2).
+2. Install dependencies with `bash scripts/ci-install.sh`.
+3. Run DSH (`dsh web`, or `npx @deepseek-ai/dsh web`) and pick a model. The project workflow ships as seven DSH skills under `.dsh/skills/` plus this repository's `AGENTS.md`; no separate install is required. Start a new DSH session after changing workflow files so the skill catalog is reloaded.
+4. Review project-local scripts and workflow configuration before trusting the repository.
+5. Run `bash scripts/verify.sh` before and after a workflow change.
+6. Delivery is explicit, not automatic. See [docs/GIT_POLICY.md](docs/GIT_POLICY.md).
 
 ## Change contract
 
@@ -25,40 +21,47 @@ For a non-trivial change, state:
 - compatibility, security, data, accessibility, performance, visual, and operational risk where relevant;
 - rollback or targeted reversal.
 
-Preserve unrelated work and keep one primary writer. Do not add dependencies without a concrete benefit over current/platform capabilities.
+Preserve unrelated work and keep one primary writer. Do not add dependencies without a concrete benefit over current or platform capabilities.
 
-## Workflow-policy changes
+## Workflow maintenance
 
-<<<<<<< Updated upstream
-Workflow maintenance is allowed in the default autonomous mode. Keep it explicitly scoped, update all affected source-of-truth documents, doctor assertions, integrity records, eval cases, and `CHANGELOG.md`, and rely on the tested diff/CI evidence rather than a startup flag.
-=======
-Workflow maintenance is allowed in the default autonomous mode. Keep it explicitly scoped, update all affected source-of-truth documents and `CHANGELOG.md`, and rely on the tested diff/CI evidence. The six skills in `.dsh/skills/` are vendored from dsh-workflow v0.1; when updating them, copy the upstream `SKILL.md` files and rerun `bash scripts/verify.sh`.
->>>>>>> Stashed changes
+Workflow maintenance is allowed in the default autonomous mode. Keep it explicitly scoped, update every affected source-of-truth document and `CHANGELOG.md`, and rely on the tested diff and CI evidence.
 
-Run:
+The seven skills in `.dsh/skills/` are vendored from [dsh-workflow](https://github.com/imdanialrashidi/dsh-workflow) v0.2 at the commit in `.dsh/workflow.json`. To update them:
+
+1. Review the upstream diff and changelog at a specific commit.
+2. Copy the seven `skills/<name>/SKILL.md` files into `.dsh/skills/<name>/SKILL.md`.
+3. Update `version`, `commit`, `retrievedAt`, and every sha256 in `.dsh/workflow.json` (`sha256sum .dsh/skills/*/SKILL.md`).
+4. Run `node scripts/verify-workflow.mjs` and `bash scripts/verify.sh`.
+5. Record the upstream commit and the behavior change in `CHANGELOG.md`.
+
+Do not hand-edit a vendored skill. A project rule belongs in `AGENTS.md` or the owning document; a procedure change belongs upstream. Keep `AGENTS.md` short and keep one home for each rule.
+
+## Verification
 
 ```bash
 bash scripts/verify.sh
-node scripts/verify-package-integrity.mjs --online  # when package pins change
-node scripts/run-workflow-evals.mjs --dry-run       # when evals/runner change
 ```
 
-<<<<<<< Updated upstream
-For a material harness change, compare baseline/candidate on representative cases as described in `docs/EVALUATION.md`. Do not publish model-eval artifacts containing repository content or credentials.
-=======
-For a material workflow change, compare baseline/candidate on representative product tasks with repeated matched-model trials. Do not publish artifacts containing repository content or credentials.
->>>>>>> Stashed changes
+The canonical gate checks:
+
+- no unresolved merge-conflict markers or whitespace errors;
+- the vendored workflow matches `.dsh/workflow.json`;
+- scripts parse and registry-managed skill frontmatter is valid;
+- `npm run format:check`, `npm test`, and `npm run ci` (`astro check` plus build).
+
+Run the nearest test plus `npm run check` for a localized change. Report each check as `PASS`, `FAIL`, `BLOCKED`, `UNPROVEN`, or `NOT EXECUTED`. Do not replace a blocked check with an invented command.
 
 ## Frontend contributions
 
-- Follow the accepted `docs/DESIGN.md`; update it before introducing a new visual direction.
-- Prove the critical journey and required states in the real browser.
+- Follow the accepted [docs/DESIGN.md](docs/DESIGN.md); update it before introducing a new visual direction.
+- Prove the critical journey and required states in a real browser when a browser-capable tool is available. Without a real render, mark visual and interaction claims `UNPROVEN`.
 - Include deterministic desktop/mobile/demanding-state evidence for a material visual change.
-- Report `frontend-design` hard gates and craft score; aesthetics never cancel a functional/accessibility/performance failure.
-- Record third-party font/media/icon source and license.
+- Report hard-gate results; aesthetics never cancel a functional, accessibility, or performance failure.
+- Record third-party font, media, and icon sources and licenses.
 
 ## Pull request evidence
 
 Complete the pull-request template. Link exact commands and outcomes, not “tests pass.” Include screenshots only when they are deterministic, non-sensitive, and materially help review.
 
-Report vulnerabilities privately using `SECURITY.md`, not a public issue or pull request.
+Report vulnerabilities privately using [SECURITY.md](SECURITY.md), not a public issue or pull request.

@@ -1,89 +1,74 @@
 ---
-import { ClientRouter } from 'astro:transitions'
 import '../styles/global.css'
+import portrait from '../assets/portrait/danial-portrait.webp'
 import Footer from '../components/Footer.astro'
 import Header from '../components/Header.astro'
-import { site, social } from '../data/site.ts'
+import { site } from '../data/site.ts'
+import { type Breadcrumb, pageGraph } from '../lib/seo.ts'
 
 interface Props {
+  /** Page title without the brand suffix. Home passes the full site title. */
   title?: string
   description?: string
-  canonical?: string
-  noIndex?: boolean
-  ogImage?: string
-  ogImageAlt?: string
-  // Image used for `primaryImageOfPage` when it differs from the social card image.
-  schemaImage?: string
-  ogType?: 'website' | 'article'
-  // Extra JSON-LD nodes for this page (BreadcrumbList, ItemList, ProfilePage…).
-  schema?: Record<string, unknown>[]
-  // Subject of the page — merged into the WebPage node's `about` relation.
+  /** Route path for the canonical URL. Defaults to the current URL path. */
+  path?: string
+  /** Social card path, e.g. "/og/work/noveno.jpg". */
+  image?: string
+  imageAlt?: string
+  pageType?: 'WebPage' | 'ProfilePage' | 'CollectionPage' | 'ContactPage' | 'AboutPage'
+  breadcrumbs?: Breadcrumb[]
+  extraSchema?: Record<string, unknown>[]
   about?: { name: string; url?: string }
+  mainEntity?: Record<string, unknown>
+  updated?: string
+  noIndex?: boolean
+  ogType?: 'website' | 'article'
+  publishedTime?: string
 }
 
 const {
-  title = site.title,
+  title,
   description = site.description,
-  canonical,
-  noIndex = false,
-  ogImage,
-  ogImageAlt,
-  schemaImage,
-  ogType = 'website',
-  schema = [],
+  path,
+  image = site.ogImage,
+  imageAlt,
+  pageType = 'WebPage',
+  breadcrumbs,
+  extraSchema,
   about,
+  mainEntity,
+  updated,
+  noIndex = false,
+  ogType = 'website',
+  publishedTime,
 } = Astro.props
 
-const rawCanonical = canonical ?? new URL(Astro.url.pathname, site.url).toString()
-// Ensure root canonical matches sitemap (no trailing slash) and respects trailingSlash:never
-const canonicalURL = rawCanonical === site.url + '/' ? site.url : rawCanonical
-const ogImageURL = ogImage ? new URL(ogImage, site.url).toString() : new URL('/og-default.png', site.url).toString()
-const schemaImageURL = schemaImage ? new URL(schemaImage, site.url).toString() : ogImageURL
-const ogImageAltText = ogImageAlt ?? `${site.shortTitle} — Software & Product Builder`
-const ogTitle = title.includes('—') ? title : `${title} — ${site.shortTitle}`
-const robotsContent = noIndex
+const rawPath = path ?? Astro.url.pathname
+// trailingSlash: "always". Canonical URLs, sitemap entries and every internal
+// link use the same trailing-slash form so GitHub Pages never has to redirect.
+const normalizedPath = rawPath.endsWith('/') ? rawPath : `${rawPath}/`
+const canonical = `${site.url}${normalizedPath}`
+const fullTitle = !title || title === site.title ? site.title : `${title} · ${site.shortTitle}`
+const ogImageUrl = image.startsWith('http') ? image : `${site.url}${image}`
+const ogImageAlt = imageAlt ?? `${site.shortTitle}, ${site.tagline}`
+const robots = noIndex
   ? 'noindex, nofollow'
   : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
-
-// One connected graph per page: WebSite → WebPage → this author, plus page-specific nodes.
-const websiteId = `${site.url}/#website`
-const personId = `${site.url}/#person`
-const webPageId = `${canonicalURL}#webpage`
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'WebSite',
-      '@id': websiteId,
-      url: site.url,
-      name: site.title,
-      description: site.description,
-      inLanguage: site.language,
-      publisher: { '@id': personId },
-    },
-    {
-      '@type': 'Person',
-      '@id': personId,
-      name: site.author,
-      url: site.url,
-      jobTitle: 'Software & Product Builder',
-      sameAs: [social.github, social.x, social.instagram, social.telegram, social.noveno],
-      email: `mailto:${social.email}`,
-    },
-    {
-      '@type': 'WebPage',
-      '@id': webPageId,
-      url: canonicalURL,
-      name: ogTitle,
-      description,
-      inLanguage: site.language,
-      isPartOf: { '@id': websiteId },
-      primaryImageOfPage: { '@type': 'ImageObject', url: schemaImageURL },
-      ...(about ? { about: { '@type': 'CreativeWork', ...about } } : {}),
-    },
-    ...schema,
-  ],
-}
+const jsonLd = pageGraph(
+  {
+    pageType,
+    title: fullTitle,
+    description,
+    canonical,
+    imageUrl: ogImageUrl,
+    breadcrumbs,
+    extra: extraSchema,
+    about,
+    mainEntity,
+    updated,
+  },
+  portrait,
+)
 ---
 
 <!doctype html>
@@ -91,86 +76,116 @@ const jsonLd = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light dark" />
-    <title>{title}</title>
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalURL} />
-    <meta name="robots" content={robotsContent} />
-    <meta name="author" content={site.author} />
-    <!-- Google Search Console site verification (public token, not a credential) -->
-    <meta name="google-site-verification" content="EbxKFJ8aupZ_xX043IyEFa_ZJ3L8VQnQ75exp1yyMsE" />
-    <meta name="theme-color" content="#fcfcfc" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content={robots} />
+    <meta name="author" content={site.name} />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f6f2ea" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#11100e" media="(prefers-color-scheme: dark)" />
+    <meta name="format-detection" content="telephone=no" />
+    <!-- Public Search Console token, not a credential. -->
+    <meta
+      name="google-site-verification"
+      content="EbxKFJ8aupZ_xX043IyEFa_ZJ3L8VQnQ75exp1yyMsE"
+    />
 
-    <!-- Preload critical Geist sans — mono loads on demand -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {[...new Set(["https://github.com/imdanialrashidi", "https://x.com/imdanialrashidi", "https://instagram.com/imdanialrashidi", "https://t.me/imdanialrashidi", site.persianSite])].map(
+      (href) => <link rel="me" href={href} />,
+    )}
+
+    <!-- Display face preloads. Body sans is text-LCP critical; mono loads on demand. -->
     <link
       rel="preload"
-      href="/fonts/Geist-Variable.woff2"
+      href="/fonts/instrument-serif-regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/geist-latin.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
 
-    <!-- Open Graph / Twitter -->
     <meta property="og:type" content={ogType} />
-    <meta property="og:site_name" content={site.shortTitle} />
-    <meta property="og:title" content={ogTitle} />
+    <meta property="og:site_name" content={site.title} />
+    <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalURL} />
-    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={ogImageAltText} />
+    <meta property="og:image:alt" content={ogImageAlt} />
     <meta property="og:locale" content={site.locale} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    {updated && <meta property="article:modified_time" content={updated} />}
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:creator" content="@imdanialrashidi" />
+    <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImageURL} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
 
-    <!-- JSON-LD — WebSite, Person, WebPage and any page-specific nodes -->
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    {
+      !noIndex && (
+        <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+      )
+    }
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <!-- Prefetch on intent; no runtime script. Chromium only, safely ignored elsewhere. -->
+    {
+      !noIndex && (
+        <script
+          is:inline
+          type="speculationrules"
+          set:html={JSON.stringify({
+            prefetch: [
+              {
+                where: {
+                  and: [
+                    { href_matches: "/*" },
+                    { not: { href_matches: "/404" } },
+                    { not: { href_matches: "/*\\?*" } },
+                  ],
+                },
+                eagerness: "moderate",
+              },
+            ],
+          })}
+        />
+      )
+    }
+
     <slot name="head" />
-    <ClientRouter fallback="swap" />
-    <style is:global>
-      /* View Transitions — very fast, restrained, compositor-friendly */
-      ::view-transition-old(root),
-      ::view-transition-new(root) {
-        animation-duration: 140ms;
-        animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
-      }
-      ::view-transition-old(root) { animation-name: vtFadeOut; }
-      ::view-transition-new(root) { animation-name: vtFadeIn; }
-      @keyframes vtFadeOut { from { opacity: 1; } to { opacity: 0; } }
-      @keyframes vtFadeIn { from { opacity: 0; } to { opacity: 1; } }
-      @media (prefers-reduced-motion: reduce) {
-        ::view-transition-group(*),
-        ::view-transition-old(*),
-        ::view-transition-new(*) { animation: none !important; }
-      }
-    </style>
 
-    <!-- FOUC prevention — inline, minimal, blocking before paint -->
+    <!-- Theme before first paint: stored choice, otherwise the system setting. -->
     <script is:inline>
       (function () {
         try {
-          var k = "theme";
-          var s = localStorage.getItem(k);
-          var d = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-          var t = s === "light" || s === "dark" ? s : d;
-          document.documentElement.setAttribute("data-theme", t);
-        } catch (e) {
-          var m = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-          document.documentElement.setAttribute("data-theme", m);
+          var stored = localStorage.getItem("theme");
+          var system = window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+          var theme = stored === "light" || stored === "dark" ? stored : system;
+          document.documentElement.setAttribute("data-theme", theme);
+        } catch (error) {
+          document.documentElement.setAttribute("data-theme", "light");
         }
       })();
     </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <Header currentPath={Astro.url.pathname} />
+    <Header currentPath={normalizedPath} />
     <main id="main">
       <slot />
     </main>

@@ -1,0 +1,111 @@
+---
+import { getCollection } from 'astro:content'
+import CtaBand from '../components/CtaBand.astro'
+import SectionHead from '../components/SectionHead.astro'
+import TravelCard from '../components/TravelCard.astro'
+import Layout from '../layouts/Layout.astro'
+import { HOME_TRAIL } from '../lib/seo.ts'
+import { type TravelEntry, sortTravels } from '../lib/travels.ts'
+
+const travels = sortTravels(await getCollection('travels'))
+
+const description =
+  'Travel notes and photographs from Iran: canyoning in Dalakhani Valley and Dareh Marg, and a cave survey in Yakh Morad. Short notes, real places.'
+---
+
+<Layout
+  title="Travels: notes and photos from Iran"
+  description={description}
+  path="/travels/"
+  image="/og/travels.jpg"
+  imageAlt="Travel notes from Iran: valleys, caves and mountains"
+  pageType="CollectionPage"
+  breadcrumbs={[HOME_TRAIL, { name: "Travels", href: "/travels/" }]}
+>
+  <header class="container page-hero">
+    <p class="eyebrow eyebrow--accent">Off the clock</p>
+    <h1 class="h1 page-hero__title">Travels</h1>
+    <p class="lede page-hero__lede">
+      Mountains, canyons, and caves in Iran. These are short notes rather than
+      guides: the full frames from each trip live on Instagram.
+    </p>
+  </header>
+
+  <section class="container travels-grid" aria-label="Travel notes">
+    {
+      travels.map((entry: TravelEntry, i) => (
+        <TravelCard entry={entry} priority={i === 0} />
+      ))
+    }
+  </section>
+
+  <section class="container travels-cta" aria-labelledby="instagram-title">
+    <SectionHead
+      title="The full frames"
+      id="instagram-title"
+      note="I post the wider set from each trip on Instagram. The photographs here are the ones that survived the water."
+    />
+    <p class="travels-cta__actions">
+      <a
+        class="btn btn--primary"
+        href="https://instagram.com/imdanialrashidi"
+        rel="me noopener"
+      >
+        Instagram, @imdanialrashidi
+      </a>
+      <a class="btn btn--outline" href="/work/">See the work instead</a>
+    </p>
+  </section>
+
+  <CtaBand />
+</Layout>
+
+<style>
+  .page-hero {
+    display: grid;
+    gap: 1.1rem;
+    padding-top: clamp(2.5rem, 6vw, 4.5rem);
+    padding-bottom: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .page-hero__title {
+    font-size: clamp(3.25rem, 9vw, 7rem);
+    line-height: 0.9;
+  }
+
+  .page-hero__lede {
+    max-width: 38rem;
+  }
+
+  .travels-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  .travels-cta {
+    display: grid;
+    gap: 1rem;
+    padding-block: clamp(2rem, 5vw, 3.5rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .travels-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 900px) {
+    .travels-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .travels-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

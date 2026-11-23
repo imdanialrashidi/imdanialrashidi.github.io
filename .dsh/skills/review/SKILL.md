@@ -13,7 +13,8 @@ Review finds defects. It is not a style pass, a summary of the diff, or an appro
 1. Read the actual diff and enough surrounding code to understand the change. Do not review from the commit message, a summary, or the file names alone.
 2. Re-establish the base and head. If the base moved or a merge occurred, read the affected range again.
 3. Read the acceptance criteria, the closest `AGENTS.md`, and the project documents that own the changed behavior. Judge the diff against those requirements, not against memory.
-4. Note pre-existing defects separately. Do not attribute them to the author.
+4. Include staged, unstaged and relevant new files for working-tree reviews. Inspect changes that influence the evidence itself (test filters, mocks, CI jobs, instruction files, dependency hooks). Check that the evidence belongs to this revision and covers the real entry point.
+5. Note pre-existing defects separately. Do not attribute them to the author.
 
 Do not modify code during the review phase. If you find a defect, report it; fixes belong to `build`.
 
@@ -65,7 +66,7 @@ Pre-existing: yes | no
 
 A fresh-context DSH subagent is the preferred independent reviewer when it is available. Use the native `subagent` tool when it starts a fresh child; do not use `subagent_fork` for independence because it inherits completed history. If only a history-seeded child is available, treat the result as assisted self-review, not independent review. Give the child:
 
-- the repository path and exact base/head;
+- the repository path, base/head and any uncommitted or new files included in this review;
 - the acceptance criteria and relevant project documents;
 - the instruction to inspect the diff and read code without editing;
 - the finding schema above and the instruction not to report style-only issues.
@@ -85,13 +86,17 @@ If independent review is unavailable, perform a disciplined self-review and repo
 - Do not reopen fixed findings unless the fix introduced a new, demonstrated problem.
 - Record accepted risks with the owner and reason. Silence is not acceptance.
 
+## Delivery decision
+
+Request changes for a failed requirement or an unresolved blocker or major defect. Mark the handoff blocked for missing mandatory evidence, an unverified candidate or a pending review required by the project. Report optional independent review as unexecuted when unavailable. A fresh agent can provide a technical review. A named human or code-owner approval, when required, comes from that person. For an accepted residual risk, record the deciding owner, reason, mitigation and follow-up date or trigger.
+
 ## Report
 
 ```text
 Scope: <base..head and paths reviewed>
 Evidence reviewed: <diff, tests, docs>
 Findings: <count by severity>
-Independent review: <performed by fresh subagent | unexecuted>
+Independent review: <reviewer and scope | unexecuted>
 Validation: <performed | not performed> — <scope>
 Verdict: <ready | changes required | blocked>
 ```

@@ -4,201 +4,279 @@ import path from 'node:path'
 import test from 'node:test'
 
 const repoRoot = path.resolve(import.meta.dirname, '..')
+const projectDir = path.join(repoRoot, 'src/content/projects')
+const travelDir = path.join(repoRoot, 'src/content/travels')
+const workAssets = path.join(repoRoot, 'src/assets/work')
+const travelAssets = path.join(repoRoot, 'src/assets/travels')
 
-// Inline pure helpers matching src/lib/projects.ts (avoids astro:content import in Node)
-// Keep in sync with src/lib/projects.ts — filesystem check below ensures drift is caught.
-function isDraft(entry) {
-  return entry.data.status === 'draft'
-}
-function statusLabelFor(status) {
-  if (status === 'building') return 'Building · In progress'
-  if (status === 'in_progress') return 'Case study — in progress'
-  return undefined
-}
-function hrefFor(entry) {
-  const raw = entry.data.links?.caseStudy ?? `/work/${entry.id}`
-  if (/^\s*javascript:/i.test(raw)) return `/work/${entry.id}`
-  return raw
-}
-function kickerFor(entry) {
-  return entry.data.kicker ?? (entry.data.categories ? entry.data.categories.join(' · ') : '')
-}
-function ctaLabelFor(entry) {
-  return entry.data.title === 'Noveno' ? 'Explore Noveno' : 'View case study'
-}
-function variantFor(entry) {
-  return entry.data.title === 'Noveno' ? 'accent' : 'default'
-}
-function cardPropsFor(entry, index) {
-  return {
-    index: String(index + 1).padStart(2, '0'),
-    title: entry.data.title,
-    kicker: kickerFor(entry),
-    summary: entry.data.summary,
-    href: hrefFor(entry),
-    statusLabel: statusLabelFor(entry.data.status),
-    year: entry.data.year,
-    ctaLabel: ctaLabelFor(entry),
-    variant: variantFor(entry),
-    reversed: index % 2 === 1,
+/** Parses the small YAML subset used by this content (scalars + one nested level). */
+function parseFrontmatter(text) {
+  const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/)
+  assert.ok(match, 'file must start with a frontmatter block')
+  const data = {}
+  let current = null
+  for (const raw of match[1].split('\n')) {
+    if (!raw.trim() || raw.trim().startsWith('#')) continue
+    const indent = raw.match(/^\s*/)[0].length
+    const line = raw.trim()
+    const colon = line.indexOf(':')
+    if (colon < 0) continue
+    const key = line.slice(0, colon).trim()
+    const value = line.slice(colon + 1).trim()
+    if (indent > 0 && current) {
+      data[current][key] = parseValue(value)
+      continue
+    }
+    if (value === '') {
+      data[key] = {}
+      current = key
+      continue
+    }
+    current = null
+    data[key] = parseValue(value)
   }
+  return { data, body: match[2] }
 }
 
-function mock(overrides = {}) {
-  return {
-    id: 'test-id',
-    data: {
-      title: 'Test Project',
-      summary: 'A summary',
-      kicker: undefined,
-      categories: undefined,
-      role: undefined,
-      year: undefined,
-      status: 'in_progress',
-      links: undefined,
-      order: undefined,
-      ...overrides.data,
-    },
-    ...overrides,
-    data: {
-      title: 'Test Project',
-      summary: 'A summary',
-      kicker: undefined,
-      categories: undefined,
-      role: undefined,
-      year: undefined,
-      status: 'in_progress',
-      links: undefined,
-      order: undefined,
-      ...(overrides.data || {}),
-      links: overrides.data?.links ?? overrides.links ?? undefined,
-    },
+function parseValue(raw) {
+  let value = raw.trim()
+  if (value.startsWith('[') && value.endsWith(']')) {
+    return value
+      .slice(1, -1)
+      .split(',')
+      .map((item) => item.trim().replace(/^["']|["']$/g, ''))
+      .filter(Boolean)
   }
+  value = value.replace(/^["']|["']$/g, '')
+  if (value === 'true') return true
+  if (value === 'false') return false
+  if (/^\d+$/.test(value)) return Number(value)
+  return value
 }
 
-test('statusLabelFor maps building/in_progress, hides draft/published', () => {
-  assert.equal(statusLabelFor('building'), 'Building · In progress')
-  assert.equal(statusLabelFor('in_progress'), 'Case study — in progress')
-  assert.equal(statusLabelFor('draft'), undefined)
-  assert.equal(statusLabelFor('published'), undefined)
+function readProjects() {
+  return fs
+    .readdirSync(projectDir)
+    .filter((file) => file.endsWith('.md'))
+    .sort()
+    .map((file) => {
+      const parsed = parseFrontmatter(fs.readFileSync(path.join(projectDir, file), 'utf8'))
+      return { id: file.replace(/\.md$/, ''), ...parsed }
+    })
+}
+
+const projects = readProjects()
+
+test('eight projects exist, four products and four client sites', () => {
+  assert.equal(projects.length, 8)
+  assert.equal(projects.filter((p) => p.data.kind === 'product').length, 4)
+  assert.equal(projects.filter((p) => p.data.kind === 'client').length, 4)
+  const orders = projects.map((p) => p.data.order)
+  assert.equal(new Set(orders).size, orders.length, 'order values must be unique')
 })
 
-test('hrefFor falls back to /work/<id> and blocks javascript:', () => {
-  const a = mock({ id: 'fast-english', data: { title: 'Fast English', links: { caseStudy: '/work/fast-english' } } })
-  assert.equal(hrefFor(a), '/work/fast-english')
+test('project frontmatter satisfies the public content contract', () => {
+  const statuses = new Set(['building', 'live', 'shipped', 'in_development'])
+  const titles = new Set()
+  const seoTitles = new Set()
+  for (const project of projects) {
+    const { data, body } = project
+    for (const key of [
+      'title',
+      'seoTitle',
+      'summary',
+      'metaDescription',
+      'kicker',
+      'kind',
+      'role',
+      'status',
+      'statusLabel',
+    ]) {
+      assert.equal(typeof data[key], 'string', `${project.id}: ${key} must be a string`)
+      assert.ok(data[key].length > 0, `${project.id}: ${key} must not be empty`)
+    }
+    assert.ok(['product', 'client'].includes(data.kind), `${project.id}: kind`)
+    assert.ok(statuses.has(data.status), `${project.id}: status`)
+    assert.equal(typeof data.year, 'number')
+    assert.ok(data.year >= 2024 && data.year <= 2030, `${project.id}: year in range`)
+    assert.equal(typeof data.featured, 'boolean')
+    assert.equal(typeof data.order, 'number')
 
-  const b = mock({ id: 'noveno', data: { title: 'Noveno' } })
-  // no caseStudy → fallback to /work/<id>
-  assert.equal(hrefFor(b), '/work/noveno')
+    assert.ok(data.seoTitle.length <= 42, `${project.id}: seoTitle <= 42 chars`)
+    assert.ok(
+      data.metaDescription.length >= 110 && data.metaDescription.length <= 165,
+      `${project.id}: metaDescription length is ${data.metaDescription.length}`,
+    )
+    assert.ok(
+      data.summary.length >= 80 && data.summary.length <= 170,
+      `${project.id}: summary length is ${data.summary.length}`,
+    )
+    assert.ok(Array.isArray(data.stack), `${project.id}: stack must be an array`)
+    assert.ok(data.stack.length >= 2 && data.stack.length <= 6, `${project.id}: stack size`)
 
-  const c = mock({ id: 'evil', data: { title: 'Evil', links: { caseStudy: 'javascript:alert(1)' } } })
-  assert.equal(hrefFor(c), '/work/evil')
+    const words = body.trim().split(/\s+/).length
+    const minimum = data.kind === 'product' ? 650 : 300
+    assert.ok(words >= minimum, `${project.id}: body is ${words} words, minimum ${minimum}`)
+    assert.ok(words <= 1200, `${project.id}: body must stay readable (${words} words)`)
 
-  const d = mock({ id: 'evil2', data: { title: 'Evil2', links: { caseStudy: '  JaVaScRiPt:alert(1)' } } })
-  assert.equal(hrefFor(d), '/work/evil2')
+    assert.ok(!/javascript:/i.test(body), `${project.id}: body must not contain javascript:`)
+    assert.ok(!data.title.includes('\u2014'), `${project.id}: no em dash in title`)
+    assert.ok(!body.includes('\u2014'), `${project.id}: no em dash in body`)
+    assert.ok(!/lorem ipsum/i.test(body), `${project.id}: no placeholder copy`)
+
+    if (data.links) {
+      for (const [key, value] of Object.entries(data.links)) {
+        assert.match(value, /^https:\/\//, `${project.id}: links.${key} must be https`)
+      }
+    }
+
+    if (data.cover) {
+      assert.equal(
+        typeof data.coverAlt,
+        'string',
+        `${project.id}: coverAlt is required when a cover exists`,
+      )
+      assert.ok(
+        fs.existsSync(path.join(workAssets, `${data.cover}.webp`)),
+        `${project.id}: cover asset`,
+      )
+    }
+
+    titles.add(data.title)
+    seoTitles.add(data.seoTitle)
+  }
+  assert.equal(titles.size, projects.length, 'titles must be unique')
+  assert.equal(seoTitles.size, projects.length, 'seoTitles must be unique')
 })
 
-test('isDraft catches only draft', () => {
-  assert.equal(isDraft(mock({ data: { status: 'draft' } })), true)
-  assert.equal(isDraft(mock({ data: { status: 'in_progress' } })), false)
-  assert.equal(isDraft(mock({ data: { status: 'building' } })), false)
-  assert.equal(isDraft(mock({ data: { status: 'published' } })), false)
+test('featured projects each have a real screenshot for the homepage', () => {
+  const featured = projects.filter((project) => project.data.featured)
+  assert.ok(featured.length >= 2 && featured.length <= 4, 'two to four featured projects')
+  for (const project of featured) {
+    assert.ok(project.data.cover, `${project.id}: featured projects need a cover`)
+  }
 })
 
-test('kickerFor prefers kicker, falls back to categories', () => {
-  const withKicker = mock({ data: { kicker: 'Product Engineering · Web' } })
-  assert.equal(kickerFor(withKicker), 'Product Engineering · Web')
-  const withCats = mock({ data: { kicker: undefined, categories: ['Founder', 'Web'] } })
-  assert.equal(kickerFor(withCats), 'Founder · Web')
-  const empty = mock({ data: { kicker: undefined, categories: undefined } })
-  assert.equal(kickerFor(empty), '')
+test('every work screenshot is used by exactly one project', () => {
+  const files = fs
+    .readdirSync(workAssets)
+    .filter((file) => file.endsWith('.webp'))
+    .map((file) => file.replace(/\.webp$/, ''))
+    .sort()
+  const covers = projects
+    .map((project) => project.data.cover)
+    .filter(Boolean)
+    .sort()
+  assert.deepEqual(covers, files, 'assets and project covers must match 1:1')
 })
 
-test('cardPropsFor derives variant/ctaLabel for Noveno vs default', () => {
-  const noveno = mock({ data: { title: 'Noveno', status: 'building', kicker: 'Founder' } })
-  const propsN = cardPropsFor(noveno, 1)
-  assert.equal(propsN.variant, 'accent')
-  assert.equal(propsN.ctaLabel, 'Explore Noveno')
-  assert.equal(propsN.index, '02')
-  assert.equal(propsN.reversed, true)
-
-  const fe = mock({ data: { title: 'Fast English', status: 'in_progress', kicker: 'Product' } })
-  const propsF = cardPropsFor(fe, 0)
-  assert.equal(propsF.variant, 'default')
-  assert.equal(propsF.ctaLabel, 'View case study')
-  assert.equal(propsF.index, '01')
-  assert.equal(propsF.reversed, false)
+test('three travel notes with real photographs', () => {
+  const travels = fs
+    .readdirSync(travelDir)
+    .filter((file) => file.endsWith('.md'))
+    .map((file) => parseFrontmatter(fs.readFileSync(path.join(travelDir, file), 'utf8')).data)
+  assert.equal(travels.length, 3)
+  const orders = travels.map((travel) => travel.order)
+  assert.equal(new Set(orders).size, orders.length)
+  const images = travels.map((travel) => travel.image).sort()
+  const files = fs
+    .readdirSync(travelAssets)
+    .filter((file) => file.endsWith('.webp'))
+    .map((file) => file.replace(/\.webp$/, ''))
+    .sort()
+  assert.deepEqual(images, files)
+  for (const travel of travels) {
+    assert.match(travel.dateLabel, /^\d{4} \(\d{4}\)$/, 'dateLabel keeps both calendars')
+    assert.equal(typeof travel.imageAlt, 'string')
+    assert.ok(travel.imageAlt.length > 20, 'descriptive alt text')
+    assert.match(travel.imagePosition, /^\d+% \d+%$/)
+  }
 })
 
-test('frontmatter caseStudy links are safe (no javascript:)', () => {
-  const projectDir = path.join(repoRoot, 'src/content/projects')
-  const files = fs.readdirSync(projectDir).filter((f) => f.endsWith('.md'))
-  assert.ok(files.length >= 2, 'should have at least 2 project files')
-  for (const file of files) {
-    const content = fs.readFileSync(path.join(projectDir, file), 'utf8')
-    assert.ok(!/javascript:/i.test(content), `${file} must not contain javascript:`)
-    // caseStudy if present should be internal or https
-    const match = content.match(/caseStudy:\s*["']([^"']+)["']/)
-    if (match) {
-      const val = match[1]
-      assert.ok(/^(\/|https?:\/\/)/.test(val), `${file} caseStudy must be / or https, got ${val}`)
+test('shared work helpers keep the expected public surface', () => {
+  const lib = fs.readFileSync(path.join(repoRoot, 'src/lib/work.ts'), 'utf8')
+  for (const exported of [
+    'coverFor',
+    'hrefFor',
+    'sortProjects',
+    'featuredProjects',
+    'otherProjects',
+    'byKind',
+    'nextProject',
+    'coverMap',
+  ]) {
+    assert.ok(lib.includes(exported), `lib/work.ts must export ${exported}`)
+  }
+  assert.match(lib, /return `\/work\/\$\{entry\.id\}\/`/, 'case-study URLs keep the trailing slash')
+
+  const travelsLib = fs.readFileSync(path.join(repoRoot, 'src/lib/travels.ts'), 'utf8')
+  assert.ok(travelsLib.includes('travelImage'))
+  assert.ok(travelsLib.includes('sortTravels'))
+})
+
+test('routes use the shared components instead of bespoke project pages', () => {
+  const pages = fs.readdirSync(path.join(repoRoot, 'src/pages/work'))
+  assert.deepEqual(pages.sort(), ['[slug].astro', 'index.astro'])
+
+  const home = fs.readFileSync(path.join(repoRoot, 'src/pages/index.astro'), 'utf8')
+  assert.ok(home.includes('ProjectFeature'))
+  assert.ok(home.includes('SectionHead'))
+  assert.ok(home.includes('TravelCard'))
+
+  const index = fs.readFileSync(path.join(repoRoot, 'src/pages/work/index.astro'), 'utf8')
+  assert.ok(index.includes('ProjectRow'))
+  assert.ok(index.includes('byKind'))
+
+  const detail = fs.readFileSync(path.join(repoRoot, 'src/pages/work/[slug].astro'), 'utf8')
+  assert.ok(detail.includes('render(entry)'))
+  assert.ok(detail.includes('Shot'))
+  assert.ok(detail.includes('ProjectPlate'))
+  assert.ok(detail.includes('nextProject'))
+})
+
+test('the static-first performance contract still holds', () => {
+  const config = fs.readFileSync(path.join(repoRoot, 'astro.config.mjs'), 'utf8')
+  assert.ok(config.includes('trailingSlash: "always"'))
+  assert.ok(config.includes('inlineStylesheets: "auto"'))
+  assert.ok(config.includes('sitemap('))
+  assert.ok(config.includes('site: "https://imdanialrashidi.github.io"'))
+
+  const sourceFiles = []
+  const walk = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name)
+      if (entry.isDirectory()) walk(full)
+      else if (/\.(astro|ts|mjs)$/.test(entry.name)) sourceFiles.push(full)
     }
   }
+  walk(path.join(repoRoot, 'src'))
+  for (const file of sourceFiles) {
+    const source = fs.readFileSync(file, 'utf8')
+    assert.ok(!source.includes('astro:transitions'), `${file}: no client router`)
+    assert.ok(!source.includes('client:load'), `${file}: no framework islands`)
+  }
 })
 
-test('pages use shared lib and draft filtering', () => {
-  const indexAstro = fs.readFileSync(path.join(repoRoot, 'src/pages/index.astro'), 'utf8')
-  const workIndexAstro = fs.readFileSync(path.join(repoRoot, 'src/pages/work/index.astro'), 'utf8')
-
-  // both import from lib
-  assert.ok(/from\s+['\"]\.\.\/lib\/projects/.test(indexAstro), 'index.astro must import from lib/projects')
-  assert.ok(/from\s+['\"]\.\.\/\.\.\/lib\/projects/.test(workIndexAstro), 'work/index.astro must import from lib/projects')
-  assert.ok(/getDisplayProjects/.test(indexAstro), 'index.astro must use getDisplayProjects')
-  assert.ok(/getDisplayProjects/.test(workIndexAstro), 'work/index.astro must use getDisplayProjects')
-  assert.ok(/cardPropsFor/.test(indexAstro), 'index.astro must use cardPropsFor')
-  assert.ok(/cardPropsFor/.test(workIndexAstro), 'work/index.astro must use cardPropsFor')
-
-  // no old inline branching
-  assert.ok(!/title\s*===\s*["']Noveno["']/.test(indexAstro), 'index.astro must not contain title === Noveno branching')
-  assert.ok(!/title\s*===\s*["']Noveno["']/.test(workIndexAstro), 'work/index.astro must not contain title === Noveno branching')
-  // old statusLabel ternary removed
-  assert.ok(!/status\s*===\s*["']building["']/.test(indexAstro) || /statusLabelFor/.test(indexAstro), 'index.astro should not have inline status ternary')
-})
-
-test('work index derives count and meta from data', () => {
-  const workIndex = fs.readFileSync(path.join(repoRoot, 'src/pages/work/index.astro'), 'utf8')
-  assert.ok(!/Portfolio index — 02 projects/.test(workIndex), 'must not hardcode 02 projects')
-  assert.ok(/projects\.length/.test(workIndex), 'must derive count from projects.length')
-  assert.ok(/projects\.map/.test(workIndex), 'must derive meta from projects')
-})
-
-test('case-study pages derive shared props from entry', () => {
-  const fe = fs.readFileSync(path.join(repoRoot, 'src/pages/work/fast-english.astro'), 'utf8')
-  const nov = fs.readFileSync(path.join(repoRoot, 'src/pages/work/noveno.astro'), 'utf8')
-  for (const [name, content] of [
-    ['fast-english', fe],
-    ['noveno', nov],
+test('asset provenance covers every image and font', () => {
+  const sources = fs.readFileSync(path.join(repoRoot, 'src/assets/SOURCES.md'), 'utf8')
+  for (const file of fs.readdirSync(workAssets).filter((f) => f.endsWith('.webp'))) {
+    assert.ok(sources.includes(file), `SOURCES.md must document ${file}`)
+  }
+  for (const file of fs.readdirSync(travelAssets).filter((f) => f.endsWith('.webp'))) {
+    assert.ok(sources.includes(file), `SOURCES.md must document ${file}`)
+  }
+  for (const font of [
+    'geist-latin',
+    'geist-mono-latin',
+    'instrument-serif-regular',
+    'instrument-serif-italic',
   ]) {
-    assert.ok(/getCollection/.test(content), `${name}: must import getCollection`)
-    assert.ok(/entry\.data\./.test(content), `${name}: must reference entry.data`)
-    assert.ok(/statusLabelFor/.test(content), `${name}: must use statusLabelFor`)
-    // ensure hardcoded shared props removed
-    // kicker hardcode check: should use entry.data.kicker
-    assert.ok(/entry\.data\.kicker/.test(content), `${name}: kicker must be from entry`)
-    assert.ok(/entry\.data\.title/.test(content), `${name}: title must be from entry`)
+    assert.ok(sources.includes(font), `SOURCES.md must document ${font}`)
+    assert.ok(
+      fs.existsSync(path.join(repoRoot, 'public/fonts', `${font}.woff2`)),
+      `${font} is vendored`,
+    )
   }
-  // ensure old hardcoded status strings removed
-  assert.ok(!/In progress — active/.test(fe), 'fast-english must not contain hardcoded In progress — active')
-})
-
-test('src/lib/projects.ts exports required surface and blocks javascript: via schema', () => {
-  const lib = fs.readFileSync(path.join(repoRoot, 'src/lib/projects.ts'), 'utf8')
-  for (const exp of ['getDisplayProjects', 'cardPropsFor', 'statusLabelFor', 'hrefFor', 'isDraft', 'kickerFor', 'ctaLabelFor', 'variantFor']) {
-    assert.ok(lib.includes(exp), `lib must export ${exp}`)
-  }
-  assert.ok(/javascript:/i.test(lib), 'lib must contain javascript: guard')
-  const config = fs.readFileSync(path.join(repoRoot, 'src/content.config.ts'), 'utf8')
-  assert.ok(/caseStudy/.test(config), 'content.config must contain caseStudy')
-  assert.ok(/refine/.test(config), 'content.config must refine caseStudy')
-  assert.ok(/javascript:/i.test(config), 'content.config must block javascript:')
+  assert.ok(fs.existsSync(path.join(repoRoot, 'public/fonts/LICENSE-Geist.txt')))
+  assert.ok(fs.existsSync(path.join(repoRoot, 'public/fonts/LICENSE-InstrumentSerif.txt')))
 })

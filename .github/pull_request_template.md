@@ -34,6 +34,7 @@ Delete this section when no rendered interface changed.
 ## Scope hygiene
 
 - [ ] No unrelated change, secret, private artifact, debug bypass, or generated output is included.
-- [ ] New/updated dependencies were source-reviewed, exactly pinned, integrity-recorded, and tested.
+- [ ] New/updated dependencies were source-reviewed, lockfile-pinned, and tested.
+- [ ] Vendored DSH workflow skills still match `.dsh/workflow.json` (`bash scripts/verify.sh`).
 - [ ] Documentation, verification evidence, and changelog are current where applicable.
 - [ ] No commit, release, deployment, or production mutation is implied by local verification.

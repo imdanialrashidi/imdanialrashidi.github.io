@@ -1,0 +1,96 @@
+---
+import { site, socials } from '../data/site.ts'
+import SocialIcon from './SocialIcon.astro'
+---
+
+<section class="cta-band" aria-labelledby="cta-title">
+  <div class="container cta-band__inner">
+    <p class="eyebrow eyebrow--accent">Next step</p>
+    <h2 class="h1 cta-band__title" id="cta-title">
+      Have something that should <em>work better?</em>
+    </h2>
+    <p class="lede cta-band__lede">
+      I am open to remote work, product collaborations, and business websites
+      that need to be done properly. Email is the fastest route to a real
+      answer.
+    </p>
+    <div class="cta-band__actions">
+      <a class="btn btn--primary" href={`mailto:${site.email}`}>
+        {site.email}
+      </a>
+      <a class="btn btn--outline" href="/contact/">Contact details</a>
+    </div>
+    <ul class="cta-band__socials">
+      {
+        socials
+          .filter((social) => social.id !== "email")
+          .map((social) => (
+            <li>
+              <a
+                href={social.href}
+                rel={social.id === "persian" ? "me" : "me noopener"}
+                lang={social.id === "persian" ? "fa" : undefined}
+              >
+                <SocialIcon id={social.id} size={16} />
+                {social.label}
+              </a>
+            </li>
+          ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .cta-band {
+    border-top: 1px solid var(--line);
+    padding-block: var(--section-y);
+  }
+
+  .cta-band__inner {
+    display: grid;
+    justify-items: start;
+    gap: 1.25rem;
+  }
+
+  .cta-band__title {
+    max-width: 16ch;
+    font-size: clamp(2.5rem, 6vw, 4.75rem);
+  }
+
+  .cta-band__lede {
+    max-width: 34rem;
+  }
+
+  .cta-band__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .cta-band__socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    list-style: none;
+    padding: 0;
+    margin-top: 0.75rem;
+  }
+
+  .cta-band__socials a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 2.75rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.03em;
+    color: var(--ink-soft);
+    text-decoration: none;
+  }
+
+  .cta-band__socials a:hover {
+    color: var(--accent);
+  }
+</style>

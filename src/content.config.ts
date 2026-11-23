@@ -2,62 +2,61 @@ import { defineCollection } from 'astro:content'
 import { glob } from 'astro/loaders'
 import { z } from 'astro/zod'
 
-// Content schemas — used via getCollection throughout the site.
-// Content is kept honest: no invented metrics, screenshots, or testimonials.
+// Content schemas. Everything shown on the site comes from these collections,
+// validated at build time. The site stays honest: no invented metrics, no
+// fabricated screenshots, no testimonials. Each project body is real prose that
+// explains the work; the layout components only frame it.
+
+const projectStatus = z.enum(['building', 'live', 'shipped', 'in_development'])
 
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
   schema: z.object({
     title: z.string(),
-    // concise truthful description shown in cards / teases
+    // Search-shape title without the brand suffix, <= 42 characters.
+    seoTitle: z.string().optional(),
+    // One sentence for cards. Aim for 90 to 150 characters.
     summary: z.string(),
-    // restrained category metadata e.g. "Product Engineering · Web · PWA · Android"
-    kicker: z.string().optional(),
-    categories: z.array(z.string()).optional(),
-    role: z.string().optional(),
-    year: z.number().int().optional(),
-    status: z.enum(['draft', 'in_progress', 'published', 'building']).default('in_progress'),
-    stack: z.array(z.string()).optional(),
+    // Search-result description. 120 to 160 characters.
+    metaDescription: z.string().min(110).max(165),
+    // Short category line, e.g. "Customer systems · Web · Product".
+    kicker: z.string(),
+    kind: z.enum(['product', 'client']),
+    role: z.string(),
+    year: z.number().int(),
+    // Honest display status; mirrored in the UI and structured data.
+    status: projectStatus,
+    statusLabel: z.string(),
+    stack: z.array(z.string()).min(1),
     links: z
       .object({
         live: z.url().optional(),
         github: z.url().optional(),
-        noveno: z.url().optional(),
-        caseStudy: z
-          .string()
-          .optional()
-          .refine((v) => !v || (/^(\/|https?:\/\/)/.test(v) && !/^\s*javascript:/i.test(v)), {
-            message: 'caseStudy must be an internal path (/) or https URL, not javascript:',
-          }),
+        related: z.url().optional(),
       })
-      .optional(),
+      .default({}),
+    // Key into the cover map in src/lib/work.ts (typed + validated there).
+    // Optional: projects without a real screenshot render a typographic plate
+    // instead of an invented interface.
     cover: z.string().optional(),
-    // explicit media placeholder flag — when false, media area renders honest abstract structure
-    hasVisual: z.boolean().optional().default(false),
-    featured: z.boolean().optional(),
-    order: z.number().optional(),
+    coverAlt: z.string().optional(),
+    featured: z.boolean().default(false),
+    order: z.number().default(99),
   }),
 })
 
-const profile = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/profile' }),
+const travels = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/travels' }),
   schema: z.object({
-    name: z.string(),
-    headline: z.string(),
-    bio: z.string(),
+    destination: z.string(),
+    // The Iranian calendar year is kept alongside its Gregorian equivalent.
+    dateLabel: z.string(),
+    summary: z.string(),
+    image: z.string(),
+    imageAlt: z.string(),
+    imagePosition: z.string().default('50% 50%'),
+    order: z.number().default(99),
   }),
 })
 
-const now = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/now' }),
-  schema: z.object({
-    date: z.coerce.date(),
-    title: z.string().optional(),
-  }),
-})
-
-export const collections = {
-  projects,
-  profile,
-  now,
-}
+export const collections = { projects, travels }

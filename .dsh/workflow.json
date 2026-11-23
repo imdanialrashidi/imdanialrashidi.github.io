@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "workflow": "dsh-workflow",
+  "version": "0.2",
+  "source": "https://github.com/imdanialrashidi/dsh-workflow",
+  "commit": "cb887ce9da9708fd84e22fd31250d937abb8b824",
+  "retrievedAt": "2026-11-23",
+  "scope": "project",
+  "skills": {
+    "build": "fa4af649dfb1fb9a55e4710f683c53fdd3c12927b37a3b290f8cf5bb290c8800",
+    "production": "4de3ed9f2362cec4631fef5c3ece7e2f368cc46ab7b1754472baa516d8b00586",
+    "quick-fix": "bc932f0f46ca1ccfbc51c3c4dc84aa372bb1764c643831748975761dcd5964d6",
+    "review": "06a3e4b3d29e1eb41be937c779092b7771de103c21f6e114dd7d8cb248916870",
+    "spec": "f65ad7a1750185101e903ec3b3481d800a6853d703b66c06fd1b9dabb856440f",
+    "test-design": "d39332c26bc9f4bf7a82d4f2d965396de3bd48e84379826c9d0e9dd88e1fc423",
+    "verify": "8c03a750c9349b72e42b36be75e89a7374ecbac838ca7be9564e59df9a9d52fe"
+  }
+}

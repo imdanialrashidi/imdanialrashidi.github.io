@@ -1,310 +1,145 @@
 ---
-import CompactWorkCard from '../../components/CompactWorkCard.astro'
-import ProjectFeature from '../../components/ProjectFeature.astro'
+import { getCollection } from 'astro:content'
+import CtaBand from '../../components/CtaBand.astro'
+import ProjectRow from '../../components/ProjectRow.astro'
+import SectionHead from '../../components/SectionHead.astro'
 import { site } from '../../data/site.ts'
 import Layout from '../../layouts/Layout.astro'
-import { cardPropsFor, getClientProjects, getDisplayProjects, getFeaturedProjects, hrefFor } from '../../lib/projects.ts'
-import { itemListLd } from '../../lib/seo.ts'
+import { HOME_TRAIL, WORK_TRAIL, itemListNode } from '../../lib/seo.ts'
+import { type ProjectEntry, byKind, sortProjects } from '../../lib/work.ts'
 
-const projects = await getDisplayProjects()
-const featured = await getFeaturedProjects()
-const clients = await getClientProjects()
+const projects = await getCollection('projects')
+const ordered = sortProjects(projects)
+const productProjects = byKind(projects, 'product')
+const clientProjects = byKind(projects, 'client')
+const years = ordered.map((entry: ProjectEntry) => entry.data.year)
+const firstYear = Math.min(...years)
+const lastYear = Math.max(...years)
 
-const workUrl = new URL('/work', site.url).toString()
-const pageTitle = 'Work — Web, AI & Automation Projects | Danial Rashidi'
-const workSchema = [
-  {
-    '@type': 'CollectionPage',
-    url: workUrl,
-    name: pageTitle,
-    isPartOf: { '@id': `${site.url}/#website` },
-    mainEntity: { '@id': `${workUrl}#worklist` },
-  },
-  {
-    ...itemListLd(
-      projects.map((p) => ({
-        name: p.data.title,
-        description: p.data.summary,
-        href: hrefFor(p),
-      })),
-    ),
-    '@id': `${workUrl}#worklist`,
-  },
-]
+const description =
+  'Eight projects by Danial Rashidi: Noveno, Fast English, Study Center and Gym Log, plus four client websites. Case studies with real screenshots and honest limits.'
+
+const itemList = itemListNode(
+  ordered.map((entry) => ({
+    name: entry.data.title,
+    description: entry.data.summary,
+    href: `/work/${entry.id}/`,
+  })),
+)
 ---
 
 <Layout
-  title={pageTitle}
-  description="Selected work by Danial Rashidi — Fast English and Noveno case studies plus four client web projects, with real screenshots, honest status and limitations."
-  schema={workSchema}
+  title="Work: software and web projects"
+  description={description}
+  path="/work/"
+  image="/og/work.jpg"
+  imageAlt="Work index: Danial Rashidi's product and client projects"
+  pageType="CollectionPage"
+  breadcrumbs={[HOME_TRAIL, WORK_TRAIL]}
+  extraSchema={[itemList]}
+  mainEntity={{ "@type": "ItemList", "@id": `${site.url}/work/#projects` }}
 >
-  <section class="work-head">
-    <div class="container">
-      <div class="work-head__top">
-        <span class="work-head__eyebrow">Portfolio index — {String(projects.length).padStart(2, '0')} projects</span>
-        <span class="work-head__rule" aria-hidden="true"></span>
+  <header class="container page-hero">
+    <p class="eyebrow eyebrow--accent">Portfolio index</p>
+    <h1 class="h1 page-hero__title">Work</h1>
+    <p class="lede page-hero__lede">
+      Eight projects: four products I own and build, and four websites made for
+      businesses. Every preview below is a real screenshot, and every status
+      says where the work actually stands.
+    </p>
+    <dl class="page-stats">
+      <div>
+        <dt>Products</dt>
+        <dd>{String(productProjects.length).padStart(2, "0")}</dd>
       </div>
-      <h1 class="work-head__title">Work</h1>
-      <p class="work-head__lede">
-        A curated portfolio — two deep product efforts and selected client web work. Every preview is a real public-site screenshot (provenance in <code>src/assets/work/SOURCES.md</code>); outcomes are “measuring” unless publicly verifiable, with limitations noted per project.
-      </p>
-      <div class="work-head__meta">
-        {
-          projects.map((p, idx) => (
-            <>
-              <span>
-                {p.data.title}{' '}
-                <span class="mono">
-                  · {p.data.kicker ?? (p.data.categories ? p.data.categories.join(' · ') : '')}
-                </span>
-              </span>
-              {idx < projects.length - 1 && <span aria-hidden="true">—</span>}
-            </>
-          ))
-        }
+      <div>
+        <dt>Client sites</dt>
+        <dd>{String(clientProjects.length).padStart(2, "0")}</dd>
       </div>
+      <div>
+        <dt>Period</dt>
+        <dd>{firstYear} to {lastYear}</dd>
+      </div>
+    </dl>
+  </header>
+
+  <section class="container work-group" aria-labelledby="products-title">
+    <SectionHead
+      index="01"
+      title="Products I own"
+      note="Built, shipped, and maintained by me. The case studies include what is finished, what is still moving, and what is deliberately out of scope."
+      id="products-title"
+    />
+    <div class="work-list">
+      {
+        productProjects.map((entry, i) => (
+          <ProjectRow entry={entry} index={i + 1} />
+        ))
+      }
     </div>
   </section>
 
-  <!-- Featured: deep product work -->
-  <section class="work-list" aria-labelledby="featured-title">
-    <div class="container">
-      <div class="work-list__sectionHead">
-        <h2 id="featured-title" class="work-list__sectionTitle">Featured — deep product work</h2>
-        <p class="work-list__sectionLede">Two focused product efforts with long-form case studies — honest depth without invented screenshots.</p>
-      </div>
-      <div class="work-list__stack">
-        {
-          featured.map((p, i) => {
-            const props = cardPropsFor(p, i)
-            return <ProjectFeature {...props} />
-          })
-        }
-      </div>
+  <section class="container work-group" aria-labelledby="clients-title">
+    <SectionHead
+      index="02"
+      title="Client work"
+      note="Websites designed and built for real businesses: stores, a safety inspection company, and a language institute. Scope and limits are stated per project."
+      id="clients-title"
+    />
+    <div class="work-list">
+      {
+        clientProjects.map((entry, i) => (
+          <ProjectRow entry={entry} index={productProjects.length + i + 1} />
+        ))
+      }
     </div>
   </section>
 
-  <!-- Selected client work — lighter profiles, real previews -->
-  <section class="work-list work-list--clients" aria-labelledby="clients-title">
-    <div class="container">
-      <div class="work-list__sectionHead">
-        <div class="work-list__eyebrow">
-          <span class="work-list__eyebrowNum">03–06</span>
-          <span class="work-list__eyebrowRule" aria-hidden="true"></span>
-          <span class="work-list__eyebrowText">Selected client work</span>
-        </div>
-        <h2 id="clients-title" class="work-list__sectionTitle">Web work — honest profiles</h2>
-        <p class="work-list__sectionLede">Four public business sites — presented as concise portfolio profiles with real hero screenshots and explicit limitations; no campaign metrics are fabricated.</p>
-      </div>
-
-      <div class="work-list__grid">
-        {
-          clients.map((p) => {
-            const props = cardPropsFor(p, 0)
-            return (
-              <CompactWorkCard
-                title={props.title}
-                kicker={props.kicker}
-                summary={props.summary}
-                href={props.href}
-                image={props.image}
-                imageAlt={props.imageAlt}
-                externalHref={p.data.links?.live}
-              />
-            )
-          })
-        }
-      </div>
-
-      <p class="work-list__note">
-        Hierarchy is intentional: featured work carries editorial weight (large feature cards). Client work is lighter (compact grid) — breadth without an agency dump. Every image is a real public-site screenshot; every outcome is “measuring” until public data exists. Screenshots via thum.io; local copies in <code>src/assets/work/</code> with <code>SOURCES.md</code> provenance.
-      </p>
-    </div>
-  </section>
-
-  <section class="work-list__footWrap">
-    <div class="container work-list__foot">
-      <p class="work-list__note">
-        Fast English and Noveno retain deep case-study treatment; the four client entries are intentionally lighter “project profiles” — scope, what was built, public site, honest status and limitations — so depth matches available evidence.
-      </p>
-      <div class="work-list__actions">
-        <a href="/" class="work-list__link">← Back to home</a>
-        <a href="/contact" class="work-list__link work-list__link--accent">Get in touch →</a>
-      </div>
-    </div>
-  </section>
+  <CtaBand />
 </Layout>
 
 <style>
-  .work-head {
-    padding: clamp(2rem, 6vw, 3.25rem) 0 clamp(1.5rem, 4vw, 2rem);
-    border-bottom: var(--border-hairline);
-    background: linear-gradient(180deg, color-mix(in srgb, var(--color-accent-soft) 34%, transparent) 0%, transparent 70%);
-  }
-
-  .work-head__top {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    margin-bottom: var(--space-4);
-  }
-
-  .work-head__eyebrow {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-weight: 700;
-    color: var(--color-text-faint);
-  }
-
-  .work-head__rule {
-    flex: 1;
-    max-width: 80px;
-    height: 1px;
-    background: var(--color-border-strong);
-    opacity: 0.7;
-  }
-
-  .work-head__title {
-    font-size: clamp(2rem, 5vw, 3rem);
-    letter-spacing: -0.03em;
-    line-height: 0.92;
-    font-weight: 670;
-  }
-
-  .work-head__lede {
-    margin-top: var(--space-4);
-    font-size: var(--text-md);
-    line-height: 1.65;
-    color: var(--color-text-muted);
-    max-width: 62ch;
-  }
-
-  .work-head__meta {
-    margin-top: var(--space-5);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 14px;
-    align-items: center;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.03em;
-    color: var(--color-text-faint);
-    border-top: var(--border-hairline);
-    padding-top: var(--space-4);
-    max-width: 70ch;
-  }
-
-  .mono { font-size: 10px; opacity: 0.9; }
-
-  .work-list {
-    padding: clamp(1.75rem, 4vw, 2.5rem) 0 clamp(1.5rem, 4vw, 2.5rem);
-  }
-  .work-list--clients {
-    padding-top: clamp(1.5rem, 4vw, 2.5rem);
-    border-top: var(--border-hairline);
-    background: color-mix(in srgb, var(--color-surface) 50%, var(--color-canvas));
-  }
-  .work-list__sectionHead {
-    margin-bottom: clamp(1.25rem, 3vw, 2rem);
-  }
-  .work-list__sectionTitle {
-    font-size: clamp(1.25rem, 2.5vw, 1.6rem);
-    font-weight: 650;
-    letter-spacing: -0.018em;
-    line-height: 1.15;
-  }
-  .work-list__sectionLede {
-    margin-top: var(--space-2);
-    font-size: var(--text-sm);
-    line-height: 1.6;
-    color: var(--color-text-muted);
-    max-width: 60ch;
-  }
-  .work-list__eyebrow {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-weight: 700;
-    color: var(--color-text-faint);
-    margin-bottom: var(--space-3);
-  }
-  .work-list__eyebrowNum {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 36px;
-    height: 20px;
-    padding: 0 6px;
-    border-radius: var(--radius-pill);
-    border: var(--border-hairline);
-    background: var(--color-surface);
-    font-weight: 700;
-    color: var(--color-text-muted);
-    font-size: 10px;
-  }
-  .work-list__eyebrowRule { width: 24px; height: 1px; background: var(--color-border-strong); opacity: 0.7; }
-  .work-list__eyebrowText { font-weight: 600; }
-
-  .work-list__stack {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-6);
-  }
-  .work-list__grid {
+  .page-hero {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-4);
-  }
-  @media (max-width: 720px) { .work-list__grid { grid-template-columns: 1fr; } }
-  .work-list__footWrap {
-    padding: clamp(1.5rem, 4vw, 2.5rem) 0 clamp(2.5rem, 6vw, 4rem);
-    border-top: var(--border-hairline);
+    gap: 1.1rem;
+    padding-top: clamp(2.5rem, 6vw, 4.5rem);
+    padding-bottom: clamp(2.5rem, 6vw, 4rem);
   }
 
-  .work-list__foot {
-    margin-top: var(--space-8);
-    border-top: var(--border-hairline);
-    padding-top: var(--space-6);
+  .page-hero__title {
+    font-size: clamp(3.25rem, 9vw, 7rem);
+    line-height: 0.9;
+  }
+
+  .page-hero__lede {
+    max-width: 40rem;
+  }
+
+  .page-stats {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-  }
-
-  .work-list__note {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    line-height: 1.65;
-    color: var(--color-text-faint);
-    max-width: 72ch;
-    border-left: 2px solid var(--color-border);
-    padding-left: 12px;
-  }
-
-  .work-list__actions {
-    display: flex;
-    gap: var(--space-4);
     flex-wrap: wrap;
+    gap: 1rem 3rem;
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
   }
 
-  .work-list__link {
-    font-size: var(--text-sm);
-    font-weight: 600;
-    color: var(--color-text-muted);
-    border-bottom: 1px solid var(--color-border-strong);
-    padding-bottom: 2px;
-    transition: color var(--duration-fast) var(--ease-default), border-color var(--duration-fast) var(--ease-default);
+  .page-stats dt {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
   }
-  .work-list__link:hover { color: var(--color-text); border-color: var(--color-text); }
-  .work-list__link--accent { color: var(--color-accent); border-color: color-mix(in srgb, var(--color-accent) 30%, transparent); }
-  .work-list__link--accent:hover { color: var(--color-accent-hover); border-color: var(--color-accent); }
 
-  @media (max-width: 480px) {
-    .work-head__meta { gap: 6px 10px; }
+  .page-stats dd {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    line-height: 1.1;
+    color: var(--ink);
+  }
+
+  .work-group {
+    padding-block: clamp(2rem, 5vw, 3.5rem);
   }
 </style>

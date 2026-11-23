@@ -1,10 +1,6 @@
-# Quality Contract — Danial Rashidi Personal Site
+# Quality Contract: Danial Rashidi Personal Site
 
-<<<<<<< Updated upstream
-Evaluator-facing quality bar for the Astro static portfolio at `https://imdanialrashidi.github.io`. Updated 2026-08-27 from repository evidence.
-=======
-Evaluator-facing quality bar for the Astro static portfolio at `https://imdanialrashidi.github.io`. Updated 2026-11-04 from repository evidence; workflow sections follow the DSH Workflow (dsh-workflow v0.1).
->>>>>>> Stashed changes
+Evaluator-facing quality bar for the English Astro static site at `https://imdanialrashidi.github.io`. Updated 2026-11-23 for the English parity rebuild from repository evidence. Workflow sections follow DSH Workflow v0.2 (`.dsh/workflow.json`); commands and evidence live here and in [WORKFLOW.md](WORKFLOW.md); product outcomes live in [PRODUCT.md](PRODUCT.md).
 
 ## Release rule
 
@@ -32,8 +28,9 @@ For accepted scope:
 - A new regression test should demonstrably fail on pre-fix behavior (or a safe focused mutation/equivalent independent characterization) when practical, then pass after the fix.
 - Generated tests must build, pass reliably, add a distinct behavioral signal, and isolate relevant state; line coverage alone is not acceptance evidence.
 
-<<<<<<< Updated upstream
 ### Test Value Gate
+
+`test-design` owns this gate; apply it before adding or materially changing tests.
 
 A new or materially changed test is retained only when it identifies:
 
@@ -44,16 +41,13 @@ A new or materially changed test is retained only when it identifies:
 5. an oracle independent from the implementation under test; and
 6. red-before-green, a controlled focused mutation, or equivalent defect-sensitivity evidence when practical.
 
-Extend an existing case only to close a distinct evidence gap; otherwise add no test. `No new test` is an acceptable professional outcome for behavior-neutral changes or behavior already proved by the suite. Coverage, assertion count, and test count are diagnostic signals—not acceptance goals.
+Extend an existing case only to close a distinct evidence gap; otherwise add no test. `No new test` is an acceptable professional outcome for behavior-neutral changes or behavior already proved by the suite. Coverage, assertion count, and test count are diagnostic signals, not acceptance goals.
 
 A test must justify what could break, why existing evidence misses it, and how it would detect that failure. Keep this explanation proportional; do not create a separate test-plan document for a small edit. Never substitute mocked unit tests for a real integration risk, or use prose/source-text matching as proof that an agent follows instructions. Preserve explicit machine-format and architecture checks where those are the contract.
 
 Select one representative per equivalence class and exact material boundaries. Use decision tables, pairwise cases, or properties for meaningful interactions instead of Cartesian enumeration. Prefer the lowest-cost layer that preserves the real contract; use full end-to-end tests only for failures lower layers cannot represent.
 
 Do not compute expected values with the implementation's own logic, mock the subject/authority, verify private calls unless contractual, test framework or third-party behavior, use broad incidental snapshots, blind-update snapshots, sleep/retry away nondeterminism, or duplicate cases that add no distinct behavioral signal. Mocks are reserved for owned boundaries that are expensive, nondeterministic, or unsafe. Browser tests use user-visible behavior and accessible roles/labels, keep independent state, and exercise only the journey that requires a browser.
-=======
-`test-design` owns the Test Value Gate — apply it before adding or materially changing tests. `No new test` is acceptable for behavior-neutral changes or behavior the suite already proves.
->>>>>>> Stashed changes
 
 ## Security and data integrity
 
@@ -67,15 +61,13 @@ At minimum:
 - money/callback/state-transition operations are verified, idempotent, replay-aware, and auditable where applicable;
 - schema/data changes have compatibility, rollback/recovery, and failure-path reasoning.
 
+The site has no server, auth, form, payment or database. Its real security surface is publication hygiene (secrets and private material stay out of the repository) and the integrity of static links and structured data.
+
 ### Focused risk review
 
 Review only the accepted scope and actual diff. Trace changed trust boundaries, input-to-sink data flows, state transitions, public contracts, dependencies, and operational behavior; check the actual controls and tests before reporting a finding.
 
-<<<<<<< Updated upstream
-Check only relevant failure paths: authorization/tenant isolation, injection and unsafe files/URLs, credential/session handling, payment/replay/idempotency, races and partial writes, timeout/cancellation/recovery, unbounded work, inaccessible/error states, dependency/CI mismatch, and migration rollback. The correctness, security, UX, and reliability sections define the underlying contracts.
-=======
-Check only relevant failure paths: authorization/tenant isolation, injection and unsafe files/URLs, credential/session handling, payment/replay/idempotency, races and partial writes, timeout/cancellation/recovery, unbounded work, inaccessible/error states, dependency/CI mismatch, migration rollback. For High-risk scopes prefer a `review` pass; otherwise a direct evidence-focused pass.
->>>>>>> Stashed changes
+Check only relevant failure paths: authorization/tenant isolation, injection and unsafe files/URLs, credential/session handling, payment/replay/idempotency, races and partial writes, timeout/cancellation/recovery, unbounded work, inaccessible/error states, dependency/CI mismatch, migration rollback. For high-risk scopes prefer a `review` pass; otherwise a direct evidence-focused pass.
 
 For each evidence-backed finding give severity, `file:line` or symbol, a concrete failure/attack scenario, why the current control is insufficient, the smallest safe fix, and a proof test. Prefer a few actionable findings over speculative checklist output.
 
@@ -90,11 +82,7 @@ Return the acceptance evidence and one verdict: `PASS`, `PASS WITH FIXES`, or `B
 
 For rendered interfaces:
 
-<<<<<<< Updated upstream
-- exercise the critical journey in the real browser when browser behavior matters;
-=======
 - exercise the critical journey in a real browser when a browser-capable tool is available; otherwise mark visual and interaction criteria `UNPROVEN`;
->>>>>>> Stashed changes
 - preserve keyboard access, visible focus, semantic controls, labels, contrast, touch targets, and reduced-motion behavior;
 - check realistic data, long text, localization/RTL when relevant, and at least one narrow viewport for mobile-facing surfaces;
 - follow the accepted `docs/DESIGN.md`; use existing design tokens/components when they remain sound and change them deliberately when the accepted direction requires it;
@@ -109,9 +97,11 @@ Default accessibility baseline when the product has not chosen a stricter target
 - reflow without loss of information/functionality at 320 CSS px where the content is not inherently two-dimensional;
 - usable at 200% text zoom, with clear visible focus and meaning that does not depend on color alone.
 
+The project target is WCAG 2.2 AA. Lab evidence of 2026-11-23 recorded Lighthouse accessibility 100 on `/`, `/work/`, `/work/noveno/`, `/about/` and `/contact/`. A manual screen-reader pass and cross-browser interaction pass are not part of that bundle and stay `UNPROVEN`.
+
 ### Visual excellence
 
-For a new interface, redesign, launch surface, or explicitly high-aesthetic task, load `frontend-design` and evaluate the rendered result using its visual-quality rubric.
+For a new interface, redesign, launch surface, or explicitly high-aesthetic task, apply the repository rubric in [VISUAL_REVIEW.md](VISUAL_REVIEW.md) and evaluate the rendered result against the accepted design contract.
 
 Require:
 
@@ -137,36 +127,26 @@ Apply only where relevant to the changed path:
 
 For production web surfaces without accepted product-specific field budgets, use current Core Web Vitals `good` thresholds as targets at the 75th percentile, segmented by mobile and desktop: LCP ≤ 2.5 s, INP ≤ 200 ms, and CLS ≤ 0.1. Before field data exists, require an accepted repeatable lab budget, RUM instrumentation, and a staged-rollout check. Lab results are pre-production signals; do not present them as field/RUM proof.
 
+This project records no RUM or field data by design. Performance acceptance is a lab budget only: Lighthouse on a local preview, and the artifact budgets in `scripts/check-built-site.mjs`.
+
 ## Maintainability and architecture
 
 - Prefer existing project patterns and stable framework/platform primitives.
 - Keep public interfaces small and backward-compatible unless a breaking change is accepted.
 - Keep business rules separable from presentation/transport when the existing architecture supports it.
 - New abstractions should solve more than one real current use case or remove a demonstrated risk/duplication.
-<<<<<<< Updated upstream
-- New dependencies require a concrete benefit over existing/platform capabilities.
-=======
-- New dependencies require a concrete benefit over existing/platform capabilities — DSH already ships skills, subagents, web search/fetch, and bash; adding a package that duplicates them needs justification.
->>>>>>> Stashed changes
+- New dependencies require a concrete benefit over existing/platform capabilities. The current dependency set is deliberately small: Astro, `@astrojs/sitemap`, `@astrojs/check`, TypeScript, Biome, and `sharp` (generation scripts only).
 - Architecture invariants that matter repeatedly should be enforced mechanically with types, lint rules, structural tests, schemas, or CI rather than prose alone.
 
 ## Evidence hierarchy
 
 Prefer stronger evidence when practical:
 
-<<<<<<< Updated upstream
-1. deterministic automated test of the accepted behavior;
-2. real browser/API/database exercise of the relevant journey;
-3. type/lint/structural/static analysis for invariant classes;
-4. reproducible measurement for performance/reliability claims;
-5. focused independent-evaluator inspection for aspects that cannot be automated economically.
-=======
 1. deterministic automated check of the accepted behavior;
-2. a real `bash`/runtime run or a browser exercise when available;
+2. a real runtime run or a browser exercise when available;
 3. type/lint/structural analysis and `astro check` diagnostics for invariant classes;
 4. reproducible measurement for performance/reliability claims;
 5. focused independent review (`review` skill or fresh subagent) for aspects that cannot be automated economically.
->>>>>>> Stashed changes
 
 A reviewer or subagent opinion alone is not proof.
 
@@ -176,10 +156,10 @@ An evaluator should assess the accepted contract, not invent adjacent scope.
 
 For each acceptance criterion return one of:
 
-- **PASS** — implementation and evidence satisfy the criterion;
-- **FAIL** — evidence demonstrates incorrect/incomplete behavior;
-- **UNPROVEN** — implementation may exist but adequate evidence is missing;
-- **BLOCKED** — a genuine prerequisite prevents verification.
+- **PASS:** implementation and evidence satisfy the criterion;
+- **FAIL:** evidence demonstrates incorrect/incomplete behavior;
+- **UNPROVEN:** implementation may exist but adequate evidence is missing;
+- **BLOCKED:** a genuine prerequisite prevents verification.
 
 Then inspect cross-cutting regression risk only where the diff makes it relevant.
 
@@ -187,21 +167,39 @@ The overall task cannot be called complete while a required criterion is `FAIL` 
 
 ## Project-specific quality invariants
 
-Confirmed from `package.json`, `astro.config.mjs`, `src/styles/tokens.css`, `src/content.config.ts`, `src/lib/projects.ts`, `tests/projects.test.mjs`, and CI:
+Confirmed from `package.json`, `astro.config.mjs`, `src/data/site.ts`, `src/content.config.ts`, `src/lib/work.ts`, `src/lib/travels.ts`, `src/lib/seo.ts`, `src/layouts/Layout.astro`, `tests/*.test.mjs`, `scripts/*.mjs` and the CI workflows.
 
-- Architecture direction: `src/data/site.ts` (single source for site/social/nav/constants) → `src/content.config.ts` (zod schemas, `glob` loaders for `projects`/`profile`/`now`) → `src/lib/projects.ts` (pure helpers: `isDraft`, `statusLabelFor`, `hrefFor`, `kickerFor`, `variantFor`, `imageFor`, `cardPropsFor`, `getDisplayProjects`/`getFeaturedProjects`/`getClientProjects`) → `src/pages/**` + `src/components/**` + `src/layouts/Layout.astro`. Pages/components import from `lib`/`data`, never the reverse; `content.config.ts` owns validation.
-- Content honesty: No invented metrics/screenshots/testimonials. `hasVisual` defaults `false` (abstract placeholder when no real preview); real hero screenshots in `src/assets/work/*` with provenance `src/assets/work/SOURCES.md`; statuses `draft`/`in_progress`/`published`/`building` filtered via `isDraft` (draft excluded from display) — enforced by `tests/projects.test.mjs`.
-- Security boundary: Author → Git → CI (`npm run check` → `npm run build`) → Pages (`actions/deploy-pages`). No server, no DB, no auth. `caseStudy` links validated by zod refine `/^(\/|https?:\/\/)/` and not `javascript:` (schema level + test). `localStorage` theme only; no cookie; external links `rel="noopener noreferrer"` / `rel="me"` where needed.
-- Accessibility target: WCAG 2.2 AA enforced — text ≥4.5:1, large/UI ≥3:1 per `src/styles/tokens.css` table in `docs/DESIGN.md`; reflow at 320 CSS px verified; 200% zoom usable; visible `:focus-visible` ring `rgba(15,76,255,0.4)`; skip-link; header `role=dialog aria-modal` with `aria-expanded`, Escape + click-away, `ThemeToggle` `aria-pressed`, touch 36–44 px.
-- Performance budget (lab, before RUM): LCP ≤2.5 s, INP ≤200 ms, CLS ≤0.1 as targets at 75th percentile. Enforce via lab budgets: CSS 23K foundation → ~90K inlined shipped (`build.inlineStylesheets: "always"`, `lightningcss`), fonts 139K (`public/fonts/Geist*`), JS 0 external + ~2K inline, portrait `Assets/Danial_photo.webp` 85K → 4 `dist/_astro/Danial_photo.*.webp` variants, OG 30.8K, `Astro` static with `astro:assets` widths `[320,480,640]`.
-- Browser/device matrix: Evergreen Chromium/Firefox/Safari, keyboard + touch + pointer, viewports 320/375/780/1280 (verified no overflow/horizontal scroll), no IE. `font-display: swap`, preload Sans only.
-- Visual contract: `docs/DESIGN.md` tokens/typography/geometry/components are authoritative; no second design system, no Tailwind, no glassmorphism/particles per rejected complexity.
-<<<<<<< Updated upstream
-- Canonical release gate: `bash scripts/ci-install.sh` (npm ci), then `npm run check` (`astro check` strict + content zod) and `npm run build` (`node scripts/generate-og.mjs && astro build`) must pass; PRs additionally require `npm run format:check` (`biome check`) and `bash scripts/verify.sh` (harness doctor + ci fallback). Deploy gate is `deploy.yml` on `main` push (`npm run check` → `npm run build` → `actions/upload-pages-artifact` `dist/` → `actions/deploy-pages`). Previous `main` always deployable (`git revert` rollback, `dist/` ephemeral).
-=======
-- Canonical release gate: `bash scripts/ci-install.sh` (npm ci), then `npm run ci` (`astro check` strict + content zod + `node scripts/generate-og.mjs && astro build`) must pass; `bash scripts/verify.sh` (repository self-checks, then `npm run ci`) is the canonical gate locally and in `quality.yml`. `npm run format:check` (`biome check`) is a separate hygiene lane with pre-existing drift (see remaining risks); `npm run lint` likewise reports pre-existing `useTemplate` style findings in `scripts/pr.mjs`. Neither lane is part of the canonical gate. Deploy gate is `deploy.yml` on `main` push (`npm run check` → `npm run build` → `actions/upload-pages-artifact` `dist/` → `actions/deploy-pages`). Previous `main` always deployable (`git revert` rollback, `dist/` ephemeral).
->>>>>>> Stashed changes
-- Structural checks that are mechanically enforced: `tests/projects.test.mjs` (pure helper parity, `javascript:` block, draft filtering, work-index count, shared `cardPropsFor` usage, `src/lib/projects.ts` export surface), `biome.json` lint/format, `tsconfig.json` strict (`astro/tsconfigs/strict`, `noUncheckedIndexedAccess`), content schema at build time via `astro check`.
-- Failure evidence: Concise — `npm run check` diagnostics, `npm run build` log, `node --test tests/projects.test.mjs` output, Biome `format:check` report, browser console (must be clean, preload warning for Mono removed), and `dist/` existence for build proofs. Secrets never appear in logs/fixtures/screenshots (see `SECURITY.md`).
-- Regression test sensitivity: A new regression test must demonstrably fail on pre-fix behavior (or a narrow focused mutation of the fixed line) and pass after the fix — e.g., `tests/projects.test.mjs` frontmatter `javascript:` caseStudy mutant or draft-filter inversion must fail before fix and pass after; line coverage alone is insufficient.
-- Flaky test handling: Flaky or intermittent paths are defects, not gate-weakening permission — isolate (quarantine suite with explicit `skip` reason and tracking issue), reproduce with fixed seed, quarantine without `retry` normalization; weakening `verify.sh` or adding automatic retries is prohibited until root cause is fixed.
+- Architecture direction: `src/data/site.ts` (site, socials, navigation, products, `persianSite`, `knowsAbout`) -> `src/content.config.ts` (zod schemas for the `projects` and `travels` collections only) -> `src/lib/work.ts` (cover map, hrefs, ordering, featured/client split, next project, kind label), `src/lib/travels.ts` (image map, ordering) and `src/lib/seo.ts` (canonical helpers, breadcrumbs, JSON-LD nodes) -> `src/pages/**` + `src/components/**` + `src/layouts/Layout.astro`. Pages and components import from `lib`/`data`, never the reverse; `content.config.ts` owns validation.
+- Route contract: 14 indexable routes plus 404. `/work/index.astro` and `/work/[slug].astro` are the only work pages; there are no bespoke per-project `.astro` case studies. `/travels/`, `/about/`, `/now/` and `/contact/` are pages. Every canonical and internal URL uses the trailing-slash form because `trailingSlash: "always"` matches GitHub Pages directory serving. `/404.html` is `noindex` and excluded from the sitemap. Enforced by `tests/projects.test.mjs`, `tests/seo-metadata.test.mjs` and `scripts/check-built-site.mjs`.
+- Content honesty: eight English case studies (four own products, four client sites) and three travel notes. `hasVisual` is not used; real screenshots are mapped in `src/lib/work.ts` from `src/assets/work/*.webp` and checked 1:1 against `cover` values. Fast English has no public screen and renders a typographic plate, not a fabricated interface. Provenance is `src/assets/SOURCES.md`. Status labels are `building`, `live`, `shipped` and `in_development`, mirrored honestly in the UI and structured data. No invented metrics, screenshots or testimonials; no em dash characters in site copy. Enforced by `tests/projects.test.mjs` and `tests/seo-metadata.test.mjs`.
+- Static-first performance contract: no `ClientRouter`, no `client:load`, no framework islands, no external JavaScript chunks. The five inline script elements on content pages are the theme FOUC guard, theme behavior, mobile dialog behavior, JSON-LD, and speculation rules. Global CSS ships as one external hashed file (`inlineStylesheets: "auto"`); cross-document view transitions are CSS only. Fonts are four vendored woff2 files in `public/fonts` (Geist latin 28K, Geist Mono latin 31K, Instrument Serif regular 21K, italic 22K; 103K with OFL licenses). Enforced by `tests/projects.test.mjs` and `scripts/check-built-site.mjs`.
+- SEO and identity contract: one canonical, one unique title and description per indexable page, robots meta with `max-image-preview:large` and `max-snippet:-1`, one JSON-LD `@graph` per page (WebSite, Person with `image`/`sameAs`/`owns`/`knowsAbout`, page entity with a narrower type, BreadcrumbList where relevant, CreativeWork for projects, ItemList), a committed 1200x630 JPEG social card per page in `public/og`, `rel="me"` identity links, manifest and icons, `robots.txt` pointing at `sitemap-index.xml`, and a trailing-slash sitemap with 14 URLs. Enforced by `tests/seo-metadata.test.mjs` and `scripts/check-built-site.mjs`.
+- Persian parity decision: the Persian site `https://danialrashidi.ir` remains the Persian home and is linked with `lang="fa"` from the header, footer and page copy. There is no `hreflang` cluster because the content sets are not 1:1; revisit only when every page has a true twin. The Persian support page is not mirrored.
+- Accessibility target: WCAG 2.2 AA, semantic landmarks, one `h1` per page, skip link, visible focus, keyboard-operable header dialog (`role="dialog"`, `aria-modal`, `aria-expanded`, Escape and click-away), `aria-pressed` theme toggle, light and dark themes, reduced-motion reset. Lab evidence: Lighthouse accessibility 100 on the audited routes of 2026-11-23. Manual screen-reader and cross-browser passes remain `UNPROVEN`.
+- Performance budget (lab, before RUM): LCP ≤ 2.5 s, INP ≤ 200 ms, CLS ≤ 0.1 as targets at the 75th percentile. Build budget: 15 pages, dist under 5MB including 14 social cards and 97 image variants, largest HTML 46K, all HTML 434K, zero external JS chunks, 103K fonts. Artifact limits enforced: total HTML under 700K, no image over 300K, dist under 8MB.
+- Browser and device matrix: evergreen Chromium, Firefox and Safari; keyboard, touch and pointer; viewports 320, 375, 768 and 1280; no IE. Recorded lab evidence is Chromium headless, so cross-browser rendering is `UNPROVEN`.
+- Visual contract: `docs/DESIGN.md` owns tokens, typography, geometry, components, motion, content voice and screen acceptance. There is no second design system: no Tailwind, no CSS-in-JS, no UI framework, no glassmorphism or particle effects.
+- Canonical release gate: `bash scripts/ci-install.sh` (`npm ci`), then `bash scripts/verify.sh`. The gate runs conflict-marker and whitespace checks, the vendored workflow check (`scripts/verify-workflow.mjs`), script syntax, domain-skill frontmatter, `npm run format:check` (Biome), `npm test` (`node --test tests/projects.test.mjs tests/seo-metadata.test.mjs`), `npm run ci` (`npm run check` plus `npm run build`, 15 pages), and `node scripts/check-built-site.mjs`. `.github/workflows/quality.yml` runs the same gate on pull requests and `main`. `.github/workflows/deploy.yml` runs `npm run check`, `npm run build`, uploads `dist/` and deploys with `actions/deploy-pages`. Rollback is `git revert` plus redeploy; `dist/` is ephemeral.
+- Generated assets: `public/og/**/*.jpg` is produced by `npm run og` (local Chrome needed for rendering) and `public/icons/*.png`, `public/apple-touch-icon.png` by `npm run icons`. Both are committed, are not rebuilt by CI, and must be regenerated when page copy or screenshots change. `public/fonts/*.woff2` and the OFL license files are committed.
+- Structural checks that are mechanically enforced: `scripts/verify-workflow.mjs` (workflow pin, exact seven-skill set, sha256); `tests/projects.test.mjs` (8 projects, 4/4 split, unique order, schema-shaped frontmatter, body length and no em dash, cover/asset 1:1, three travels with both calendars and real photos, shared helper export surface, route shape, no ClientRouter or client:load, asset provenance); `tests/seo-metadata.test.mjs` (layout SEO markers, title budgets, canonical path arguments, config invariants, robots.txt, trailing-slash internal URLs, social card files, no em dashes in site copy, built-artifact gate presence); `scripts/check-built-site.mjs` (artifact-level canonical/sitemap/trailing-slash agreement, titles/descriptions/robots/lang/h1, OG files, JSON-LD graph, internal links, image files with alt and dimensions, zero JS chunks, external CSS, no oversized image, dist budget); `biome.json` format and lint; `tsconfig.json` strict plus `noUncheckedIndexedAccess`.
+- Failure evidence: keep it concise and attributable. Use `npm run check` diagnostics, the `npm run build` log, `npm test` output, the Biome report, `node scripts/check-built-site.mjs` failures, and a clean browser console. Secrets never appear in logs, fixtures or screenshots (see [SECURITY.md](../SECURITY.md)).
+- Regression test sensitivity: a new regression test must demonstrably fail on pre-fix behavior (or a narrow focused mutation of the fixed line) and pass after the fix. Line coverage alone is insufficient.
+- Flaky test handling: flaky or intermittent paths are defects, not permission to weaken the gate. Isolate or quarantine with an explicit reason and tracking issue, reproduce with a fixed seed, and do not add automatic retries to `scripts/verify.sh`.
+
+## Recorded verification evidence (2026-11-23)
+
+Observed on the working tree before the documentation pass. Record these as evidence, not as new claims; rerun them on the final tree before delivery.
+
+| Check | Command | Result |
+| --- | --- | --- |
+| Type and content check | `npm run check` | 0 errors, 0 warnings, 0 hints (33 files) |
+| Tests | `npm test` | 18 tests pass, 0 fail |
+| Build | `npm run build` | 15 pages |
+| Built artifact | `node scripts/check-built-site.mjs` | PASS for 14 pages, 114 images, 4.5MB total |
+| Canonical gate | `bash scripts/verify.sh` | all required checks pass |
+| Lighthouse desktop home | local preview, Chrome headless | Performance 100, Accessibility 100, Best Practices 100, SEO 100; LCP 0.4 s, CLS 0.001, TBT 0 ms |
+| Lighthouse mobile home | local preview, Chrome headless, mobile emulation | Performance 99, Accessibility 100, Best Practices 100, SEO 100; LCP 2.0 s, CLS 0.001, TBT 0 ms |
+| Lighthouse audited routes | `/work/`, `/work/noveno/`, `/about/`, `/contact/` | accessibility 100 and SEO 100 with no failing audits |
+| Field data / RUM | none shipped | `UNPROVEN`, lab evidence only |
+
+The review environment was a local preview server with Lighthouse in Chrome headless. No production, field, screen-reader or cross-browser measurement is part of this bundle.

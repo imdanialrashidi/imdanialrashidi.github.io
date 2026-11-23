@@ -1,91 +1,72 @@
-# Product Roadmap — Danial Rashidi Personal Site
+# Product Roadmap: Danial Rashidi Personal Site
 
-Execution state for the shipped static portfolio at `https://imdanialrashidi.github.io`. Updated 2026-08-27 from repository evidence at `main`. Task-level multi-session state lives in `docs/exec-plans/active/` when continuity needs it.
+Execution state for the English static site at `https://imdanialrashidi.github.io`. Updated 2026-11-23 after the English parity rebuild. Durable task-level state and evidence live in [exec-plans/active/english-parity-rebuild.md](exec-plans/active/english-parity-rebuild.md). The older [exec-plans/active/premium-personal-brand.md](exec-plans/active/premium-personal-brand.md) is stale history from the pre-rebuild site and is not current state.
 
 ## Outcome and boundaries
-- Product outcome: A fast, honest, static credibility hub answering in ~15 seconds who Danial is, what he builds (Web · AI · Automation · Product Engineering, Building Noveno), and how to reach him, with verifiable project profiles and no invented proof.
-- Measurable success: Visitor reaches `/work` or `/contact` in one click from hero, can state focus without confusion, and site meets lab budgets (LCP ≤2.5 s, CLS ≤0.1, WCAG 2.2 AA) at 320/375/1280. Build gates `npm run check && npm run build` pass locally and on Pages deploy.
-- Explicit non-goals: `/writing` blog/notes, CMS/DB/auth/newsletter, analytics/RUM v1, backend contact form, framework islands, Tailwind/CSS-in-JS, heavy motion/WebGL (see `docs/PRODUCT.md` Non-goals and `docs/ARCHITECTURE.md` rejected complexity).
-- Deadline / capital / compliance constraints: No calendar deadline. Must remain static-only (GitHub Pages, `output: static`, `trailingSlash: never`), Node ≥22.19, zero secrets, `APP_ENV` placeholder only, Geist vendored under SIL OFL.
-- Current stage: 7. Staged production — deployed via `actions/deploy-pages` on `main` pushes (build 1.7s at foundation, verified via `deploy.yml`), now in iterative polish / learning-loop improvements (plans 011+ in `plans/`, current polishing tracks in `docs/exec-plans/active/` if present).
+
+- Product outcome: a fast, honest English credibility hub that answers in about 15 seconds who Danial is, what he builds, what the work looks like, and how to reach him, with eight verifiable case studies, three travel notes, and no invented proof.
+- Measurable success: a visitor reaches `/work/` or `/contact/` in one click from the hero, the site meets its lab budgets (LCP ≤ 2.5 s, CLS ≤ 0.1, WCAG 2.2 AA) at 320, 375 and 1280, and the canonical gate passes locally and in CI.
+- Explicit non-goals: `/writing`, CMS/DB/auth/newsletter, analytics or RUM in v1, backend contact form, framework islands, Tailwind or a UI framework, client router, Persian mirror or `hreflang` cluster, support page mirroring, and a custom domain. See [PRODUCT.md](PRODUCT.md) and [ARCHITECTURE.md](ARCHITECTURE.md).
+- Constraints: static GitHub Pages output, `trailingSlash: "always"`, Node ≥ 22.19, zero secrets, committed generated assets (social cards need local Chrome), vendored OFL fonts, and provable provenance for every image.
+
+## Current stage
+
+Stage 7, staged production. The English rebuild is complete in the working tree as of 2026-11-23 and has passed the local canonical gate. It is not committed or deployed yet, so the public Pages URL still serves the previous build until the owner commits `main` and the Pages workflow runs. Durable state, decisions and the exact evidence bundle are in [english-parity-rebuild.md](exec-plans/active/english-parity-rebuild.md).
 
 ## Evidence ledger
-| Claim or assumption | Status | Evidence | Next test / decision |
-|---|---|---|---|
-| Static site builds and deploys on Pages | confirmed | `astro.config.mjs` `site: https://imdanialrashidi.github.io`, `output: static`, `public/.nojekyll`; `scripts/generate-og.mjs && astro build` → `dist/` (HTML + hashed `_astro/*.webp` + fonts + `sitemap-*.xml` + `og-default.png`); `.github/workflows/deploy.yml` live, gated on `npm run check` | Keep `npm run ci` passing on every PR |
-| Content stays honest, no invented proof | confirmed | `src/content.config.ts` zod schema + `hasVisual` default false, `tests/projects.test.mjs` frontmatter/`javascript:` checks, `src/assets/work/SOURCES.md` provenance, 6 `src/content/projects/*.md` with explicit Limitations/Sources | Enforce via `tests/projects.test.mjs` structural test on each content change |
-| Six projects correctly grouped and routed | confirmed | `src/lib/projects.ts` (`isDraft`, `getFeaturedProjects`, `getClientProjects`, `cardPropsFor`), `src/pages/work/index.astro`, individual `src/pages/work/*.astro` | Add content, re-run `npm run check` + `node --test tests/projects.test.mjs` |
-| Editorial design + tokens hold contrast/AA | confirmed | `src/styles/tokens.css`, `docs/DESIGN.md` color table (AA contrasts), reduced-motion reset, sticky header + dialog `aria-modal` | Browser QA at 320/375/1280 + Lighthouse preview before visual change ships |
-| Honest “no analytics, no form” stance is better than fake metrics | assumed | `docs/DESIGN.md` + `src/pages/contact.astro` copy (“No form · No tracker · Direct”), no analytics dep in `package.json` | Test via inbound email intent vs. prior scattered links when analytics added (deferred) |
-| RUM/field performance meets `good` thresholds | unmeasured | No RUM shipped; lab budgets only (`npm run build` + preview + Lighthouse manual) | Decide provider/budget when traffic justifies (see Open product decisions) |
+
+| Claim or assumption | Status | Evidence | Next test or decision |
+| --- | --- | --- | --- |
+| Static build and Pages deploy chain | confirmed | `astro.config.mjs` (`output: "static"`, `site`, `trailingSlash: "always"`), `deploy.yml` (check, build, artifact, deploy), `quality.yml` (`verify.sh`) | Run the gate on the final tree, then owner commit and deploy |
+| 14 routes, trailing-slash URLs, sitemap agreement | confirmed | `node scripts/check-built-site.mjs`: 14 sitemap URLs in trailing-slash form, canonical maps back to the built file | Keep the artifact check in the gate |
+| Eight case studies and three travel notes | confirmed | `npm test` 18 passes; `npm run check` 0 errors, 0 warnings, 0 hints | Enforce on every content change |
+| Honest evidence: eight real screenshots | confirmed | `tests/projects.test.mjs` cover/asset 1:1 and provenance assertions; `src/assets/SOURCES.md` | Refresh captures and social cards when the owner supplies new images |
+| Editorial design with light and dark themes | confirmed | `docs/DESIGN.md`; Lighthouse accessibility 100 on audited routes; rendered acceptance per `docs/VISUAL_REVIEW.md` | Browser pass before any design change |
+| SEO and identity infrastructure | confirmed | 14 committed social cards asserted by tests; JSON-LD graph, robots.txt, manifest and icons checked by `scripts/check-built-site.mjs` | Re-run the artifact check after any SEO or copy change |
+| Zero external JS and lab performance budget | confirmed as lab | 0 JS chunks in the artifact; Lighthouse home desktop 100/100/100/100 and mobile 99/100/100/100 | Field data absent; keep re-running the lab after deploy |
+| Field Core Web Vitals and RUM | unmeasured | No RUM or analytics by decision | Decide only if the product decides to break the no-tracker promise |
+| Honest case studies beat metric-heavy portfolios | assumed | No funnel or analytics data exists | Read inbound email and conversation quality over time |
+| Persian parity and `hreflang` decision | decided | Content sets are not 1:1; Persian site linked with `lang="fa"` | Revisit only when every page has a true twin |
+| Cross-browser rendering | unproven | Recorded lab is Chromium headless only | Spot-check Firefox and Safari before a redesign |
 
 ## Stage gates
-### 0. Discovery proof
-- Scope: Target user (hiring manager/recruiter/peer), painful job (15-second orientation), current alternative (scattered socials), riskiest assumption (honest > polished metrics).
-- Exit evidence: `docs/PRODUCT.md` users/problem/MVP outcome filled with confirmed facts (done 2026-08-27). ✅ complete
-- Next smallest experiment: Ship 2 featured + 4 client profiles with mailto CTA and measure funnel.
 
-### 1. Experience direction
-- Scope: Critical journey (hero → work → contact), IA (Home, Work, About, Now, Contact, 404), brand character (Calm & precise), visual thesis (Editorial × Engineering, monochrome + electric blue).
-- Exit evidence: Accepted `docs/DESIGN.md` with visual thesis, tokens, geometry, components, screen acceptance. ✅ complete
-- Decision owner: Danial Rashidi (author).
-
-### 2. Walking skeleton
-- Scope: One deployable end-to-end path through real boundaries with observability — typecheck + build + Pages deploy.
-- Exit evidence: Canonical `bash scripts/ci-install.sh` → `npm run check` → `npm run build` → `dist/` works; Pages artifact deploy via `actions/deploy-pages` verified. ✅ complete
-- Verification: `npm run ci` (check && build) locally; `deploy.yml` on `main`.
-
-### 3. Vertical MVP
-- Scope: Smallest useful end-to-end behavior that tests riskiest assumption — portfolio index + contact with real data.
-- Exit evidence: `src/pages/index.astro` hero with 3 curated projects, `src/pages/work/index.astro` full index, `src/pages/contact.astro` mailto + outbound links, `src/pages/about.astro`/`now.astro`/`404.astro` functional with real data/state, negative paths (404 recovery, empty honest placeholders). ✅ complete
-- Non-goals: Analytics, CMS, backend form (deferred).
-
-### 4. Internal alpha
-- Scope: Team use (single author) with realistic data and controlled failure testing.
-- Exit evidence: No release-blocking correctness/security/accessibility issues; support/recovery via `git revert` + redeploy exercised logically; `tests/projects.test.mjs` + `npm run check` enforce invariants. ✅ complete
-- Feedback sample / owner: Author self-review + project tests.
-
-### 5. External beta
-- Scope: Bounded cohort (public GitHub Pages visitors), reversible static rollout, support via email.
-- Exit evidence: Activation (work/contact clicks) observable via future analytics; guardrails `npm run check && npm run build` run on PR (`quality.yml`); `npm run format:check` is a separate non-gating hygiene lane. Field performance unmeasured (RUM deferred). Status: shipped, guardrails active, RUM pending.
-- Rollback trigger: Build or Pages deploy failure → `git revert` on `main` and redeploy previous green commit; `dist/` ephemeral.
-
-### 6. Release candidate
-- Scope: Frozen release boundary — compatibility, data, security, visual, performance hardening (plans 001–019 + polish tracks).
-- Exit evidence: `bash scripts/verify.sh` (repository self-checks + `npm run ci`) passes and is enforced by `quality.yml` on PR and `main`; `node --test tests/*.test.mjs` passes as a separate manual lane. No unresolved BLOCKER/MAJOR per `docs/QUALITY.md`.
-- Sign-off owners: Danial Rashidi.
-
-### 7. Staged production
-- Scope: Progressive exposure with telemetry and stop conditions — Pages `main` deploy on push, `actions/deploy-pages` with concurrency `group: pages` and 10m timeout.
-- Exit evidence: Health window passes at each stage (deploy job green, Pages URL live). Incident/support ownership is active via email; previous `main` remains deployable.
-- Stages and stop conditions: Single stage (static). Stop on `npm run check` or `npm run build` failure in `deploy.yml`; in `quality.yml` stop on `format:check` or `verify.sh` failure. Manual rollback via revert.
-
-### 8. Learning loop
-<<<<<<< Updated upstream
-- Scope: Product outcomes, failures, support signals, agent/harness evals.
-- Exit evidence: Validated learning updates `docs/PRODUCT.md`, roadmap priorities, regression tests (`tests/projects.test.mjs`), or `evals/cases.json` / `docs/EVALUATION.md`. Review cadence: per shipped slice / at each polish plan completion.
-=======
-- Scope: Product outcomes, failures, support signals, and agent workflow evidence.
-- Exit evidence: Validated learning updates `docs/PRODUCT.md`, roadmap priorities, or regression tests (`tests/projects.test.mjs`). Review cadence: per shipped slice / at each polish plan completion.
->>>>>>> Stashed changes
+| Stage | Scope | Exit evidence | Status |
+| --- | --- | --- | --- |
+| 0. Discovery proof | Users, problem, MVP outcome | `docs/PRODUCT.md` filled from evidence | Complete 2026-11-23 |
+| 1. Experience direction | Critical journey, IA, visual thesis | Accepted `docs/DESIGN.md` with tokens and screen acceptance | Complete 2026-11-23 |
+| 2. Walking skeleton | Typecheck, build and Pages deploy path | `npm run check` + `npm run build`; `deploy.yml` live | Complete |
+| 3. Vertical MVP | 14 routes, eight case studies, three travels, the about/now/contact pages, and 404 | Built artifact and `node scripts/check-built-site.mjs` | Complete in working tree |
+| 4. Internal alpha | Tests, type/content check and artifact check green | `npm test` 18 passes; `npm run check` clean; no open BLOCKER/MAJOR in the independent review | In progress |
+| 5. External beta | Public Pages visitors, reversible static rollout, email support | Older build is public; rebuild awaits deploy | Pending deployment |
+| 6. Release candidate | Frozen tree, full gate, docs match the artifact, independent review | `bash scripts/verify.sh` on the final tree; review findings resolved | In progress |
+| 7. Staged production | Single static stage; stop on gate failure; rollback by revert | Owner-authorized commit and Pages deploy; previous `main` deployable | Pending owner action |
+| 8. Learning loop | Each shipped change updates the owning doc, tests and plan | Docs, tests and `exec-plans` updated per slice | Active |
 
 ## Critical path and risks
-| Risk / dependency | Control or experiment | Owner | Decision date / trigger |
-|---|---|---|---|
-| Dependabot-invented metrics would break trust | Keep `hasVisual` defaults false, enforce `tests/projects.test.mjs` frontmatter safety + `src/assets/work/SOURCES.md` provenance, CI blocks invented visuals | Author | Ongoing — block on PR |
-| GitHub Pages outage or deploy misconfig (`.nojekyll`, `site.url`) | `deploy.yml` pinned actions, `site: https://imdanialrashidi.github.io` + `trailingSlash: never`, `.nojekyll` in `public/` and repo root, `dist/` artifact verified | Author | On any domain/CNAME change |
-| Font licensing or vendored font drift | Geist/Geist Mono vendored to `public/fonts` (69K+70K), `font-display: swap`, single preload Sans, removed 7.9M npm dep | Author | If subsetting or weight needed |
-| Performance regression (inlined CSS, image variants, JS budget) | Budgets in `docs/DESIGN.md` Quality budgets + `docs/QUALITY.md`; `build.inlineStylesheets: "always"` and `lightningcss`; `astro:assets` widths `[320,480,640]`; keep JS ~2K inline | Author | Before any heavy asset or motion addition |
-| Content schema drift breaks build | `astro check` strict + `tests/projects.test.mjs` structural test; CI gates on `npm run check` before build | Author | On `src/content.config.ts` change |
+
+| Risk or dependency | Control or experiment | Owner | Trigger |
+| --- | --- | --- | --- |
+| GitHub Pages redirects from directory serving | `trailingSlash: "always"`; canonical, internal links, sitemap and the artifact check all use the trailing-slash form | Author | Any URL, route or domain change |
+| Generated asset drift (social cards, icons) | Cards and icons are committed; tests assert every card exists; `SOURCES.md` records provenance; regenerate with `npm run og` (local Chrome) and `npm run icons` after copy or screenshot changes | Author | Before release and after any image or copy change |
+| Font budget or licensing drift | Four vendored woff2 files (103K with OFL licenses), preload display and body faces, `font-display: swap` | Author | If budget tightens or a face changes |
+| Content honesty | Schema plus tests, provenance file, explicit limits sections, no invented metrics | Author | Every content change |
+| Content schema drift | `src/content.config.ts` plus `npm run check` and `tests/projects.test.mjs` | Author | Schema or content change |
+| Stale client screenshots | Captures age; regenerate cards and screenshots when the owner supplies fresh images; never describe a current site from an old capture | Author | New capture supplied |
+| Persian parity drift | No `hreflang` cluster until twins exist; Persian site linked with `lang="fa"`; review when the Persian content set changes | Author | Persian content release |
+| No field performance data | Lab evidence only; never claim field Core Web Vitals | Author | If RUM is considered |
 
 ## Next bounded slice
-- Goal: Keep credibility hub current and measurable without adding backend/cost — add optional RUM budget or writing cadence only when evidence justifies.
-- Acceptance proof: Any new content passes `npm run check && node --test tests/projects.test.mjs && npm run build` and `npm run format:check`; visual changes include desktop/mobile (1280/375) + reduced-motion + contrast proof per `docs/DESIGN.md` Screen acceptance; no invented proof.
-- Recovery / rollback: `git revert` on `main` + Pages redeploy; previous commit remains deployable; `dist/` rebuilt deterministically.
+
+- Goal: land the English rebuild. Resolve any outstanding review findings, run `bash scripts/verify.sh` on the final tree, then let the owner commit to `main` and deploy through the Pages workflow per [GIT_POLICY.md](GIT_POLICY.md). After deploy, re-check the production URL, the sitemap and a lab Lighthouse run against production.
+- Acceptance proof: `bash scripts/verify.sh` exits 0; `node scripts/check-built-site.mjs` reports PASS for 14 pages and 114 images; the production URL serves the 14 trailing-slash routes; performance remains labelled as lab evidence.
+- Recovery and rollback: `git revert` on `main` plus a Pages redeploy; the previous `main` remains deployable; `dist/` is ephemeral and rebuilt deterministically.
 
 ## Deferred decisions
-- RUM/analytics provider and script budget (Plausible/Umami candidates) — keep “No tracker” promise until deliberate decision.
-- Full long-form case-study body for Fast English / Noveno once verifiable assets exist.
-- Notes/blog (`/writing`) and associated collection/CMS choice.
-- Custom domain (CNAME) and canonical migration.
-- Subsetting vendored Geist fonts if character budget tightens.
+
+- RUM or analytics provider and script budget, if the no-tracker promise is intentionally revisited.
+- A writing or notes section and its content model.
+- A custom domain (CNAME) and the canonical, sitemap and social card migration that follows.
+- A Persian mirror or `hreflang` cluster, only when every page has a true twin.
+- Mirroring the Persian support page, if support ever becomes an English product need.
+- Font subsetting if the character budget tightens.

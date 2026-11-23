@@ -1,8 +1,8 @@
 # Visual Quality Rubric
 
-This is a repository acceptance rubric, not an OMP skill or tool. Use OMP's bundled `designer` for UI implementation/refinement, bundled `reviewer` for independent code review, and the native `browser` for rendered evidence.
+This is a repository acceptance rubric, not an agent skill or tool. Use the `build` and `review` skills for implementation and code review, and an available browser-capable tool for rendered evidence. When no real render is available, mark the dependent dimensions `UNPROVEN`.
 
-Use this rubric for `design-review`, final frontend evaluation, or a substantial redesign. Judge the rendered interface against the accepted product/design contract, not personal taste or trend conformity.
+Use this rubric for final frontend evaluation or a substantial redesign. Judge the rendered interface against the accepted product/design contract, not personal taste or trend conformity.
 
 ## Evidence set
 

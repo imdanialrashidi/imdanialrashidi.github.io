@@ -1,0 +1,98 @@
+---
+import { Image } from 'astro:assets'
+import { type TravelEntry, travelImage } from '../lib/travels.ts'
+
+interface Props {
+  entry: TravelEntry
+  index?: number
+  sizes?: string
+  priority?: boolean
+}
+
+const { entry, sizes = '(max-width: 760px) 92vw, 380px', priority = false } = Astro.props
+const image = travelImage(entry)
+---
+
+<figure class="travel">
+  <div class="travel__photo">
+    {
+      image && (
+        <Image
+          src={image}
+          alt={entry.data.imageAlt}
+          widths={[320, 480, 720]}
+          sizes={sizes}
+          format="webp"
+          quality={72}
+          loading={priority ? "eager" : "lazy"}
+          decoding={priority ? "sync" : "async"}
+          style={`object-position: ${entry.data.imagePosition}`}
+        />
+      )
+    }
+  </div>
+  <figcaption class="travel__caption">
+    <span class="travel__date">{entry.data.dateLabel}</span>
+    <span class="travel__name">{entry.data.destination}</span>
+    <span class="travel__note">{entry.data.summary}</span>
+  </figcaption>
+</figure>
+
+<style>
+  .travel {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .travel__photo {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--bg-sunk);
+    aspect-ratio: 4 / 5;
+  }
+
+  .travel__photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--dur-slow) var(--ease);
+  }
+
+  .travel:hover .travel__photo img {
+    transform: scale(1.03);
+  }
+
+  .travel__caption {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .travel__date {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .travel__name {
+    font-family: var(--font-display);
+    font-size: var(--display-h3);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  .travel__note {
+    color: var(--ink-soft);
+    font-size: var(--text-sm);
+    max-width: 26rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .travel__photo img {
+      transition: none;
+    }
+  }
+</style>

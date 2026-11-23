@@ -1,121 +1,150 @@
 #!/usr/bin/env bash
-<<<<<<< Updated upstream
-=======
 # Canonical verification gate for this repository.
-# Repository self-checks first, then the cheapest project lane that applies.
->>>>>>> Stashed changes
+# Runs repository/workflow checks first, then the project's real test, type and build lanes.
 set -Eeuo pipefail
 
 ROOT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-bash scripts/pi-doctor.sh --ci
+fail=0
 
-<<<<<<< Updated upstream
-=======
-# 1. Whitespace errors in tracked changes.
-if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-  git --no-pager diff --check || bad "git diff --check reported whitespace errors."
-fi
-
-# 2. The six project workflow skills must exist and carry matching frontmatter.
-expected_skills=(quick-fix spec build verify review test-design)
-for name in "${expected_skills[@]}"; do
-  [[ -f ".dsh/skills/$name/SKILL.md" ]] || bad "missing workflow skill: .dsh/skills/$name/SKILL.md"
-done
-for skill in .dsh/skills/*/SKILL.md; do
-  [[ -f "$skill" ]] || continue
-  dir="$(basename "$(dirname "$skill")")"
-  front="$(sed -n '1,/^---$/p' "$skill" | sed '1d;$d')"
-  grep -Eq '^name: .+' <<<"$front" || bad "$skill is missing frontmatter name."
-  grep -Eq '^description: .+' <<<"$front" || bad "$skill is missing frontmatter description."
-  grep -Eq "^name: [\"']?${dir}[\"']?$" <<<"$front" || bad "$skill name does not match directory '$dir'."
-done
-
-# 3. Registry-managed project skills also need frontmatter.
-for skill in .agents/skills/*/SKILL.md; do
-  [[ -f "$skill" ]] || continue
-  front="$(sed -n '1,/^---$/p' "$skill" | sed '1d;$d')"
-  grep -Eq '^name: .+' <<<"$front" || bad "$skill is missing frontmatter name."
-  grep -Eq '^description: .+' <<<"$front" || bad "$skill is missing frontmatter description."
-done
-
-# 4. PR helper must parse.
-if command -v node >/dev/null 2>&1; then
-  node --check scripts/pr.mjs || bad "scripts/pr.mjs does not parse."
-else
-  note "SKIP: node not installed; cannot syntax-check scripts/pr.mjs."
-fi
-
-[[ "$fail" -eq 0 ]] || exit 1
-note "Repository self-checks passed."
-
-# 5. Project override wins when the repo defines its own gate.
->>>>>>> Stashed changes
-if [[ -x scripts/project-verify.sh ]]; then
-  exec scripts/project-verify.sh
-fi
-
-ran=0
-
-run_node_script() {
-  local script="$1"
-  node -e "const p=require('./package.json'); process.exit(p.scripts && p.scripts['$script'] ? 0 : 1)" >/dev/null 2>&1 || return 0
-  ran=1
-  if [[ -f pnpm-lock.yaml ]]; then pnpm run "$script"
-  elif [[ -f yarn.lock ]]; then yarn "$script"
-  else npm run "$script"
-  fi
+pass() { printf 'PASS  %s\n' "$1"; }
+note() { printf 'NOTE  %s\n' "$1"; }
+bad() {
+  printf 'FAIL  %s\n' "$1" >&2
+  fail=$((fail + 1))
 }
 
-if [[ -f package.json ]]; then
-  if node -e "const p=require('./package.json'); process.exit(p.scripts && p.scripts.ci ? 0 : 1)" >/dev/null 2>&1; then
-    ran=1
-    if [[ -f pnpm-lock.yaml ]]; then pnpm run ci
-    elif [[ -f yarn.lock ]]; then yarn ci
-    else npm run ci
-    fi
+# 1. No unresolved merge-conflict markers in tracked or untracked text files.
+if command -v git >/dev/null 2>&1 && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  if markers="$(git grep --untracked -nE '^(<<<<<<< |\|\|\|\|\|\|\| |=======$|>>>>>>> )' -- . 2>/dev/null)"; then
+    scan_status=0
   else
-    run_node_script "format:check"
-    run_node_script "typecheck"
-    run_node_script "lint"
-    run_node_script "test"
-    run_node_script "build"
+    scan_status=$?
   fi
-fi
-
-if [[ -f pyproject.toml || -f requirements.txt ]]; then
-  ran=1
-  python -m compileall -q -x '(^|/)(\.venv|venv|build|dist|node_modules)/' .
-  command -v ruff >/dev/null 2>&1 && ruff check .
-  command -v mypy >/dev/null 2>&1 && mypy .
-  command -v pytest >/dev/null 2>&1 && pytest
-fi
-
-if [[ -f go.mod ]]; then
-  ran=1
-  unformatted="$(gofmt -l .)"
-  [[ -z "$unformatted" ]] || { printf 'Unformatted Go files:\n%s\n' "$unformatted" >&2; exit 1; }
-  go vet ./...
-  go test ./...
-fi
-
-if [[ -f Cargo.toml ]]; then
-  ran=1
-  cargo fmt --all -- --check
-  cargo clippy --all-targets --all-features -- -D warnings
-  cargo test --all-features
-fi
-
-if [[ "$ran" -eq 0 ]]; then
-  if grep -Fxq -- '- Primary users:' docs/PRODUCT.md; then
-    printf '\nTemplate-only verification passed. Run /bootstrap after adding product source.\n'
-    exit 0
+  if [[ "$scan_status" -eq 0 ]]; then
+    printf '%s\n' "$markers" >&2
+    bad "unresolved merge-conflict markers found"
+  elif [[ "$scan_status" -eq 1 ]]; then
+    pass "no unresolved merge-conflict markers"
+  else
+    bad "conflict-marker scan failed (git grep exit $scan_status)"
   fi
-  cat >&2 <<'MSG'
-No supported project or verification command was found.
-Add normal package scripts (format:check/typecheck/lint/test/build or ci),
-or create executable scripts/project-verify.sh for this repository.
-MSG
+
+  if git diff HEAD --check >/dev/null 2>&1; then
+    pass "no whitespace errors in the working diff"
+  else
+    git diff HEAD --check >&2 || true
+    bad "git diff --check reported whitespace errors in the working diff"
+  fi
+
+  # A clean CI checkout has no working diff. Check the committed range instead
+  # when the CI environment exposes it (quality.yml fetches full history).
+  if [[ -n "${GITHUB_BASE_REF:-}" ]]; then
+    base="origin/${GITHUB_BASE_REF}"
+    if ! git rev-parse --verify --quiet "$base" >/dev/null; then
+      git fetch --quiet --no-tags origin \
+        "+refs/heads/${GITHUB_BASE_REF}:refs/remotes/origin/${GITHUB_BASE_REF}" >/dev/null 2>&1 || true
+    fi
+    if git rev-parse --verify --quiet "$base" >/dev/null; then
+      if git diff --check "$base"...HEAD >/dev/null 2>&1; then
+        pass "no whitespace errors in $base...HEAD"
+      else
+        git diff --check "$base"...HEAD >&2 || true
+        bad "whitespace errors in the committed PR range $base...HEAD"
+      fi
+    else
+      bad "cannot resolve $base for the committed-range whitespace check"
+    fi
+  elif [[ "${GITHUB_EVENT_NAME:-}" == "push" ]]; then
+    push_base="${PUSH_BEFORE:-}"
+    if [[ ! "$push_base" =~ ^[0-9a-f]{40}$ ]] || [[ "$push_base" =~ ^0+$ ]] ||
+      ! git rev-parse --verify --quiet "$push_base" >/dev/null; then
+      push_base=""
+    fi
+    if [[ -z "$push_base" ]] && git rev-parse --verify --quiet HEAD^ >/dev/null; then
+      push_base="HEAD^"
+    fi
+    if [[ -n "$push_base" ]]; then
+      if git diff --check "$push_base" HEAD >/dev/null 2>&1; then
+        pass "no whitespace errors in the pushed range $push_base..HEAD"
+      else
+        git diff --check "$push_base" HEAD >&2 || true
+        bad "whitespace errors in the pushed range $push_base..HEAD"
+      fi
+    else
+      note "shallow single-commit checkout; committed-range whitespace check not executed"
+    fi
+  fi
+else
+  note "not a Git worktree; skipping conflict-marker and whitespace checks"
+fi
+
+# 2. Node-based workflow and script checks.
+if command -v node >/dev/null 2>&1; then
+  if node scripts/verify-workflow.mjs; then
+    pass "vendored DSH workflow matches .dsh/workflow.json"
+  else
+    bad "vendored DSH workflow does not match .dsh/workflow.json"
+  fi
+
+  for script in scripts/*.mjs; do
+    [[ -f "$script" ]] || continue
+    if node --check "$script"; then
+      pass "syntax: $script"
+    else
+      bad "syntax error: $script"
+    fi
+  done
+else
+  bad "Node.js is required but is not installed"
+fi
+
+# 3. Registry-managed domain skills must keep valid frontmatter.
+for skill in .agents/skills/*/SKILL.md; do
+  [[ -f "$skill" ]] || continue
+  frontmatter="$(sed -n '1,/^---$/p' "$skill" | sed '1d;$d')"
+  if grep -Eq '^name: .+' <<<"$frontmatter" &&
+    grep -Eq '^description: .+' <<<"$frontmatter"; then
+    pass "skill frontmatter: $skill"
+  else
+    bad "skill frontmatter is incomplete: $skill"
+  fi
+done
+
+# 4. Project lanes. These are also the commands documented in docs/QUALITY.md.
+if command -v npm >/dev/null 2>&1; then
+  if npm run format:check; then
+    pass "format check"
+  else
+    bad "format check failed"
+  fi
+
+  if npm test; then
+    pass "tests"
+  else
+    bad "tests failed"
+  fi
+
+  if npm run ci; then
+    pass "type/content check and build"
+  else
+    bad "type/content check or build failed"
+  fi
+
+  if node scripts/check-built-site.mjs; then
+    pass "built artifact: canonical, sitemap, structured data, budgets"
+  else
+    bad "built artifact check failed"
+  fi
+else
+  bad "npm is required but is not installed"
+fi
+
+printf '\n'
+if [[ "$fail" -ne 0 ]]; then
+  printf 'verify: %d required check(s) failed\n' "$fail" >&2
   exit 1
 fi
+
+printf 'verify: all required checks passed\n'

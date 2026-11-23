@@ -6,7 +6,7 @@ Owner: Danial Rashidi (@imdanialrashidi)
 Repo: https://github.com/imdanialrashidi/imdanialrashidi.github.io
 Plan type: Complex — durable decisions, cross-cutting design + content + infra
 
-> Workflow note (2026-11-04): this plan is retained as decision and evidence history. Paths and commands below that name the Pi/omp harness are historical; the current workflow is `AGENTS.md` plus the skills in `.dsh/skills/`.
+> Workflow note (2026-11-23): this plan is retained as decision and evidence history. Paths and commands below that name the retired Pi/OMP harness — including `.pi/`, `scripts/pi-*`, `scripts/pr.mjs`, `evals/`, and `plans/` — are historical and no longer exist. Do not execute them. The current workflow is `AGENTS.md`, the seven pinned skills in `.dsh/skills/`, and `docs/WORKFLOW.md`.
 
 ---
 

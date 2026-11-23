@@ -1,306 +1,157 @@
 ---
-import ProjectMedia from './ProjectMedia.astro'
+import { type ProjectEntry, coverFor, hrefFor } from '../lib/work.ts'
+import ProjectPlate from './ProjectPlate.astro'
+import Shot from './Shot.astro'
 
 interface Props {
-  index: string // "01"
-  title: string
-  kicker: string
-  summary: string
-  href: string
-  statusLabel?: string
-  year?: number
-  ctaLabel?: string
-  variant?: 'default' | 'accent'
-  reversed?: boolean
-  image?: ImageMetadata
-  imageAlt?: string
+  entry: ProjectEntry
+  index: number
+  flip?: boolean
+  priority?: boolean
 }
 
-const {
-  index,
-  title,
-  kicker,
-  summary,
-  href,
-  statusLabel,
-  year,
-  ctaLabel = 'View case study',
-  variant = 'default',
-  reversed = false,
-  image,
-  imageAlt,
-} = Astro.props
+const { entry, index, flip = false, priority = false } = Astro.props
+const cover = coverFor(entry)
 ---
 
-<article class:list={["pf", reversed && "pf--reversed", variant === "accent" && "pf--accent"]}>
-  <div class="pf__media">
-    <a href={href} class="pf__mediaLink" tabindex="-1" aria-hidden="true">
-      <ProjectMedia title={title} indexLabel={index} statusLabel={statusLabel} variant={variant} image={image} imageAlt={imageAlt} />
-    </a>
+<article class:list={["feature", { "feature--flip": flip }]}>
+  <div class="feature__media">
+    {
+      cover ? (
+        <Shot
+          image={cover}
+          alt={entry.data.coverAlt ?? `${entry.data.title} preview`}
+          priority={priority}
+          sizes="(max-width: 900px) 100vw, 58vw"
+          widths={[640, 960, 1280, 1600]}
+        />
+      ) : (
+        <ProjectPlate entry={entry} />
+      )
+    }
   </div>
 
-  <div class="pf__content">
-    <div class="pf__meta">
-      <span class="pf__index">{index}</span>
-      <span class="pf__rule" aria-hidden="true"></span>
-      <span class="pf__kicker">{kicker}</span>
-    </div>
-
-    <h3 class="pf__title">
-      <a href={href} class="pf__titleLink">{title}</a>
+  <div class="feature__body">
+    <p class="eyebrow feature__eyebrow">
+      <span aria-hidden="true">{String(index).padStart(2, "0")}</span>
+      <span class="feature__divider" aria-hidden="true"></span>
+      {entry.data.kicker}
+    </p>
+    <h3 class="h2 feature__title">
+      <a href={hrefFor(entry)}>{entry.data.title}</a>
     </h3>
-
-    <p class="pf__summary">{summary}</p>
-
-    <div class="pf__details">
-      {year && <span class="pf__year">{year}</span>}
-      {statusLabel && <span class="pf__status">{statusLabel}</span>}
-    </div>
-
-    <a href={href} class="pf__cta" aria-label={`${ctaLabel} — ${title}`}>
-      <span class="pf__ctaLabel">{ctaLabel}</span>
-      <span class="pf__ctaArrow" aria-hidden="true">→</span>
-    </a>
+    <p class="feature__summary">{entry.data.summary}</p>
+    <p class="feature__meta">
+      <span>{entry.data.role}</span>
+      <span aria-hidden="true">/</span>
+      <span>{entry.data.year}</span>
+      <span aria-hidden="true">/</span>
+      <span class="status" data-status={entry.data.status}>{entry.data.statusLabel}</span>
+    </p>
+    <p class="feature__cta">
+      <a class="link" href={hrefFor(entry)}>Read the {entry.data.kind === "product" ? "product" : "project"} case study</a>
+    </p>
   </div>
 </article>
 
 <style>
-  .pf {
+  .feature {
     display: grid;
-    grid-template-columns: 1.18fr 0.82fr;
-    gap: clamp(1.25rem, 3vw, 2.5rem);
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 4rem);
     align-items: center;
-    padding: clamp(1rem, 2vw, 1.25rem);
-    background: var(--color-surface);
-    border: var(--border-hairline);
-    border-radius: var(--radius-xl);
-    transition: border-color var(--duration-base) var(--ease-default), box-shadow var(--duration-base) var(--ease-default), transform var(--duration-base) var(--ease-out);
+    padding-block: clamp(1.75rem, 4vw, 3rem);
+    border-top: 1px solid var(--line);
   }
 
-  .pf:hover {
-    border-color: var(--color-border-strong);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+  .feature:last-of-type {
+    border-bottom: 1px solid var(--line);
   }
 
-  .pf--accent {
-    background: linear-gradient(180deg, var(--color-accent-soft) 0%, var(--color-surface) 62%);
-    border-color: color-mix(in srgb, var(--color-accent) 10%, var(--color-border));
-  }
-
-  .pf--accent:hover {
-    border-color: color-mix(in srgb, var(--color-accent) 18%, var(--color-border-strong));
-  }
-
-  .pf--reversed {
-    grid-template-columns: 0.82fr 1.18fr;
-  }
-
-  .pf--reversed .pf__media { order: 2; }
-  .pf--reversed .pf__content { order: 1; }
-
-  .pf__mediaLink {
-    display: block;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    /* make hover propagate */
-  }
-
-  .pf__media {
+  .feature__media {
     min-width: 0;
   }
 
-  .pf__content {
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-    padding: clamp(0.5rem, 1.5vw, 1rem) 0;
+  .feature__body {
+    display: grid;
+    gap: 0.75rem;
+    align-content: center;
   }
 
-  .pf__meta {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-text-faint);
-    flex-wrap: wrap;
-  }
-
-  .pf__index {
+  .feature__eyebrow {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    width: 26px;
-    height: 22px;
-    border-radius: var(--radius-pill);
-    border: var(--border-hairline);
-    background: var(--color-surface-raised);
-    font-weight: 700;
-    color: var(--color-text-muted);
-    flex-shrink: 0;
+    gap: 0.6rem;
+    color: var(--accent);
   }
 
-  .pf--accent .pf__index {
-    background: var(--color-surface);
-    border-color: color-mix(in srgb, var(--color-accent) 16%, var(--color-border));
-    color: var(--color-accent);
-  }
-
-  .pf__rule {
-    width: 20px;
+  .feature__divider {
+    width: 1.5rem;
     height: 1px;
-    background: var(--color-border-strong);
-    flex-shrink: 0;
+    background: var(--line-strong);
   }
 
-  .pf__kicker {
-    color: var(--color-text-muted);
-    font-weight: 600;
-    line-height: 1.4;
-    max-width: 32ch;
+  .feature__title {
+    margin: 0;
   }
 
-  .pf--accent .pf__kicker { color: var(--color-accent); }
-
-  .pf__title {
-    font-size: clamp(1.5rem, 2.6vw, 2rem);
-    line-height: 1.05;
-    letter-spacing: var(--tracking-tight);
-    font-weight: 650;
-    margin-top: -2px;
-  }
-
-  .pf__titleLink {
-    color: var(--color-text);
+  .feature__title a {
     text-decoration: none;
-    transition: color var(--duration-fast) var(--ease-default);
+    color: var(--ink);
   }
 
-  .pf__titleLink:hover,
-  .pf__titleLink:focus-visible {
-    color: var(--color-accent);
+  .feature__title a:hover {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.1em;
   }
 
-  .pf__summary {
-    font-size: var(--text-md);
-    line-height: 1.6;
-    color: var(--color-text-muted);
-    max-width: 38ch;
+  .feature__summary {
+    color: var(--ink-soft);
+    max-width: 30rem;
+    font-size: var(--text-base);
   }
 
-  .pf__details {
+  .feature__meta {
     display: flex;
-    gap: var(--space-3);
-    align-items: center;
     flex-wrap: wrap;
-    font-size: var(--text-xs);
-    color: var(--color-text-faint);
+    align-items: center;
+    gap: 0.35rem 0.6rem;
+    margin-top: 0.25rem;
     font-family: var(--font-mono);
-    letter-spacing: 0.04em;
+    font-size: var(--text-xs);
+    letter-spacing: 0.03em;
+    color: var(--ink-faint);
   }
 
-  .pf__year {
+  .feature__meta .status {
+    font-size: inherit;
+    margin-left: 0.4rem;
+  }
+
+  .feature__cta {
+    margin-top: 0.5rem;
+  }
+
+  .feature__cta .link {
     display: inline-flex;
-    padding: 3px 8px;
-    border-radius: var(--radius-pill);
-    border: var(--border-hairline);
-    background: var(--color-surface-raised);
-    font-weight: 600;
-    color: var(--color-text-muted);
-  }
-
-  .pf__status {
+    align-items: center;
+    min-height: 2.75rem;
     font-weight: 500;
   }
 
-  .pf__cta {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    align-self: flex-start;
-    margin-top: var(--space-1);
-    padding: 9px 14px 9px 16px;
-    border-radius: var(--radius-pill);
-    border: var(--border-hairline);
-    background: var(--color-text);
-    color: var(--color-canvas);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    transition: background var(--duration-fast) var(--ease-default), transform var(--duration-fast) var(--ease-default), border-color var(--duration-fast) var(--ease-default);
-  }
-
-  .pf__cta:hover {
-    background: color-mix(in srgb, var(--color-text) 88%, var(--color-accent));
-    border-color: transparent;
-    transform: translateY(-1px);
-  }
-
-  .pf__cta:active { transform: scale(0.98); }
-
-  .pf--accent .pf__cta {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
-    color: white;
-  }
-
-  .pf--accent .pf__cta:hover {
-    background: var(--color-accent-hover);
-    border-color: var(--color-accent-hover);
-  }
-
-  /* Dark theme: white-on-accent needs >=4.5:1. Use pressed (darker) for sufficient contrast with white */
-  :global(:root[data-theme="dark"] .pf--accent .pf__cta) {
-    background: var(--color-accent-pressed);
-    border-color: var(--color-accent-pressed);
-    color: white;
-  }
-
-  :global(:root[data-theme="dark"] .pf--accent .pf__cta:hover) {
-    background: #334ecc;
-    border-color: #334ecc;
-  }
-
-  .pf__ctaArrow {
-    display: inline-flex;
-    width: 20px;
-    height: 20px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: color-mix(in srgb, white 14%, transparent);
-    font-size: 12px;
-    line-height: 1;
-    transition: transform var(--duration-fast) var(--ease-out);
-  }
-
-  .pf__cta:hover .pf__ctaArrow { transform: translateX(2px); }
-
-  /* focus */
-  .pf:focus-within {
-    border-color: var(--color-border-strong);
-    box-shadow: var(--shadow-md);
-  }
-
-  @media (max-width: 880px) {
-    .pf,
-    .pf--reversed {
-      grid-template-columns: 1fr;
-      gap: var(--space-4);
+  @media (min-width: 901px) {
+    .feature--flip .feature__media {
+      order: 2;
     }
-    .pf--reversed .pf__media { order: 1; }
-    .pf--reversed .pf__content { order: 2; }
-    .pf__content { padding: 0 2px 4px; }
-    .pf__title { font-size: clamp(1.4rem, 5vw, 1.75rem); }
-    .pf__summary { max-width: none; }
   }
 
-  @media (max-width: 480px) {
-    .pf { padding: 12px; border-radius: var(--radius-lg); }
-    .pf__kicker { font-size: 10px; max-width: 22ch; }
+  @media (max-width: 900px) {
+    .feature {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
   }
 </style>

@@ -1,123 +1,38 @@
 # Changelog
 
-<<<<<<< Updated upstream
-=======
-## Unreleased — DSH Workflow replaces the omp workflow
+All notable changes to this repository's product delivery and agent workflow are recorded here. The project follows the spirit of Keep a Changelog; versioning begins at the first tagged release.
 
-- Replace the omp workflow layer (`.omp/` commands, skills, rules, and config; omp-native `AGENTS.md`; `docs/HARNESS.md`) with DSH Workflow v0.1 (commit `93c9281`): six project skills under `.dsh/skills/` and a short `AGENTS.md` entry point, with execution procedures owned by `quick-fix`, `spec`, `build`, `verify`, `review`, and `test-design`.
-- Rename `scripts/omp-pr.mjs` to `scripts/pr.mjs`; use `DSH_PR_DELIVERY=off`, `.artifacts/dsh-pr.*`, and `dsh-pr` evidence markers. Delivery remains opt-in under `docs/GIT_POLICY.md`.
-- Update `scripts/verify.sh` to validate `.dsh/skills` and `.agents/skills` frontmatter and parse `scripts/pr.mjs`, then run the same `npm run ci` gate.
-- Refresh `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `docs/QUALITY.md`, `docs/ARCHITECTURE.md`, `docs/PLAN.md`, the active execution plan, and the pull-request template for DSH tooling and honest browser-evidence statuses.
-- Remove the omp runtime block from `.gitignore` and scope `build/` to `/build/` so the vendored `build` skill is trackable; `scripts/verify.sh` now asserts all six workflow skills exist. A pre-migration copy is kept in `.workflow-backups/20261104-175900-omp-to-dsh-workflow/` (untracked).
+## English parity rebuild (2026-11-23)
 
-## Unreleased — DeepWiki MCP replaces Context7
+- Rebuilt the English site to match the Persian sibling's depth: eight English case studies (four own products: Noveno, Fast English, Study Center, Gym Log; four client sites: Elsa Hamrah, Isbatab, Mobile Khorsandi, PHP IELTS House), three travel notes (Dalakhani Valley, Dareh Marg, Yakh Morad Cave), and rewritten About, Now and Contact pages. The Persian site remains the Persian home and is linked with `lang="fa"`; there is no `hreflang` cluster because the content sets are not 1:1.
+- Replaced the six-project model and the hand-written per-project `.astro` case studies (including the old Fast English and Noveno pages) with one shared `src/pages/work/[slug].astro` route and Markdown case studies in `src/content/projects/`. Removed the unused `now` and `profile` collections, `src/lib/projects.ts` and the `case-study/` component set, and added `src/lib/work.ts`, `src/lib/travels.ts` and rewritten `src/lib/seo.ts`.
+- Added `/travels/`, the eight project routes, and the new route list: 14 indexable routes plus 404, built as 15 pages.
+- Rebuilt the visual system around the editorial premium direction: warm paper palette, Instrument Serif display over Geist and Geist Mono, one vermilion accent, real screenshots as evidence, light and dark themes. Eight project covers are real screenshots. Provenance is recorded in `src/assets/SOURCES.md`.
+- Set `trailingSlash: "always"` so canonical URLs, internal links, sitemap entries and GitHub Pages directory serving all use the same form and no redirect is needed.
+- Moved global CSS to external hashed files (`inlineStylesheets: "auto"`), removed `ClientRouter`, added CSS cross-document view transitions and `speculationrules` prefetch, and kept zero external JavaScript chunks. Content pages carry five inline script elements (theme FOUC guard, theme behavior, mobile dialog, JSON-LD, speculation rules).
+- Replaced the 139K Geist variable fonts with four subset woff2 files totalling 103K including the OFL licenses (`public/fonts`).
+- Added the SEO layer: per-page canonical, title and description, a trailing-slash sitemap with 14 URLs, `robots.txt`, 14 committed 1200x630 JPEG social cards (`npm run og`, local Chrome), a web manifest and app icons (`npm run icons`), one JSON-LD `@graph` per page (WebSite, Person, page entity with narrower type, BreadcrumbList, CreativeWork, ItemList), and `rel="me"` identity links. The 404 page is `noindex` and excluded from the sitemap.
+- Corrected the Fast English case study after independent review: the product is now a live Laravel 13 / Inertia 3 / React 19 application at `https://fastenglishpodcast.ir` with a public repository and an Android 1.0.0 build, not the older PocketBase prototype. The page now links the live site and source, carries the real stack and honest live status, and uses a real capture with the support phone numbers hidden before capture.
+- Added `scripts/check-built-site.mjs` and wired it into `scripts/verify.sh`. It checks the artifact for canonical and sitemap agreement, the trailing-slash form, titles and descriptions, headings and language, social card files, the JSON-LD graph, internal links, image files, zero JavaScript chunks, external CSS and the asset budgets.
+- Updated `tests/projects.test.mjs` and `tests/seo-metadata.test.mjs` for the new content and contract. `npm test` now runs 18 tests.
+- Recorded verification evidence (2026-11-23): `npm run check` 0 errors, 0 warnings, 0 hints; `npm test` 18 passes; `npm run build` 15 pages; `node scripts/check-built-site.mjs` PASS for 14 pages, 114 images, 4.5MB total; `bash scripts/verify.sh` all required checks pass; Lighthouse lab desktop home 100/100/100/100 (LCP 0.4s, CLS 0.001, TBT 0ms), mobile home 99/100/100/100 (LCP 2.0s, CLS 0.001, TBT 0ms), and accessibility 100 with SEO 100 on `/work/`, `/work/noveno/`, `/about/` and `/contact/`. Field data is unmeasured.
+- Re-verified after the Fast English content correction and the final rebuild: `npm run check` 0/0/0, `npm test` 18 passes, `npm run build` 15 pages, `node scripts/check-built-site.mjs` PASS for 14 pages, 114 images, 4.5MB, `bash scripts/verify.sh` all required checks pass, Lighthouse desktop home 100/100/100/100 (LCP 0.4s, CLS 0.001, TBT 0ms) and mobile home 99/100/100/100 (LCP 2.0s, CLS 0.001, TBT 0ms), `/work/fast-english/` accessibility 100 and SEO 100.
+- Rewrote `docs/PRODUCT.md`, `docs/QUALITY.md` and `docs/PLAN.md` for the rebuilt site, refreshed `README.md` and `AGENTS.md`, and added `docs/exec-plans/active/english-parity-rebuild.md` as the durable handoff. `docs/DESIGN.md` and `docs/ARCHITECTURE.md` are rewritten in the same rebuild.
 
-- Replace `@upstash/context7-mcp@4.1.2` stdio MCP with the official DeepWiki remote MCP (`https://mcp.deepwiki.com/mcp`, hidden, deferred `read_wiki_structure`/`read_wiki_contents`/`ask_wiki_question` via `tool_search`). No package install, no API key for public repos; private repos stay out of scope.
-- Drop the `CONTEXT7_API_KEY` env mapping and sandbox passthrough; doctor rejects a stale `context7` server, non-official URLs, stdio commands, and hardcoded keys on the DeepWiki entry.
-- Retarget the docs secret/path guard and eval contract to DeepWiki inputs (`repoName`/`question`); legacy Context7 tool names stay guarded.
-- Remove the Context7 integrity record (remote servers need none); refresh doctor/integrity/test/docs coverage.
+## Unreleased — DSH Workflow v0.2 migration (2026-11-23)
 
-- Replace third-party `@dreki-gg/pi-doc-search@0.3.2` with official `@upstash/context7-mcp@4.1.2` as a native deferred MCP server (`resolve-library-id`, `query-docs` via `tool_search`).
-- Remove the `docs` capability from `harness_tools`; docs now follows the same native MCP pattern as Playwright. Legacy `doc_search_*` schemas are cleared on reset/resume for pre-migration sessions; unknown capabilities are ignored without crashing.
-- Keep `CONTEXT7_API_KEY` out of Git via `${CONTEXT7_API_KEY}` env mapping; unauthenticated use stays at lower rate limits. Refresh registry integrities and doctor/integrity/test coverage.
+- Adopt [dsh-workflow](https://github.com/imdanialrashidi/dsh-workflow) 0.2 at `cb887ce9da9708fd84e22fd31250d937abb8b824` as the single agent workflow. The project now vendors seven skills — `quick-fix`, `spec`, `build`, `verify`, `review`, `test-design`, and `production` — in `.dsh/skills/`.
+- Add `.dsh/workflow.json` to pin the upstream version, commit, retrieval date, and sha256 of every skill file. `scripts/verify-workflow.mjs` enforces the exact skill set, one-file layout, frontmatter, and hashes; `scripts/verify.sh` runs it on every check.
+- Rewrite `AGENTS.md` as a short repository map and add `docs/WORKFLOW.md` as the workflow source of truth (pin, skill map, project rules, update and rollback procedure). Duplicated instructions were removed from the policy documents.
+- Resolve the unresolved merge conflicts that had left conflict markers in `AGENTS.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md`, `scripts/verify.sh`, `docs/ARCHITECTURE.md`, `docs/GIT_POLICY.md`, `docs/PLAN.md`, `docs/QUALITY.md`, and `docs/exec-plans/README.md`.
+- Replace the automatic standing PR-delivery policy with explicit authorization per action and target in `docs/GIT_POLICY.md`, matching the DSH Workflow authority model. Remove the duplicate `scripts/ai-pr.mjs` and `scripts/pr.mjs` helpers and their tests.
+- Rebuild `scripts/verify.sh` around the real lanes: conflict and whitespace checks, workflow integrity, script syntax, domain-skill frontmatter, `npm run format:check`, `npm test`, and `npm run ci`. `.github/workflows/quality.yml` now runs this one canonical gate instead of a partial subset.
+- Add an `npm test` script covering `tests/projects.test.mjs` and `tests/seo-metadata.test.mjs`. Remove twelve tests that exercised the retired runtime.
+- Normalize the 386 `resolved` URLs in `package-lock.json` from the `registry.npmmirror.com` mirror to `registry.npmjs.org`. Package versions and integrity hashes are unchanged; a clean `npm ci` now succeeds under npm 12's default remote-tarball policy and under the CI runtime (Node 22.23.2 / npm 10.9.8).
+- Prune the stale `frontend-design` entry from `skills-lock.json`; that skill is not installed, so the lock now matches the three registry-managed domain skills in `.agents/skills/`.
+- Remove the retired Pi/OMP runtime (`.pi/`, launcher, provider/sandbox/doctor scripts, extensions, prompt packs, MCP and integrity records, eval harness, migration script, container file), the tracked `.workflow-backups/` copies (335 files), the historical `plans/` set, and stale workflow docs (`TOOLING_SETUP.md`, `RESEARCH.md`, `RESEARCH_PI_BASELINE.md`, `EVALUATION.md`, `VALIDATION.md`, `PROJECT_CONTEXT.md`). All remain recoverable from Git history at commit `3124ca2`.
+- Refresh `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `docs/QUALITY.md`, `docs/ARCHITECTURE.md`, `docs/PLAN.md`, `docs/VISUAL_REVIEW.md`, `docs/MIGRATION.md`, the active execution-plan note, `.gitignore`, and the pull-request template for the DSH-only workflow. This includes honest browser-evidence language: visual claims without a real render are `UNPROVEN`.
 
-## Unreleased — hardening and Pi 1.0.4
+## Historical
 
-- Re-pin reviewed runtime `1.0.0` → `1.0.4` across launcher, Docker, integrity, setup, doctor, and theme schema; structural validation passes on installed `1.0.4` (per-version upstream changelog deltas not individually audited).
-- Fix `verify-package-integrity.mjs --online`: unwrap the array `npm view --json` returns so registry comparisons read the real record.
-- Block secrets and sensitive file references in Context7 `resolve-library-id`/`query-docs` calls; ordinary docs questions pass.
-- Add `docs-mcp-workflow` eval case locking the local-first, `tool_search` + `mcp__context7__*` resolve-then-query contract with no live fetch.
-- Document Context7 rate limits, retry behavior, no-cache tradeoff, direct `/org/project` IDs, and key handling.
-
-## Unreleased — LSP host dependency repair
-
-- Correct the reviewed `pi-lsp-adapter@0.1.3` installed manifest before launcher startup: Pi TUI and TypeBox become optional wildcard peers supplied by Pi, preserving LSP source and all unrelated settings.
-- Reapply after successful launcher install/update commands; prepare missing LSP on the first trusted session and keep help/opt-out runs free of pre-installs.
-- Add a read-only doctor check and focused preservation/idempotence/drift regressions. Keep other extension warnings visible.
-
->>>>>>> Stashed changes
-## Unreleased — Pi 1.0 compatibility
-
-- Upgrade the reviewed runtime to Pi 1.0.0, todo to 2.12.0, web search to 0.5.1, and Playwright MCP to 0.0.83; refresh registry integrities.
-- Replace the third-party MCP adapter and root `.mcp.json` with native `.pi/mcp.json` and selective `tool_search`; preserve guard enforcement for direct and nested calls.
-- Use project `defaultTools` instead of a CLI allowlist that hides native MCP tools; remove three unintended startup helpers and forced experimental setup.
-- Pass native CLI subcommands through correctly; update browser guidance, migration notes, theme schema and runtime checks.
-- Retain model/provider choice, design contracts, economical tests, and native run metrics.
-
-## Unreleased — saved design direction and run cost
-
-- Capture natural-language design preferences in the existing DESIGN contract; preserve owner choices across design, build, bootstrap, and resume, with semantic code-token mappings and optional reference calibration.
-- Show observed tool wall time, post-error model retries, and native foreground USD cost estimates alongside run time and effective tok/s. Unknown pricing stays unavailable; overlapping tools count once.
-- Add no dependencies, tool schemas, or extra setup command.
-
-## Unreleased — deliberate testing
-
-- Make no-new-test decisions explicit in the always-loaded map and review; choose test layers by the actual failure mechanism.
-- Replace prose-matching test-design checks with executable evaluation-grader controls for a copy edit and already-covered behavior; keep the existing defect-sensitive pricing regression.
-- Reject evaluation records that omit declared post-check results. No new dependencies, tools, or mandatory test quotas.
-
-## Unreleased — writing, terminal theme, and run visibility
-
-- Add a Pi-native, MIT-attributed adaptation of Peter Yang’s `no-ai-slop` for substantive prose, with technical and multilingual exceptions.
-- Consolidate the generic `risk-review` skill into `docs/QUALITY.md`; preserve review severity and evidence requirements.
-- Add the dependency-free `slate` dark theme and a footer status for elapsed run time and effective output tok/s. Keep Pi’s native footer and provider/model choice.
-- Measure through automatic recovery until `agent_settled`; show unavailable usage honestly, clean up timers, and keep print mode silent.
-- Add `./p --add-provider` for Pi's four supported custom API protocols; store models and private credentials in the user's Pi config, preserving existing entries.
-
-All notable workflow changes are documented here. This project follows the spirit of Keep a Changelog; versioning begins when the first release is tagged.
-
-## Unreleased
-
-### Added
-
-- Behavioral coverage for autonomous/strict guard modes and launcher trust overrides.
-- Product design contract, distinctive frontend-design skill, visual hard gates, and scored craft rubric.
-- Idea-to-production prompts: discover, design, spec, ADR, build UI, design review, release plan, and incident response.
-- Evidence-gated product roadmap template.
-- Safety-guard behavior tests and a contained Docker launcher.
-- Security reporting and dependency-review policy.
-- `test-design` and `/test` workflows with red/pre-fix defect-sensitivity guidance.
-- Deterministic affected-file verification routing with a conservative full-gate fallback.
-- Workflow eval schema v2 with executable assertions, trace metrics, baseline comparison, and a real code/test repair fixture.
-- Primary-source research and audit record in `docs/RESEARCH.md`.
-- Owner-controlled Git/GitHub policy with guard, launcher, prompt, and deterministic-eval enforcement.
-- Materialized-file filtering and a Git-independent pre-fix fixture for disposable workflow evaluations.
-
-### Changed
-
-- Made `./p` trust the checked-out project and grant full-workspace implementation access by default, while independently denying all Git/GitHub mutation until the owner authorizes an exact action; the optional Docker launcher selects strict repository scope.
-- Strengthened the safety guard around secrets, destructive host actions, Git metadata/commands, publication/deployment/production mutation, and browser file exfiltration while preserving read-only Git inspection.
-- Replaced archived `pi-context7` with maintained `pi-doc-search`.
-- Removed delegated image-analysis extensions, model configuration, tools, and workflow guidance; browser QA now relies on browser-native evidence and saved screenshots as artifacts.
-- Removed the template's forced model/provider/thinking selection and unmeasured compaction/retry/timeout overrides so the operator's active Pi model and official defaults apply.
-- Pinned Pi installation guidance and GitHub Actions by immutable revision.
-- Raised browser QA, accessibility, responsive, and Core Web Vitals requirements for visual work.
-- Made the canonical full verification gate validate the template before product source is bootstrapped.
-- Reduced duplicate always-loaded policy by 30.5%, removed the duplicate `docs/PI_WORKFLOW.md`, and tightened the combined context-size ratchet.
-- Reduced the launcher from 22 to 19 active tool schemas and made subagents conditional with a universal self-review fallback.
-- Reduced routine eval default trials from three to one while retaining explicit repeated trials and stronger efficiency thresholds for promotion comparisons.
-- Updated reviewed pins to Pi `0.84.2`, `pi-mcp-adapter@2.26.1`, `@juicesharp/rpiv-todo@2.6.2`, and `@bytetrue/pi-web-search@0.2.1` with exact registry integrity records.
-
-### Added — product site (slice 1–4, plans 001–010, commit dbda97e)
-
-- Astro 7.2.4 + TypeScript 5.9 (strict) static site — 8 routes (/, /work, /work/fast-english, /work/noveno, /about, /now, /contact, 404) with `src/layouts/Layout.astro` (canonical, OG/Twitter, JSON-LD Person, FOUC script) and `src/data/site.ts` as single source for site/social/nav.
-- Content layer — `src/content.config.ts` collections (`projects` via `astro/loaders` + zod, `profile`/`now` stubs) with `src/content/projects/{fast-english,noveno}.md`; typed frontmatter for card + case-study contracts.
-- Design system — semantic tokens `src/styles/tokens.css` + `global.css`, Geist/Geist Mono variable woff2 vendored to `public/fonts` (69K+70K, preload Sans), editorial × engineering aesthetic per `docs/DESIGN.md` (light-first + polished dark, `backdrop-filter` header, `clamp()` rhythm).
-- Components/pages — `Header` (sticky + mobile `role=dialog` with focus trap), `Footer`, `ThemeToggle` (localStorage + prefers-color-scheme), `ProjectFeature`/`ProjectMedia`, `case-study/*` blocks; portrait via `astro:assets <Image>` on Home + About.
-- Social preview — `public/og-default.png` (1200×630) via `scripts/generate-og.mjs` + OG/Twitter meta in Layout (plan 005).
-
-### Added — deployment & CI (plans 001–002, 007, 014)
-
-- `bash scripts/ci-install.sh` + `npm ci` install lane (plan 001).
-- `.github/workflows/deploy.yml` — `actions/deploy-pages` to GitHub Pages (`contents: read, pages: write, id-token: write`, `node 22.23.2`) with typecheck gate `npm run check` before build (plan 014).
-- `.github/workflows/quality.yml` product verification (`bash scripts/verify.sh` + `verify-package-integrity --online`) with lint/format gate (plan 018).
-
-### Changed
-
-- `.gitignore` + `README.md` repo hygiene, `AGENTS.md`/`docs/` map, `docs/TOOLING_SETUP.md` Pi pin source (plan 003).
-- `src/content.config.ts` `links.caseStudy` hardened to block `javascript:` and enforce `/(https?)` (plan 012); `src/lib/projects.ts` single source for card mapping, draft filtering, and first `node:test` coverage (`tests/projects.test.mjs`).
-- `src/pages/about.astro` LCP image `fetchpriority="high"`, `src/pages/index.astro` below-fold portrait `loading="lazy"`, `astro.config.mjs` `inlineStylesheets: "always"` for first-paint (plan 013).
-- `scripts/generate-og.mjs` anchored to `import.meta.dirname` with repo-root guard and wired into `npm run build` (plan 015).
-- `src/components/Footer.astro` explicit year, `ProjectMedia`/`CaseFigure` placeholders `aria-hidden="true"`, `ThemeToggle` `is:inline` pressed state, `.pi/models.env` guard comment (plan 019).
-- `CONTRIBUTING.md` Pi pin pointer fixed to `docs/TOOLING_SETUP.md` (plan 016); `docs/DESIGN.md` budgets corrected (portrait rendered, CSS inlined), `docs/ARCHITECTURE.md` topology updated to shipped `deploy-pages` (plan 016).
-- `biome.json` + `.editorconfig` lint/format baseline, `.github/workflows/quality.yml` `Lint and format check` (plan 018); `.pi/package-integrity.json` extended to 14 entries (8 harness + 5 product + Biome) with `verify-package-integrity` allowing product prefixes (plan 017).
+The Pi and OMP workflow generations are retired. Earlier unreleased entries for the Pi runtime, MCP adapters, package-integrity records, launcher, evaluation harness, and design/writing skills were removed with those files rather than kept as stale active documentation. They remain available in Git history at commit `3124ca2`.

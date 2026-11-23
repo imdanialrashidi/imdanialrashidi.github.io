@@ -24,6 +24,13 @@ Implement the change. Do not stop at a plan when the task can be implemented saf
 - Add or update tests when they protect a changed behavior or a realistic failure. Use `test-design` when coverage is non-obvious.
 - Update the owning documentation when a contract, command, behavior, or architecture fact changes. Do not create a second source of truth.
 
+## Changes with operational consequences
+
+- Before changing a dependency, check the package identity, source, version, license policy and lockfile changes. Inspect install hooks. Use the existing registry, scanner and update procedure where applicable.
+- For stored data, preserve old-reader compatibility during rollout. Test partial completion and restart on disposable data. Identify the last reversible step and a restore or forward-repair procedure for changes that cannot be undone by reverting code.
+- For permissions, record who may act on which resource and where that rule is enforced. Use synthetic data. Check that denial leaves protected state unchanged.
+- At a session handoff, record the current revision and local diff, last verified criterion, remaining risk and next safe check in the existing task. The next session should inspect the tree and recheck stale evidence.
+
 ## Verify as you go
 
 - Run focused checks after each meaningful stage, not only at the end.
@@ -35,7 +42,8 @@ Implement the change. Do not stop at a plan when the task can be implemented saf
 1. Read the complete diff. Remove temporary debugging, generated noise, and unrelated edits.
 2. Confirm every acceptance criterion is addressed or explicitly reported as unmet.
 3. Run `verify` for the final evidence and `review` for the diff. Fix actionable findings in `build`; re-review only the new changes.
-4. Report what changed, what was executed, and what remains unproven or blocked.
+4. If an agreed outcome failed or lacks evidence, report the delivery as failed or incomplete. Continue independent in-scope checks while a prerequisite is blocked.
+5. For a release candidate, hand off the revision or artifact identity, affected consumers, changes to configuration or migration order, owner, observation window and stop/recovery condition. Use existing release controls. Report deployment only when separately authorized and observed.
 
 ## Stop conditions
 

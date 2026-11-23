@@ -14,13 +14,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  workflow-doctor:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
+    env:
+      PUSH_BEFORE: ${{ github.event.before }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
 
       - name: Set up Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -30,9 +34,5 @@ jobs:
       - name: Install dependencies
         run: bash scripts/ci-install.sh
 
-      - name: Lint and format check
-        run: npm run format:check
-
-      - name: Validate template
+      - name: Run canonical verification gate
         run: bash scripts/verify.sh
-
