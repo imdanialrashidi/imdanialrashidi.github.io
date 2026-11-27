@@ -4,6 +4,7 @@ import elsa from '../assets/work/elsa-hamrah.webp'
 import fastEnglish from '../assets/work/fast-english.webp'
 import gymLog from '../assets/work/gym-log.webp'
 import isbatab from '../assets/work/isbatab.webp'
+import kidotalks from '../assets/work/kidotalks.webp'
 import mobile from '../assets/work/mobile-khorsandi.webp'
 import noveno from '../assets/work/noveno.webp'
 import phpIelts from '../assets/work/php-ielts-house.webp'
@@ -21,6 +22,7 @@ export const coverMap: Record<string, ImageMetadata> = {
   'fast-english': fastEnglish,
   'gym-log': gymLog,
   isbatab,
+  kidotalks,
   'mobile-khorsandi': mobile,
   noveno,
   'php-ielts-house': phpIelts,

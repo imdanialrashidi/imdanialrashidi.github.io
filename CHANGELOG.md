@@ -2,6 +2,15 @@
 
 All notable changes to this repository's product delivery and agent workflow are recorded here. The project follows the spirit of Keep a Changelog; versioning begins at the first tagged release.
 
+## Kidotalks, client classification, hero portrait and Bing verification (2026-11-27)
+
+- Added the Bing Webmaster `msvalidate.01` verification meta tag to the shared layout and to the built-artifact check, so every indexable page carries it.
+- Replaced the home hero with the owner-supplied studio portrait. The former night photograph now fills the about band, which keeps two different photographs on the home page. Regenerated the default social card.
+- Reclassified Fast English as client work in its case study, on the work index and on its social card. The case-study body now describes when the project started without claiming it was an owned product.
+- Added the Kidotalks case study at `/work/kidotalks/` with a real 1440x900 capture of `https://kidotalks.ir/`, a release-candidate status, an explicit limits section, provenance in `src/assets/SOURCES.md`, a cover-map entry and a social card.
+- The site now has 15 indexable routes (16 built pages), nine case studies (three own products, six client builds), nine real work screenshots and 15 social cards. Updated the work-index copy and stats, home hero and about copy, footer building links, site metadata, tests, the OG generator, the artifact validator and current docs.
+- Verification (2026-11-27): `bash scripts/verify.sh` exit 0; `npm run check` 0 errors, 0 warnings, 0 hints; `npm test` 18 passes; `npm run build` 16 pages; `node scripts/check-built-site.mjs` PASS for 15 pages, 127 images, 4.95MB. The home, work index and Kidotalks case study were rendered in headless Chrome at 1440 and 375 and inspected. Lighthouse was not rerun, so the 2026-11-23 lab numbers remain the baseline and are not claimed for the new content. Field data, dark-theme render, cross-browser and assistive-technology checks remain unmeasured or unproven.
+
 ## English parity rebuild (2026-11-23)
 
 - Rebuilt the English site to match the Persian sibling's depth: eight English case studies (four own products: Noveno, Fast English, Study Center, Gym Log; four client sites: Elsa Hamrah, Isbatab, Mobile Khorsandi, PHP IELTS House), three travel notes (Dalakhani Valley, Dareh Marg, Yakh Morad Cave), and rewritten About, Now and Contact pages. The Persian site remains the Persian home and is linked with `lang="fa"`; there is no `hreflang` cluster because the content sets are not 1:1.

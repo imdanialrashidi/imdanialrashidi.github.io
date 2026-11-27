@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets'
 import { getCollection } from 'astro:content'
 import heroPortrait from '../assets/portrait/danial-hero.webp'
-import btsPortrait from '../assets/portrait/danial-portrait.webp'
+import btsPortrait from '../assets/portrait/danial-night.webp'
 import CtaBand from '../components/CtaBand.astro'
 import ProjectFeature from '../components/ProjectFeature.astro'
 import SectionHead from '../components/SectionHead.astro'
@@ -86,8 +86,8 @@ const principles = [
       </h1>
       <p class="lede hero__lede">
         I design and build software products, client websites, and the
-        automations in between. Right now that means Noveno, Study Center, Fast
-        English, and Gym Log.
+        automations in between. Right now that means Noveno, Study Center and
+        Gym Log, plus client work like Fast English and Kidotalks.
       </p>
       <p class="hero__actions">
         <a class="btn btn--primary" href="/work/">
@@ -112,7 +112,7 @@ const principles = [
         </div>
         <div>
           <dt>Building</dt>
-          <dd>Noveno, Study Center, Fast English, Gym Log</dd>
+          <dd>Noveno, Study Center, Gym Log, Fast English, Kidotalks</dd>
         </div>
         <div>
           <dt>Open to</dt>
@@ -130,8 +130,8 @@ const principles = [
     <figure class="hero__portrait">
       <Image
         src={heroPortrait}
-        alt="Danial Rashidi at night, next to a large yellow sculpture wearing sunglasses"
-        widths={[320, 480]}
+        alt="Studio portrait of Danial Rashidi in a navy suit and white shirt"
+        widths={[320, 480, 640, 750]}
         sizes="(max-width: 900px) 90vw, 420px"
         format="webp"
         quality={84}
@@ -154,7 +154,7 @@ const principles = [
         id="selected-title"
         note="Three builds with real screenshots and honest status. The full index groups products and client work."
         href="/work/"
-        linkLabel="All eight projects"
+        linkLabel="All nine projects"
       />
       <div class="features">
         {
@@ -261,8 +261,8 @@ const principles = [
       <div class="about-band__portrait">
         <Image
           src={btsPortrait}
-          alt="Portrait of Danial Rashidi"
-          widths={[280, 420, 560]}
+          alt="Danial Rashidi at night, next to a large yellow sculpture wearing sunglasses"
+          widths={[280, 420, 480]}
           sizes="(max-width: 760px) 40vw, 240px"
           format="webp"
           quality={82}

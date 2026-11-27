@@ -67,10 +67,13 @@ function readProjects() {
 
 const projects = readProjects()
 
-test('eight projects exist, four products and four client sites', () => {
-  assert.equal(projects.length, 8)
-  assert.equal(projects.filter((p) => p.data.kind === 'product').length, 4)
-  assert.equal(projects.filter((p) => p.data.kind === 'client').length, 4)
+test('nine projects exist, three products and six client builds', () => {
+  assert.equal(projects.length, 9)
+  assert.equal(projects.filter((p) => p.data.kind === 'product').length, 3)
+  assert.equal(projects.filter((p) => p.data.kind === 'client').length, 6)
+  const byId = new Map(projects.map((project) => [project.id, project]))
+  assert.equal(byId.get('fast-english')?.data.kind, 'client', 'Fast English is client work')
+  assert.equal(byId.get('kidotalks')?.data.kind, 'client', 'Kidotalks is client work')
   const orders = projects.map((p) => p.data.order)
   assert.equal(new Set(orders).size, orders.length, 'order values must be unique')
 })

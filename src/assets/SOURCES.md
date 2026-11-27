@@ -5,7 +5,7 @@ mockups, no stock photography, no AI-generated screenshots.
 
 ## Project screenshots (`src/assets/work/`)
 
-All eight previews are local copies of publicly commissioned or shipped work.
+All nine previews are local copies of publicly commissioned or shipped work.
 The originals live in the sibling repository `danialrashidi.ir`
 (`public/images/projects/`), which is the owner's own project.
 
@@ -13,6 +13,7 @@ The originals live in the sibling repository `danialrashidi.ir`
 | --- | --- | --- |
 | `elsa-hamrah.webp` | https://elsahamrah.com/ | Public storefront capture, 1440x900. |
 | `isbatab.webp` | https://isbatab.ir/ | Public corporate site capture, 1440x900. |
+| `kidotalks.webp` | https://kidotalks.ir/ | Public homepage capture, 1440x900, captured 2026-11-27. |
 | `mobile-khorsandi.webp` | https://mobilekhorsandi.ir/ | Public storefront capture, 1920x936. |
 | `php-ielts-house.webp` | https://phpieltshouse.ir/ | Public site capture, 1440x900. |
 | `noveno.webp` | https://noveno.ir/ | Live product site, 1840x932. |
@@ -27,8 +28,9 @@ the honest fallback for a future project without a public screen.
 
 | File | Origin |
 | --- | --- |
-| `src/assets/portrait/danial-hero.webp` | Owner-provided photograph (`danialrashidi.ir`, `public/images/Danial_hero.jpg`). |
-| `src/assets/portrait/danial-portrait.webp` | Owner-provided studio portrait (`danialrashidi.ir`, `public/images/Danial_photo.jpg`). |
+| `src/assets/portrait/danial-hero.webp` | Owner-provided studio portrait (`danialrashidi.ir`, `public/images/Danial_photo.jpg`), used as the home hero and default social card. |
+| `src/assets/portrait/danial-night.webp` | Owner-provided photograph (`danialrashidi.ir`, `public/images/Danial_hero.jpg`), used in the home about band. |
+| `src/assets/portrait/danial-portrait.webp` | Owner-provided studio portrait (`danialrashidi.ir`, `public/images/Danial_photo.jpg`), used on the about page, social cards and structured data. |
 | `src/assets/travels/dalakhani.webp` | Owner-provided trip photograph (Dalakhani Valley, 2024). |
 | `src/assets/travels/dareh-marg.webp` | Owner-provided trip photograph (Dareh Marg, 2025). |
 | `src/assets/travels/yakh-morad.webp` | Owner-provided trip photograph (Yakh Morad cave survey, 2025). |

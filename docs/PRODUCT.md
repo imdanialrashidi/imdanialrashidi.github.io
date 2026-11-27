@@ -1,6 +1,6 @@
 # Product Contract: Danial Rashidi Personal Site
 
-Source of truth for what the shipped product must do. Updated 2026-11-23 for the English parity rebuild from repository evidence and the recorded verification bundle. System and trust boundaries live in [ARCHITECTURE.md](ARCHITECTURE.md); the visual contract lives in [DESIGN.md](DESIGN.md); the evidence bar lives in [QUALITY.md](QUALITY.md); stage status lives in [PLAN.md](PLAN.md); the rebuild's durable handoff is [exec-plans/active/english-parity-rebuild.md](exec-plans/active/english-parity-rebuild.md).
+Source of truth for what the shipped product must do. Updated 2026-11-27 with the Kidotalks case study and the Fast English client classification; the baseline rebuild dates to 2026-11-23. System and trust boundaries live in [ARCHITECTURE.md](ARCHITECTURE.md); the visual contract lives in [DESIGN.md](DESIGN.md); the evidence bar lives in [QUALITY.md](QUALITY.md); stage status lives in [PLAN.md](PLAN.md); the rebuild's durable handoff is [exec-plans/active/english-parity-rebuild.md](exec-plans/active/english-parity-rebuild.md).
 
 ## Users and problem
 
@@ -12,9 +12,9 @@ Source of truth for what the shipped product must do. Updated 2026-11-23 for the
 
 ## Shipped product (v1, English)
 
-- 14 indexable routes plus a 404: `/`, `/work/`, `/work/noveno/`, `/work/fast-english/`, `/work/study/`, `/work/gym-log/`, `/work/elsa-hamrah/`, `/work/isbatab/`, `/work/mobile-khorsandi/`, `/work/php-ielts-house/`, `/travels/`, `/about/`, `/now/`, `/contact/`. Every URL uses the trailing-slash form.
-- Content: eight English case studies, four own products (Noveno, Fast English, Study Center, Gym Log) and four client sites (Elsa Hamrah, Isbatab, Mobile Khorsandi, PHP IELTS House); three travel notes (Dalakhani Valley, Dareh Marg, Yakh Morad Cave); rewritten About, Now and Contact pages.
-- Evidence: eight real screenshots from live or shipped work. A project with no public screen would render a typographic plate instead of an invented interface. Provenance is [src/assets/SOURCES.md](../src/assets/SOURCES.md). There are no invented metrics, screenshots or testimonials.
+- 15 indexable routes plus a 404: `/`, `/work/`, `/work/noveno/`, `/work/fast-english/`, `/work/study/`, `/work/gym-log/`, `/work/kidotalks/`, `/work/elsa-hamrah/`, `/work/isbatab/`, `/work/mobile-khorsandi/`, `/work/php-ielts-house/`, `/travels/`, `/about/`, `/now/`, `/contact/`. Every URL uses the trailing-slash form.
+- Content: nine English case studies, three own products (Noveno, Study Center, Gym Log) and six client builds (Fast English, Kidotalks, Elsa Hamrah, Isbatab, Mobile Khorsandi, PHP IELTS House); three travel notes (Dalakhani Valley, Dareh Marg, Yakh Morad Cave); rewritten About, Now and Contact pages.
+- Evidence: nine real screenshots from live or shipped work. A project with no public screen would render a typographic plate instead of an invented interface. Provenance is [src/assets/SOURCES.md](../src/assets/SOURCES.md). There are no invented metrics, screenshots or testimonials.
 - Design: editorial premium direction with a warm paper palette, Instrument Serif display type over Geist and Geist Mono, one vermilion accent, real screenshots as evidence, light and dark themes.
 - Delivery: static Astro 7.2.4 output on GitHub Pages at `https://imdanialrashidi.github.io`. No backend, database, form endpoint, analytics, cookies, auth, CMS or secrets. Contact is `mailto:` plus public profiles.
 
@@ -28,7 +28,7 @@ Source of truth for what the shipped product must do. Updated 2026-11-23 for the
 ## Must-have user flows
 
 1. Land and orient: `/` shows the identity hero, capabilities and principles, selected work with real screenshots, travel notes, and a closing contact band. "See the work" and "Start a conversation" are one click away.
-2. Evaluate work: `/work/` lists eight projects, four own products and four client sites, each with a real preview, an honest status and a link. `/work/<slug>/` renders the Markdown case study, the stack, the honest limits and the next project.
+2. Evaluate work: `/work/` lists nine projects, three own products and six client builds, each with a real preview, an honest status and a link. `/work/<slug>/` renders the Markdown case study, the stack, the honest limits and the next project.
 3. See the human side: `/travels/` shows three travel notes with real photographs. `/about/` covers background, working style and direction. `/now/` records the current focus and a "last updated" date.
 4. Contact: `/contact/` leads with the direct email, then public profiles, with explicit "No form, no tracker" copy. There is no POST surface.
 5. Recover: `/404.html` is a noindex page with recovery links to Work, Travels, About and Contact, plus the email.
@@ -49,11 +49,11 @@ Evidence for the shipped state is the recorded bundle of 2026-11-23; see [QUALIT
 
 | ID | Criterion | Evidence | Status |
 | --- | --- | --- | --- |
-| A1 | 14 indexable routes plus 404; canonical, sitemap and internal links all use the trailing-slash form | `node scripts/check-built-site.mjs`: 14 page URLs in sitemap, every one in trailing-slash form | PASS |
-| A2 | Eight case studies (four product, four client) and three travel notes pass the content schema and the project invariants | `npm test` (18 tests) and `npm run check` (0 errors, 0 warnings, 0 hints) | PASS |
-| A3 | Honest evidence: eight real screenshots, provenance in SOURCES.md, no invented metrics or testimonials | `tests/projects.test.mjs` cover 1:1 and body rules; `src/assets/SOURCES.md` | PASS |
+| A1 | 15 indexable routes plus 404; canonical, sitemap and internal links all use the trailing-slash form | `node scripts/check-built-site.mjs`: 15 page URLs in sitemap, every one in trailing-slash form | PASS |
+| A2 | Nine case studies (three product, six client) and three travel notes pass the content schema and the project invariants | `npm test` (18 tests) and `npm run check` (0 errors, 0 warnings, 0 hints) | PASS |
+| A3 | Honest evidence: nine real screenshots, provenance in SOURCES.md, no invented metrics or testimonials | `tests/projects.test.mjs` cover 1:1 and body rules; `src/assets/SOURCES.md` | PASS |
 | A4 | Design contract matches the shipped editorial system and its states | `docs/DESIGN.md`; rendered acceptance follows [VISUAL_REVIEW.md](VISUAL_REVIEW.md) | PASS at document level |
-| A5 | SEO baseline: canonical, robots meta, sitemap, robots.txt, per-page social card, manifest and icons, one JSON-LD `@graph` per page, `rel="me"`, 404 noindex and sitemap exclusion | `node scripts/check-built-site.mjs` and `tests/seo-metadata.test.mjs` | PASS |
+| A5 | SEO baseline: canonical, robots meta, Google and Bing verification tokens, sitemap, robots.txt, per-page social card, manifest and icons, one JSON-LD `@graph` per page, `rel="me"`, 404 noindex and sitemap exclusion | `node scripts/check-built-site.mjs` and `tests/seo-metadata.test.mjs` | PASS |
 | A6 | Static performance: zero external JavaScript chunks, external hashed CSS, 103K vendored fonts, lab Lighthouse home desktop 100/100/100/100 and mobile 99/100/100/100 | Recorded lab run of 2026-11-23; see QUALITY.md | PASS as lab evidence; field data UNPROVEN |
 | A7 | Accessibility: WCAG 2.2 AA target, Lighthouse accessibility 100 on `/`, `/work/`, `/work/noveno/`, `/about/` and `/contact/` | Recorded lab run of 2026-11-23 | PASS on audited routes; manual AT and cross-browser UNPROVEN |
 | A8 | Contact is email first with public profiles second, no form and no tracker | `src/pages/contact.astro` (mailto only, no form element) and the built contact page | PASS |
@@ -72,8 +72,8 @@ Evidence for the shipped state is the recorded bundle of 2026-11-23; see [QUALIT
 ## Performance and UX budgets
 
 - Field targets: Core Web Vitals `good` at the 75th percentile (LCP ≤ 2.5 s, INP ≤ 200 ms, CLS ≤ 0.1). No RUM or field data exists; the measured numbers are lab evidence only and must be labelled that way.
-- Static build budget: 15 pages; dist under 5MB including 14 social cards and 97 image variants; largest HTML 46K and all HTML 434K; fonts 103K vendored; zero external JavaScript chunks; five inline script elements on content pages (theme FOUC guard, theme behavior, mobile dialog, JSON-LD, speculation rules); external hashed CSS; `sharp` used offline at build and asset-generation time only.
-- Enforced budgets in `scripts/check-built-site.mjs`: sitemap 14 URLs; total HTML under 700K; no image over 300K; dist under 8MB; no external JS; every page links the external stylesheet; canonical and sitemap agree.
+- Static build budget: 16 pages; dist about 4.95MB including 15 social cards and 99 image variants; all HTML 459K; fonts 103K vendored; zero external JavaScript chunks; five inline script elements on content pages (theme FOUC guard, theme behavior, mobile dialog, JSON-LD, speculation rules); external hashed CSS; `sharp` used offline at build and asset-generation time only.
+- Enforced budgets in `scripts/check-built-site.mjs`: sitemap 15 URLs; total HTML under 700K; no image over 300K; dist under 8MB; no external JS; every page links the external stylesheet; canonical and sitemap agree.
 - UX targets: WCAG 2.2 AA; reflow at 320 CSS px; 200% text zoom; visible focus; light and dark themes; reduced motion respected; no horizontal overflow at 320, 375, 768 and 1280.
 - Brand character (x, not y): calm and precise, not noisy; technically literate, not buzzword AI; editorial restraint, not generic SaaS or gradient cyberpunk. The warm paper palette with one vermilion signal is the only chromatic move.
 

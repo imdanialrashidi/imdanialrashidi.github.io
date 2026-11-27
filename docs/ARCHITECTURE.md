@@ -1,6 +1,6 @@
 # Architecture and Operations: Danial Rashidi personal site
 
-Current for the 2026-11-23 rebuild. This document owns system structure, data flow, invariants, build and operations for the English site at <https://imdanialrashidi.github.io>. Visual and interaction rules live in [DESIGN.md](DESIGN.md); product outcomes in [PRODUCT.md](PRODUCT.md); release evidence rules in [QUALITY.md](QUALITY.md); workflow pin in [WORKFLOW.md](WORKFLOW.md).
+Updated 2026-11-27 for the Kidotalks addition and the Fast English client classification; the baseline rebuild dates to 2026-11-23. This document owns system structure, data flow, invariants, build and operations for the English site at <https://imdanialrashidi.github.io>. Visual and interaction rules live in [DESIGN.md](DESIGN.md); product outcomes in [PRODUCT.md](PRODUCT.md); release evidence rules in [QUALITY.md](QUALITY.md); workflow pin in [WORKFLOW.md](WORKFLOW.md).
 
 ## Current system
 
@@ -12,7 +12,7 @@ Current for the 2026-11-23 rebuild. This document owns system structure, data fl
 | Build tools | `@astrojs/sitemap` 3.7.3 for the sitemap, `sharp` 0.35.3 for Astro's image pipeline and offline social cards and icons, Biome 1.9.4 for format and lint. Six devDependencies, zero runtime dependencies. |
 | Runtime | None. No server, database, auth, cookies, backend form, analytics, CMS or client framework. Every route is static HTML served by GitHub Pages. |
 | Node | `>=22.19.0` in `package.json`; CI pins 22.23.2. |
-| Output | 15 HTML files: 14 indexable routes plus `404.html`. About 4.53MB in `dist/`, including 97 responsive WebP variants, 14 social cards, four fonts and six hashed CSS files. Zero emitted JavaScript chunks. |
+| Output | 16 HTML files: 15 indexable routes plus `404.html`. About 4.95MB in `dist/`, including 99 responsive WebP variants, 15 social cards, four fonts and six hashed CSS files. Zero emitted JavaScript chunks. |
 | Host | GitHub Pages account root URL, published by `.github/workflows/deploy.yml` from `dist/`. `.nojekyll` at the archive root keeps underscore paths (`_astro/`) served as-is. |
 
 ### Modules
@@ -21,14 +21,14 @@ Current for the 2026-11-23 rebuild. This document owns system structure, data fl
 | --- | --- |
 | `src/data/site.ts` | Single source for identity, canonical URL, email, social profiles, `sameAs` list, navigation, product links, Noveno organisation and `isActiveNav`. |
 | `src/content.config.ts` | Zod schemas for the `projects` and `travels` collections, loaded from Markdown with `glob`. Build fails on schema drift. |
-| `src/content/projects/*.md` | Eight case studies: four own products and four client sites, each with summary, meta description, kicker, kind, role, year, status, stack, links, optional real cover and an ordered body. |
+| `src/content/projects/*.md` | Nine case studies: three own products and six client builds, each with summary, meta description, kicker, kind, role, year, status, stack, links, optional real cover and an ordered body. |
 | `src/content/travels/*.md` | Three travel notes with destination, dual-calendar date label, summary, image key, alt text and focal position. |
-| `src/lib/work.ts` | Typed cover map for the eight real screenshots, `coverFor`, `hrefFor`, ordering, featured and kind splits, and next-project lookup. |
+| `src/lib/work.ts` | Typed cover map for the nine real screenshots, `coverFor`, `hrefFor`, ordering, featured and kind splits, and next-project lookup. |
 | `src/lib/travels.ts` | Typed image map and ordering for travel notes. |
 | `src/lib/seo.ts` | Breadcrumb, item list, image, Person and WebSite nodes, the per-page `@graph` builder and the CreativeWork node for case studies. |
-| `src/layouts/Layout.astro` | Document shell, head metadata, canonical normalisation, social metadata, rel-me links, font preloads, JSON-LD, speculation rules, pre-paint theme guard, skip link, header, main, footer. |
+| `src/layouts/Layout.astro` | Document shell, head metadata, canonical normalisation, social metadata, rel-me links, search-engine verification tokens, font preloads, JSON-LD, speculation rules, pre-paint theme guard, skip link, header, main, footer. |
 | `src/components/*.astro` | `Header` with dialog menu, `ThemeToggle`, `Footer`, `SectionHead`, `ProjectFeature`, `ProjectRow`, `ProjectPlate`, `Shot`, `TravelCard`, `CtaBand`, `SocialIcon`. |
-| `src/pages/**` | Eight route files that generate 15 HTML files: `index`, `work/index`, `work/[slug]`, `travels`, `about`, `now`, `contact`, `404`. |
+| `src/pages/**` | Eight route files that generate 16 HTML files: `index`, `work/index`, `work/[slug]`, `travels`, `about`, `now`, `contact`, `404`. |
 | `src/styles/**` | Tokens and shared primitives: reset, container, grid, typography, buttons, links, status, shot, prose, motion and reduced-motion rules. |
 | `public/**` | Fonts and licences, generated social cards, generated icons, favicon, manifest, robots and `.nojekyll`. |
 | `scripts/**` | Artifact validator, social card and icon generators, canonical gate, workflow lock verifier, install helper. |
@@ -58,7 +58,7 @@ Every indexable page emits exactly one JSON-LD `@graph` containing `WebSite`, `P
 | Page entity | Every indexable page | `WebPage` plus a narrower second type where used: `ProfilePage` on home, `CollectionPage` on work and travels, `AboutPage`, `ContactPage`. Carries canonical, title, description, language, `isPartOf`, `primaryImageOfPage` and `mainEntity`; `/now/` adds `dateModified`. |
 | `BreadcrumbList` | Work index, case studies, about, now, contact | Home plus the route item trail. `/travels/` has no trail because it is a single-level section. |
 | `CreativeWork` | Each case study | Name, description, canonical, creator Person, creation year, product or client genre, stack keywords, website part, social card image, live URL when one exists. |
-| `ItemList` | Home and work index | The eight projects with name, description and canonical URL. |
+| `ItemList` | Home and work index | The nine projects with name, description and canonical URL. |
 | `ContactPoint` | Contact | Professional enquiries email, English and Persian. |
 
 Sharing metadata is generated from the same page props: Open Graph and Twitter tags, a 1200x630 JPEG card from `public/og/` for every indexable page, `og:type=article` on case studies, and `article:modified_time` where a page supplies an update date.
@@ -105,12 +105,12 @@ Author
 | --- | --- | --- |
 | Static artifact only, no client framework, no external JS chunks | Keeps the site copyable, cacheable and free of hydration and tracking surface. | `tests/projects.test.mjs` rejects `astro:transitions` and `client:load`; the artifact check counts `.js` files and requires zero. |
 | Every URL uses the trailing-slash form | GitHub Pages redirects non-slash directory URLs; matching canonical, sitemap and links avoids redirects and duplicate signals. | `astro.config.mjs`, canonical normalisation in `Layout.astro`, slash assertions in the artifact check, slash assertions in links tests. |
-| 14 indexable routes plus a noindex 404, with sitemap agreement | Search engines see exactly the intended page set. | Artifact check compares each canonical with the sitemap, requires 14 URLs, rejects `/404`, and asserts the 404 is noindex. |
+| 15 indexable routes plus a noindex 404, with sitemap agreement | Search engines see exactly the intended page set. | Artifact check compares each canonical with the sitemap, requires 15 URLs, rejects `/404`, and asserts the 404 is noindex. |
 | One JSON-LD `@graph` per indexable page with Person, WebSite and a page entity | Keeps identity and page meaning machine-readable from one block. | Artifact check requires exactly one block, parses it, checks types and a non-thin `sameAs`; 404 has none. |
 | Unique title and description, one `h1`, `lang="en"`, indexable robots, existing social card | Baseline search and sharing correctness. | Artifact check per page, including the OG image file. |
 | Internal links resolve, images have alt text and dimensions and real files | The artifact must be self-contained and accessible. | Artifact check walks every page. |
 | CSS stays external and hashed | Caching without inlining the design system into every page. | Artifact check requires a linked stylesheet per page; source test pins `inlineStylesheets: "auto"`. |
-| Content contract: eight projects (four products, four client), three travels, unique order and titles, honest status labels, no placeholders | The credibility claim depends on real, complete content. | Zod at build time plus `tests/projects.test.mjs`. |
+| Content contract: nine projects (three products, six client), three travels, unique order and titles, honest status labels, no placeholders | The credibility claim depends on real, complete content. | Zod at build time plus `tests/projects.test.mjs`. |
 | Real images only, one cover per real screenshot, provenance | No invented interface or stock proof. | Cover map parity test, cover alt presence test, `src/assets/SOURCES.md` reference test. |
 | No em dash character in site copy | A mechanical house style rule, not a preference. | `tests/seo-metadata.test.mjs`. |
 | Budgets: total HTML under 700K, no image over 300K, artifact under 8MB | The static-first performance claim must stay measurable. | Artifact check. |
@@ -125,7 +125,7 @@ The form is kept consistent at every layer rather than patched per page:
 
 - Astro emits `/work/index.html`, `/about/index.html` and so on, with `404.html` as the only flat page.
 - `Layout.astro` normalises `Astro.url.pathname` to end with a slash before building the canonical URL.
-- `@astrojs/sitemap` receives those routes and the 404 filter, so all 14 sitemap URLs end in `/`.
+- `@astrojs/sitemap` receives those routes and the 404 filter, so all 15 sitemap URLs end in `/`.
 - `src/data/site.ts` navigation, product links and `hrefFor` produce slash-terminated internal URLs.
 - `scripts/check-built-site.mjs` fails if any sitemap URL or canonical drifts from the slash form, and `tests/seo-metadata.test.mjs` fails if a navigation href does not end in a slash.
 
@@ -158,7 +158,7 @@ Changing this contract means changing the canonical URL of every page, so treat 
 - Analytics, RUM and tag managers: rejected by the product promise of no tracking; lab Lighthouse runs are the available performance evidence.
 - Backend contact services (Formspree and similar): the site explicitly states it has no form and no tracker; `mailto:` is the contract.
 - Font CDNs and npm font runtimes: four licensed woff2 files are vendored locally for privacy and performance.
-- A search service, filtering, pagination or infinite scroll on eight projects: a static list is faster to scan and adds no state.
+- A search service, filtering, pagination or infinite scroll on nine projects: a static list is faster to scan and adds no state.
 - Per-request dynamic social cards and an image CDN: cards are generated rarely and committed, so request-time rendering adds cost with no benefit.
 - A custom error service or server redirects: GitHub Pages has no server; the 404 page and slash contract cover the actual failure modes.
 - Committed browser test infrastructure, Lighthouse CI and visual regression in CI: no browser tool is part of the default environment; lab runs are recorded as observations, not CI automation.
@@ -174,7 +174,7 @@ Changing this contract means changing the canonical URL of every page, so treat 
 | Build | `npm run build` | `astro build` only. Social cards and icons are committed and not regenerated. |
 | Preview | `npm run preview` | Serves the built `dist/` on port 4321. Use this for browser QA. |
 | Type and content check | `npm run check` | `astro check`: TypeScript, Astro files and content schema. Observed 0 errors, 0 warnings, 0 hints on 2026-11-23. |
-| Tests | `npm test` | `node --test tests/projects.test.mjs tests/seo-metadata.test.mjs`; 18 tests, 18 pass on 2026-11-23. |
+| Tests | `npm test` | `node --test tests/projects.test.mjs tests/seo-metadata.test.mjs`; 18 tests, 18 pass on 2026-11-27. |
 | Format and lint | `npm run format:check` | Biome check over `src` and `scripts`. |
 | Type check plus build | `npm run ci` | `npm run check && npm run build`. |
 | Artifact check | `node scripts/check-built-site.mjs` | Run after build; also run by the canonical gate. |
@@ -194,9 +194,9 @@ Changing this contract means changing the canonical URL of every page, so treat 
 
 ### Artifact and recovery
 
-- The build produces 15 static HTML files, the sitemap index and URL set, hashed CSS and image variants, a copied `public/` tree including 14 committed social cards and four fonts, and no JavaScript chunks. The full report on 2026-11-23: 14 pages verified, 114 images, 4.53MB, all artifact checks pass.
+- The build produces 16 static HTML files, the sitemap index and URL set, hashed CSS and image variants, a copied `public/` tree including 15 committed social cards and four fonts, and no JavaScript chunks. The report on 2026-11-27: 15 pages verified, 127 images, 4.95MB, all artifact checks pass.
 - `dist/` and `.astro/` are build output and are not committed. `public/og/**`, `public/icons/**`, `public/apple-touch-icon.png`, fonts and `.nojekyll` are source artifacts and are committed.
-- A warm Astro build produced 15 pages in about 1.3 seconds; `npm run build` end to end took about 2.3 seconds in the 2026-11-23 run. The build is deterministic from the lockfile and committed assets.
+- A warm Astro build produced 16 pages in about 1.3 seconds; `npm run build` end to end took about 2 seconds in the 2026-11-27 run. The build is deterministic from the lockfile and committed assets.
 - Rollback is `git revert <sha>` on `main` and push. `deploy.yml` rebuilds that commit and republishes it; the previous commit remains deployable. There is no database, migration, queue or server state to undo.
 - Monitoring is the workflow status plus a manual Lighthouse lab run against `npm run preview`. There is no runtime logging, error reporting or traffic telemetry by design, so failures are build and deploy failures, not production incidents.
 - Secrets: no repository secrets are required. Deployment uses the permissions declared in `deploy.yml` (contents read, pages write, id-token write), and `.env.example` documents only `APP_ENV=development`.

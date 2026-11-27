@@ -77,7 +77,7 @@ if (!fs.existsSync(sitemapPath)) {
 }
 const sitemap = fs.readFileSync(sitemapPath, 'utf8')
 const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1])
-check(urls.length === 14, `sitemap contains 14 indexable URLs (found ${urls.length})`)
+check(urls.length === 15, `sitemap contains 15 indexable URLs (found ${urls.length})`)
 check(
   urls.every((url) => url === `${siteUrl}/` || url.endsWith('/')),
   'every sitemap URL uses the trailing-slash form',
@@ -126,6 +126,11 @@ for (const file of htmlFiles) {
   check(
     Boolean(robots) && robots.includes('index') && robots.includes('follow'),
     `${relative}: robots`,
+  )
+  const bingVerification = metaContent(html, /<meta name="msvalidate\.01" content="([^"]+)"/)
+  check(
+    bingVerification === '08FE4B30F915F3371AE65E18279D5F6A',
+    `${relative}: Bing verification tag`,
   )
   check(lang === 'en', `${relative}: html lang is en`)
   check((html.match(/<h1\b/g) ?? []).length === 1, `${relative}: exactly one h1`)

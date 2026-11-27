@@ -3,8 +3,8 @@ seoTitle: "Fast English: reading and listening app"
 title: "Fast English"
 summary: "A Persian-first English reading and listening product: CEFR-leveled articles with matching audio, flashcards, and a released Android app."
 metaDescription: "Fast English is a live Persian-first English learning product: CEFR-leveled articles read and heard together, flashcards, a placement test and an Android app."
-kicker: "Product engineering · Laravel · React · Android"
-kind: "product"
+kicker: "Client work · Laravel · React · Android"
+kind: "client"
 role: "Product engineering, backend, Android"
 year: 2025
 status: "live"
@@ -21,7 +21,7 @@ order: 2
 
 Fast English is an English learning product for Persian speakers. A learner picks a short article at a CEFR level from A1 to C2, reads it, and listens to the same text as audio. It is live at fastenglishpodcast.ir with paid subscriptions, public library samples, a staff panel, and an Android app released as version 1.0.0.
 
-I started it in 2025 and built it as a single product rather than a collection of experiments. This page covers what exists now, the decisions that shaped it, and the limits I would want a reader to know before trusting any part of it.
+The project started in 2025 and was built as a single product rather than a collection of experiments. This page covers what exists now, the decisions that shaped it, and the limits I would want a reader to know before trusting any part of it.
 
 ## What it is
 

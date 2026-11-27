@@ -31,11 +31,16 @@ test('the shared layout ships the full technical SEO baseline', () => {
     'application/ld+json',
     'rel="me"',
     'google-site-verification',
+    'name="msvalidate.01"',
     'name="viewport" content="width=device-width, initial-scale=1"',
     'rel="preload"',
   ]) {
     assert.ok(layout.includes(marker), `Layout must include ${marker}`)
   }
+  assert.ok(
+    layout.includes('content="08FE4B30F915F3371AE65E18279D5F6A"'),
+    'Bing Webmaster verification token is present',
+  )
   assert.ok(!layout.includes('ClientRouter'), 'no client-side router in the layout')
   assert.ok(layout.includes('noindex'), 'layout supports noindex pages')
   assert.ok(

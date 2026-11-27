@@ -5,14 +5,14 @@ export const site = {
   shortTitle: 'Danial Rashidi',
   tagline: 'Software & Product Builder',
   description:
-    'Danial Rashidi builds software products from a vague idea to a working system: Noveno, Study Center, Fast English and Gym Log, plus client websites.',
+    'Danial Rashidi builds software products from a vague idea to a working system: Noveno, Study Center and Gym Log, plus client work like Fast English and Kidotalks.',
   url: 'https://imdanialrashidi.github.io',
   locale: 'en_US',
   language: 'en',
   email: 'imdanialrashidi@gmail.com',
   location: 'Iran',
   availability: 'Open to remote work and product collaborations',
-  currentFocus: 'Building Noveno, Study Center, Fast English and Gym Log',
+  currentFocus: 'Building Noveno, Study Center, Gym Log, Fast English and Kidotalks',
   persianSite: 'https://danialrashidi.ir',
   ogImage: '/og/default.jpg',
   // Kept in one place so the Person node and the footer agree.
@@ -113,6 +113,7 @@ export const products = [
   { label: 'Noveno', href: '/work/noveno/' },
   { label: 'Study Center', href: '/work/study/' },
   { label: 'Fast English', href: '/work/fast-english/' },
+  { label: 'Kidotalks', href: '/work/kidotalks/' },
   { label: 'Gym Log', href: '/work/gym-log/' },
 ] as const
 

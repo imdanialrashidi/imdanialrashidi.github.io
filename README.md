@@ -1,6 +1,6 @@
 # imdanialrashidi.github.io
 
-English personal credibility site for Danial Rashidi, Software & Product Builder: eight case
+English personal credibility site for Danial Rashidi, Software & Product Builder: nine case
 studies, three travel notes, and about, now and contact pages. Static [Astro](https://astro.build)
 site deployed to GitHub Pages at <https://imdanialrashidi.github.io>. No backend, analytics or
 cookies.
@@ -16,7 +16,7 @@ The Persian sibling site at <https://danialrashidi.ir> remains the Persian home.
 
     npm ci          # or: bash scripts/ci-install.sh
     npm run dev     # dev server
-    npm run build   # static build to dist/ (15 pages)
+    npm run build   # static build to dist/ (16 pages)
     npm run preview # serve dist/ on :4321
 
 ## Verification
@@ -32,14 +32,14 @@ JSON-LD, internal links, image files and the asset budgets.
 
 ## Routes and content
 
-- 14 indexable routes plus 404: `/`, `/work/`, eight `/work/<slug>/` case studies, `/travels/`,
+- 15 indexable routes plus 404: `/`, `/work/`, nine `/work/<slug>/` case studies, `/travels/`,
   `/about/`, `/now/` and `/contact/`. Every URL uses the trailing-slash form.
-- `src/content/projects/*.md`: eight English case studies, four own products and four client
-  sites. Schema in `src/content.config.ts`.
+- `src/content/projects/*.md`: nine English case studies, three own products and six client
+  builds. Fast English and Kidotalks are client work. Schema in `src/content.config.ts`.
 - `src/content/travels/*.md`: three travel notes with real photographs.
 - `src/data/site.ts`: site identity, social links, navigation and product links.
 - `src/assets/SOURCES.md`: provenance for every screenshot, photograph and font.
-- All eight projects have real captures. A future project without a public screen would render the
+- All nine projects have real captures. A future project without a public screen would render the
   typographic plate component instead of an invented interface.
 
 ## Site structure

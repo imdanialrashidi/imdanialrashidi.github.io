@@ -17,7 +17,7 @@ const firstYear = Math.min(...years)
 const lastYear = Math.max(...years)
 
 const description =
-  'Eight projects by Danial Rashidi: Noveno, Fast English, Study Center and Gym Log, plus four client websites. Case studies with real screenshots and honest limits.'
+  'Nine projects: three products I own and six client builds, including Fast English and Kidotalks. Case studies with real screenshots and honest limits.'
 
 const itemList = itemListNode(
   ordered.map((entry) => ({
@@ -43,9 +43,10 @@ const itemList = itemListNode(
     <p class="eyebrow eyebrow--accent">Portfolio index</p>
     <h1 class="h1 page-hero__title">Work</h1>
     <p class="lede page-hero__lede">
-      Eight projects: four products I own and build, and four websites made for
-      businesses. Every preview below is a real screenshot, and every status
-      says where the work actually stands.
+      Nine projects: three products I own and build, and six client builds, from
+      stores and a safety inspection company to English-learning platforms.
+      Every preview below is a real screenshot, and every status says where the
+      work actually stands.
     </p>
     <dl class="page-stats">
       <div>
@@ -53,7 +54,7 @@ const itemList = itemListNode(
         <dd>{String(productProjects.length).padStart(2, "0")}</dd>
       </div>
       <div>
-        <dt>Client sites</dt>
+        <dt>Client builds</dt>
         <dd>{String(clientProjects.length).padStart(2, "0")}</dd>
       </div>
       <div>
@@ -83,7 +84,7 @@ const itemList = itemListNode(
     <SectionHead
       index="02"
       title="Client work"
-      note="Websites designed and built for real businesses: stores, a safety inspection company, and a language institute. Scope and limits are stated per project."
+      note="Client products and websites made for real businesses: two English-learning platforms, two stores, a safety inspection company, and an IELTS institute. Scope and limits are stated per project."
       id="clients-title"
     />
     <div class="work-list">

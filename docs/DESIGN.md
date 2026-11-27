@@ -191,7 +191,7 @@ Recomposition principles: reorder instead of shrink; keep one reading column; ne
 Journey and environment states:
 
 - Loading: none. Pages are complete static HTML, so no skeleton or spinner is presented.
-- Empty: not reachable from current content. Eight case studies and three travel notes are schema-required; a project without a real cover degrades to the typographic plate instead of an empty frame.
+- Empty: not reachable from current content. Nine case studies and three travel notes are schema-required; a project without a real cover degrades to the typographic plate instead of an empty frame.
 - Error: 404 only, with recovery links and no index. There is no form, request or account failure state.
 - Success: email handoff to `mailto:`; there is no in-page success screen.
 - Permission and account: none.
@@ -217,7 +217,7 @@ Motion rules: animate opacity and transform, never layout; one gesture per eleme
 
 - First person, calm, specific. Short declarative sentences. No hype adjectives, no "revolutionary", "world-class" or "passionate".
 - No em dash character in source copy. `tests/seo-metadata.test.mjs` fails any `src/pages`, `src/components`, `src/content`, `src/data`, `src/lib` or `src/layouts` file containing U+2014.
-- No invented proof: no metrics, testimonials, client logos, awards or fabricated screenshots. The content schema has no metric fields; covers come only from the eight real captures documented in `src/assets/SOURCES.md`; Fast English has no public screen and renders the plate.
+- No invented proof: no metrics, testimonials, client logos, awards or fabricated screenshots. The content schema has no metric fields; covers come only from the nine real captures documented in `src/assets/SOURCES.md`. Every project has a real capture, including Fast English and Kidotalks.
 - Status must match reality. The visible label comes from `statusLabel` in project frontmatter: "Live product · v1.0.0", "Live, in development", "Live, growing", "Released, v0.2.1", "Shipped 2024".
 - Actions are verbs: "See the work", "Read the product case study", "Start a conversation", "Read the now page", "Visit noveno.ir". Labels never say "click here".
 - Headings are sentence case. Uppercase is reserved for short mono metadata, never for sentences.
@@ -245,15 +245,15 @@ Lab evidence observed on 2026-11-23, not field data: Lighthouse accessibility 10
 | Surface | Budget | Current | Enforced by |
 | --- | --- | --- | --- |
 | Largest HTML page | Under 50K | 46K (home) | Manual review; total HTML has a hard check |
-| All HTML | Under 700K | 434K across 15 files | `scripts/check-built-site.mjs` |
+| All HTML | Under 700K | 459K across 16 files | `scripts/check-built-site.mjs` |
 | CSS | External, hashed, no inline global sheet; about 47K total | 6 hashed files; indexable pages load the 19K shared sheet plus a 4K to 9K page sheet, and the 404 loads only the shared sheet | Artifact check for external stylesheets; source test for `inlineStylesheets: "auto"` |
 | JavaScript | 0 external chunks | 0 chunks | Artifact check |
 | Inline behaviour | Under 3K raw | About 2.6K: theme guard, theme toggle, menu dialog | Documented; payloads also include JSON-LD and speculation rules |
 | Fonts | 4 woff2, under 110K, 2 preloads | 103K; serif regular 21K and Geist 28K preloaded | Source test for vendored fonts and licence files |
-| Images | Responsive WebP, no file over 300K | 97 responsive variants; largest under 300K | Artifact check |
-| Dist artifact | Under 8MB | 4.53MB (14 pages verified, 114 images) | Artifact check |
+| Images | Responsive WebP, no file over 300K | 99 responsive variants; largest under 300K | Artifact check |
+| Dist artifact | Under 8MB | 4.95MB (15 pages verified, 127 images) | Artifact check |
 | Web Vitals targets | LCP 2.5s or less, CLS 0.1 or less, INP 200ms or less | Lab: desktop LCP 0.4s, CLS 0.001, TBT 0ms; mobile LCP 2.0s, CLS 0.001, TBT 0ms. INP has no lab measurement here. | Lighthouse lab, manual |
-| SEO baseline | Sitemap and canonical agreement, unique titles and descriptions, one h1, JSON-LD parses | 14 sitemap URLs, all checks pass | Artifact check |
+| SEO baseline | Sitemap and canonical agreement, unique titles and descriptions, one h1, JSON-LD parses | 15 sitemap URLs, all checks pass | Artifact check |
 
 Performance is budgeted as a static-site contract rather than tuned per route: no external JS, images sized and responsive, fonts limited to four files, CSS hashed and cacheable. Lab results are pre-production signals; no field or RUM claim is made because no analytics is installed.
 
@@ -264,7 +264,7 @@ Supported baseline: evergreen Chromium, Firefox and Safari; keyboard, touch and 
 | Screen | Required states | Viewports | Evidence status on 2026-11-23 |
 | --- | --- | --- | --- |
 | `/` | Light and dark, current route, hover and focus, dialog closed and open | 320, 375, 768, 1280 | Lighthouse desktop 100/100/100/100 and mobile 99/100/100/100 observed. Dark theme and open dialog are implemented and inspected in source but have no committed render, so their visual state is UNPROVEN. |
-| `/work/` | Eight rows in two groups, real thumbnails, hover and focus | 320, 375, 768, 1280 | Lighthouse accessibility 100 and SEO 100, zero failing audits. Rendered list and hover states are UNPROVEN beyond the audit render. |
+| `/work/` | Nine rows in two groups, real thumbnails, hover and focus | 320, 375, 768, 1280 | Lighthouse accessibility 100 and SEO 100, zero failing audits. Rendered list and hover states are UNPROVEN beyond the audit render. |
 | `/work/noveno/` | Case hero, priority shot, prose, sticky rail, next project | 320, 375, 768, 1280 | Lighthouse accessibility 100 and SEO 100, zero failing audits. Sticky rail and long-content states are UNPROVEN beyond the audit render. |
 | `/work/fast-english/` | Live screenshot hero, honest live-product status, long prose | 320, 375, 768, 1280 | Lighthouse accessibility 100 and SEO 100, zero failing audits. |
 | `/travels/` | Three photographs, caption metadata, reduced-motion variant | 320, 375, 768, 1280 | Built-artifact checks only; no browser audit recorded for this route, so rendered state is UNPROVEN. |
@@ -286,12 +286,13 @@ This table deliberately separates what was observed from what is assumed. A rout
 - Image lightbox, video, carousels and scroll-driven storytelling.
 - A committed browser screenshot set or CI visual regression lane. Lab audits are manual and recorded as observations.
 - Third theme, density switch or user-selectable type scale.
-- Search, filtering and pagination on the work index. Eight projects do not justify them.
+- Search, filtering and pagination on the work index. Nine projects do not justify them.
 
 ## Decision log
 
 | Date | Decision | Evidence and rationale | Revisit when |
 | --- | --- | --- | --- |
+| 2026-11-27 | Home hero uses the studio portrait; the former night photograph moves to the about band. Kidotalks joins the work index as client work, and Fast English moves from the product group to client work. | Owner-supplied portrait and client classification; swapping the two portraits avoids repeating the same image twice on the home page. | The owner asks for the night photograph back in the hero. |
 | 2026-11-23 | Editorial premium direction: warm paper and ink with one vermilion accent, replacing any SaaS or dark-portfolio default. | `src/styles/tokens.css`; a credibility site for a builder reads better as a printed portfolio than as a product landing page. | The site becomes product marketing rather than personal credibility. |
 | 2026-11-23 | Instrument Serif for display, Geist for body and UI, Geist Mono for metadata; self-hosted under OFL. | `global.css` font faces and preloads; 103K total, two preloads, no CDN; serif voice without losing technical scanability. | Language coverage, font size or licence constraints change. |
 | 2026-11-23 | One accent, warm neutrals and status dots that never carry meaning alone; every measured pair passes AA. | Contrast table above and `tokens.css`; a second accent would dilute emphasis and complicate dark mode. | Status vocabulary grows beyond live, building, in development and shipped. |

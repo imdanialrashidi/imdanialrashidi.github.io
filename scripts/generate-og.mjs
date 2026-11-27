@@ -105,13 +105,13 @@ cards.push({
 
 cards.push({
   file: 'work.jpg',
-  kicker: 'Portfolio index · Eight projects',
+  kicker: 'Portfolio index · Nine projects',
   title: 'Work',
-  summary: 'Four products I own and four client websites, with real screenshots and honest status.',
+  summary: 'Three products I own and six client builds, with real screenshots and honest status.',
   visual: `<div class="gallery">
     <div class="frame"><img src="${image('work/noveno.webp')}" alt=""></div>
     <div class="frame"><img src="${image('work/study.webp')}" alt=""></div>
-    <div class="frame"><img src="${image('work/gym-log.webp')}" alt=""></div>
+    <div class="frame"><img src="${image('work/kidotalks.webp')}" alt=""></div>
     <div class="frame"><img src="${image('work/elsa-hamrah.webp')}" alt=""></div>
   </div>`,
 })
@@ -169,11 +169,20 @@ const projects = [
   {
     slug: 'fast-english',
     title: 'Fast English',
-    kicker: 'Own product · English learning',
+    kicker: 'Client work · English learning',
     summary:
       'A Persian-first English reading and listening product: CEFR-leveled articles with matching audio, flashcards and an Android app.',
     status: 'Live product',
     cover: 'work/fast-english.webp',
+  },
+  {
+    slug: 'kidotalks',
+    title: 'Kidotalks',
+    kicker: 'Client work · Education',
+    summary:
+      'A Persian-first English learning platform for children: short video lessons, visual practice, flashcards, stories and a parent zone.',
+    status: 'Release candidate',
+    cover: 'work/kidotalks.webp',
   },
   {
     slug: 'study',
